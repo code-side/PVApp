@@ -1,53 +1,67 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
+import React, { PureComponent } from 'react';
+import { AppRegistry, Image, Text, View } from 'react-native';
+import Card from './src/components/Card';
+import CardSection from './src/components/CardSection';
+import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 
-import React, { Component } from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+const FirstRoute = () => <View style={[ styles.container, { backgroundColor: '#ff4081' } ]} />;
+const SecondRoute = () => <View style={[ styles.container, { backgroundColor: '#673ab7' } ]} />;
 
-export default class PVApp extends Component {
+export default class PVApp extends PureComponent {
+  state = {
+    index: 0,
+    routes: [
+      { key: '1', title: 'First' },
+      { key: '2', title: 'Second' },
+    ],
+  };
+
+  _handleChangeTab = index => this.setState({ index });
+
+  _renderHeader = props => <TabBar {...props} />;
+
+  _renderScene = SceneMap({
+    '1': FirstRoute,
+    '2': SecondRoute,
+  });
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
+      <Card>
+        <CardSection>
+          <Image
+            style={styles.imageStyle}
+            source={{ uri: 'https://www.municipay.com/wp-content/themes/Artificial-Reason-WP/img/no_image.png' }}
+          />
+        </CardSection>
+
+        <CardSection>
+          <Text>
+            Titulo
+          </Text>
+        </CardSection>
+
+        {/* <TabViewAnimated
+          style={styles.container}
+          navigationState={this.state}
+          renderScene={this._renderScene}
+          renderHeader={this._renderHeader}
+          onRequestChangeTab={this._handleChangeTab}
+        /> */}
+
+      </Card>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+const styles = {
+  imageStyle: {
+  height: 100,
+  width: 100,
+}
+  // container: {
+  //   flex: 1
+  // }
+};
 
 AppRegistry.registerComponent('PVApp', () => PVApp);
