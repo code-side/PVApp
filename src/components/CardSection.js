@@ -15,7 +15,8 @@ const styles = {
     alignItems: 'center',
     flexDirection: 'row',
     borderBottomWidth: 2,
-    padding: 10
+    padding: 10,
+    borderColor: 'transparent'
   }
 };
 
