@@ -16,7 +16,7 @@ export default class ProvinceInfo extends Component {
 
   getDefault() {
     var prov = {
-      name: 'San Jose',
+      name: 'San José',
       photo: 'http://s2.eestatic.com/2016/05/17/actualidad/Actualidad_125498519_5032260_1706x960.jpg',
       history: 'Juan de Cavallón funda en 1561 el primer poblado español, la ciudad de Garcimuñoz, en el valle de Santa Ana. A finales del siglo XVI se pobló el valle de Aserrí y su principal centro de población fue nombrado Mata Redonda. Para facilitar el tránsito entre San Bartolomé de Barva y Aserrí o Curridabat, se creó el sitio llamado Boca del Monte. La primera ermita de adobe, así como las primeras casas que la rodearon se fundó el 21 de mayo de 1737.',
       culture: 'Esta provincia cuenta con una amplia gama de museos, hoteles, restaurantes, parques, centros de conferencias, parques temáticos, modernos centros comerciales de lujo, cines, teatros, galerías, balnearios, estadios y varios lugares para la recreación nocturna y la vida cosmopolita.',
@@ -34,19 +34,22 @@ export default class ProvinceInfo extends Component {
           name: 'Policia Municipal',
           type: 'police',
           contact: '911',
-          workingHours: '24/7'
+          workingHours: '24/7',
+          coordinates: '9.9368345,-84.1099237,17z'
         },
         {
           name: 'Guia telefonica',
           type: 'help',
           contact: '110',
-          workingHours: '24/7'
+          workingHours: '24/7',
+          coordinates: '9.9356124,-84.1484506,13z'
         },
         {
           name: 'Servicio Grua',
           type: 'crane',
           contact: '70477349',
-          workingHours: 'L-V de 8am a 5pm'
+          workingHours: 'L-V de 8am a 5pm',
+          coordinates: '9.9356124,-84.1484506,13z'
         }
       ]
     };
@@ -86,10 +89,6 @@ export default class ProvinceInfo extends Component {
     if (Linking.canOpenURL(type + ':' + resource)) {
       Linking.openURL(type + ':' + resource);
     }
-  }
-
-  noItems(text) {
-    return <Text style={styles.noItems}>{text}</Text>;
   }
 
   render() {
@@ -151,9 +150,16 @@ export default class ProvinceInfo extends Component {
 
             {/* Emergency Contacts */}
             <Tab heading="Contactos emergencia">
-              <List
-                dataArray={ this.state.province.emergencyContacts }
-                renderRow={ (item) => this.renderContactItem(item) }/>
+              {
+                this.state.province.emergencyContacts.length > 0 ?
+                (
+                  <List
+                    dataArray={ this.state.province.emergencyContacts }
+                    renderRow={ (item) => this.renderContactItem(item) }/>
+                ) : (
+                  <Text style={ styles.noItems }>No hay contactos</Text>
+                )
+              }
             </Tab>
           </Tabs>
         </Content>
@@ -200,10 +206,10 @@ const styles = {
     marginLeft: 10
   },
   noItems: {
+    padding: 15,
     fontSize: 16,
     fontWeight: 'bold',
     color: 'red',
-    flex: 1,
     textAlign: 'center',
     textAlignVertical: 'center'
   }
