@@ -1,16 +1,4 @@
-import React, { Component } from 'react';
 import { AppRegistry } from 'react-native';
-//import TicoStop from './src/views/ticoStop';
-import TouristicInterest from './src/views/touristicInterest';
+import App from './src/App';
 
-export default class PVApp extends Component {
-  render() {
-    return (
-       // <TicoStop />
-      <TouristicInterest />
-    );
-  }
-}
-
-
-AppRegistry.registerComponent('PVApp', () => PVApp);
+AppRegistry.registerComponent('PVApp', () => App);
