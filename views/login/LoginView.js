@@ -11,18 +11,70 @@ import {
   TouchableHighlight
 } from 'react-native';
 
-
 class LoginAndroid extends Component {
+
  constructor(props) {
     super(props);
     this.state = {
-      userName: '',
-      pass: ''
+      username: "",
+      password: "",
+      exist: true
     };
   }
 
-  _handlePress = () =>{
+  _login = () =>{
+    if(this.state.username !== "" && this.state.password !== "" ){
+      this.validateCredentials();
+    }else{
+      this.setState({exist:false});
+    }
+  }
 
+  validateCredentials = () =>{
+    console.log('method');
+    return fetch('http://172.20.10.3:8080/api/authenticate',{
+     method: "POST",
+     headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json',
+     },
+     body: JSON.stringify(
+      {
+            username: 'user',
+            password: 'user',
+            rememberMe: true
+     })
+  })
+   .then((response) => response.json())
+   .then(async (responseJson) => {
+     console.log(responseJson.id_token);
+     return fetch('http://172.20.10.3:8080/api/authenticateUser',{
+       method: "POST",
+       headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json',
+         'Authorization': ' Bearer ' + responseJson.id_token
+
+       },
+       body: JSON.stringify(
+        {
+              username: this.state.username,
+              password: this.state.password
+
+       })
+    })
+     .then((response) => response.json())
+     .then(async (responseJson) => {
+       console.log(responseJson);
+       this.props.goToHomeScreen();
+     })
+     .catch((error) => {
+       console.error(error);
+     });
+   })
+   .catch((error) => {
+     console.error(error);
+   });
   }
 
   render() {
@@ -34,24 +86,24 @@ class LoginAndroid extends Component {
         <Text style={styles.welcome}>PVApp</Text>
         <View style ={styles.body}>
          <TextInput
-          onChangeText={(userName) => this.setState({userName})}
+          onChangeText={(username) => this.setState({username})}
           placeholder = 'Correo'
-          value={this.state.userName}
+          value={this.state.username}
         />
         <TextInput
-          onChangeText={(pass) => this.setState({pass})}
+          onChangeText={(password) => this.setState({password})}
           secureTextEntry={true}
           placeholder = 'Contraseña'
-          value={this.state.pass}
+          value={this.state.password}
         />
-        <TouchableHighlight>
+        {!this.state.exist && <Text style={{color:'red'}}>Correo o contraseña incorrectos</Text>}
+        <TouchableHighlight style={{marginTop:15}}>
           <Text> Olvido su contraseña?</Text>
         </TouchableHighlight>
         <Button primary style={{marginLeft:80,marginTop:15}}
-        onPress={() => this._handlePress()}>
+        onPress={() => this._login()}>
           <Text style={styles.loginButton}> Login </Text>
         </Button>
-
 
         </View>
       </View>
