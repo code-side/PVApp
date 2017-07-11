@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Image, Linking } from 'react-native';
 import { Container, Header, Text, Content, Button, Tabs, Tab, List, ListItem, Thumbnail, Left, Body, Icon } from 'native-base';
 import { Row, Grid } from 'react-native-easy-grid';
+import I18n from '../services/languageService';
 import { EMERGENCY_ICONS } from './emergencyContact';
 
 export default class ProvinceInfo extends Component {
@@ -123,14 +124,14 @@ export default class ProvinceInfo extends Component {
               <Grid>
                 {/* Info */}
                 <Row>
-                  <Text style={styles.titles}>Historia:</Text>
+                  <Text style={styles.titles}>{ I18n.t('history') }</Text>
                 </Row>
                 <Row>
                   <Text style={styles.textContainer}>{this.state.province.history}</Text>
                 </Row>
 
                 <Row>
-                  <Text style={styles.titles}>Cultura:</Text>
+                  <Text style={styles.titles}>{ I18n.t('culture') }</Text>
                 </Row>
                 <Row>
                   <Text style={styles.textContainer}>{this.state.province.culture}</Text>
@@ -138,7 +139,7 @@ export default class ProvinceInfo extends Component {
 
                 {/* Cantones */}
                 <Row>
-                  <Text style={styles.titles}>Cantones:</Text>
+                  <Text style={styles.titles}>{ I18n.t('cantons') }</Text>
                 </Row>
                 <Row>
                   <List
