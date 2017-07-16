@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { saveToken } from '../actions';
 import { connect } from 'react-redux';
+import {Container, Content, Footer, FooterTab, Button } from 'native-base';
 
 class Home extends Component {
 
@@ -11,9 +12,18 @@ class Home extends Component {
   }
   render(){
     return (
-      <View>
+      <Container>
+      <Content>
         <Text>{this.props.token}</Text>
-      </View>
+      </Content>
+      <Footer>
+       <FooterTab>
+         <Button full>
+           <Text>Footer</Text>
+         </Button>
+       </FooterTab>
+     </Footer>
+      </Container>
     );
   }
 }
