@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image } from 'react-native';
-import { Container, Header, Text, Content, Button, Left, Icon } from 'native-base';
+import { Container, Text, Content } from 'native-base';
 import { Row, Grid } from 'react-native-easy-grid';
 
 export default class TicoStop extends Component {
@@ -33,16 +33,6 @@ export default class TicoStop extends Component {
   render() {
     return (
       <Container>
-        {/* AppHeader */}
-        <Header>
-          <Left>
-            <Button transparent>
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
-        </Header>
-
-        {/* Header */}
         <Content>
           <Grid>
             <Row style={ styles.header }>
@@ -50,9 +40,6 @@ export default class TicoStop extends Component {
                 style={{ flex: 1 }}
                 source={{ uri: this.state.ticoStop.photo }}
               />
-            </Row>
-            <Row style={{ backgroundColor:'#5069c3' }}>
-              <Text style={styles.mainTitle}>{ this.state.ticoStop.name }</Text>
             </Row>
           </Grid>
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, Linking } from 'react-native';
-import { Container, Header, Text, Content, Button, Tabs, Tab, Card, List, Thumbnail, CardItem, Body, Left, Right, Icon } from 'native-base';
+import { Container, Text, Content, Tabs, Tab, Card, List, Thumbnail, CardItem, Body, Left, Right } from 'native-base';
 import { Row, Grid } from 'react-native-easy-grid';
 import Moment from 'moment';
 
@@ -110,16 +110,6 @@ export default class TouristicInterest extends Component {
   render() {
     return (
       <Container>
-        {/* AppHeader */}
-        <Header>
-          <Left>
-            <Button transparent onPress={() => this.invoke('geo', this.state.touristicInterest)}>
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
-        </Header>
-
-        {/* Header */}
         <Content>
           <Grid>
             <Row style={ styles.header }>
@@ -127,9 +117,6 @@ export default class TouristicInterest extends Component {
                 style={{ flex: 1 }}
                 source={{ uri: this.state.touristicInterest.logo }}
               />
-            </Row>
-            <Row style={{ backgroundColor:'#5069c3' }}>
-              <Text style={styles.mainTitle}>{ this.state.touristicInterest.name }</Text>
             </Row>
           </Grid>
 
