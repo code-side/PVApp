@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, Linking } from 'react-native';
-import { Container, Header, Text, Content, Button, Tabs, Tab, List, ListItem, Thumbnail, Left, Body, Icon } from 'native-base';
+import { Container, Text, Content, Button, Tabs, Tab, List, ListItem, Thumbnail, Body } from 'native-base';
 import { Row, Grid } from 'react-native-easy-grid';
 import I18n from '../services/languageService';
 import { EMERGENCY_ICONS } from './emergencyContact';
@@ -95,15 +95,6 @@ export default class ProvinceInfo extends Component {
   render() {
     return (
       <Container>
-        {/* AppHeader */}
-        <Header>
-          <Left>
-            <Button transparent>
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
-        </Header>
-
         {/* Header */}
         <Content>
           <Grid>
@@ -120,18 +111,18 @@ export default class ProvinceInfo extends Component {
 
           {/* Layout */}
           <Tabs initialPage={0} style={{flex:1}}>
-            <Tab heading="Información">
+            <Tab heading={I18n.t('provinceInfo.tabs.info')}>
               <Grid>
                 {/* Info */}
                 <Row>
-                  <Text style={styles.titles}>{ I18n.t('history') }</Text>
+                  <Text style={styles.titles}>{ I18n.t('provinceInfo.history') }</Text>
                 </Row>
                 <Row>
                   <Text style={styles.textContainer}>{this.state.province.history}</Text>
                 </Row>
 
                 <Row>
-                  <Text style={styles.titles}>{ I18n.t('culture') }</Text>
+                  <Text style={styles.titles}>{ I18n.t('provinceInfo.culture') }</Text>
                 </Row>
                 <Row>
                   <Text style={styles.textContainer}>{this.state.province.culture}</Text>
@@ -139,7 +130,7 @@ export default class ProvinceInfo extends Component {
 
                 {/* Cantones */}
                 <Row>
-                  <Text style={styles.titles}>{ I18n.t('cantons') }</Text>
+                  <Text style={styles.titles}>{ I18n.t('provinceInfo.cantons') }</Text>
                 </Row>
                 <Row>
                   <List
@@ -150,7 +141,7 @@ export default class ProvinceInfo extends Component {
             </Tab>
 
             {/* Emergency Contacts */}
-            <Tab heading="Contactos emergencia">
+            <Tab heading={I18n.t('provinceInfo.tabs.contacts')}>
               {
                 this.state.province.emergencyContacts.length > 0 ?
                 (
@@ -158,7 +149,7 @@ export default class ProvinceInfo extends Component {
                     dataArray={ this.state.province.emergencyContacts }
                     renderRow={ (item) => this.renderContactItem(item) }/>
                 ) : (
-                  <Text style={ styles.noItems }>No hay contactos</Text>
+                  <Text style={ styles.noItems }>{I18n.t('noContacts')}</Text>
                 )
               }
             </Tab>
