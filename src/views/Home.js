@@ -3,6 +3,8 @@ import { View, Text } from 'react-native';
 import { saveToken } from '../actions';
 import { connect } from 'react-redux';
 import {Container, Content, Footer, FooterTab, Button } from 'native-base';
+import { Actions } from 'react-native-router-flux';
+
 
 class Home extends Component {
 
@@ -10,6 +12,7 @@ class Home extends Component {
     //this.props.welcome('Welcome to PVApp!');
     console.log(this.props);
   }
+
   render(){
     return (
       <Container>
@@ -23,7 +26,7 @@ class Home extends Component {
          </Button>
        </FooterTab>
      </Footer>
-      </Container>
+    </Container>
     );
   }
 }
