@@ -9,7 +9,8 @@ class TouristDestination extends Component {
     super(props);
 
     this.state = {
-      touristDest: props.touristDest || this.getDefault()
+      touristDest: props.touristDest || this.getDefault(),
+      isAddToVisit: false
     };
   }
   getDefault() {
@@ -17,7 +18,7 @@ class TouristDestination extends Component {
       name: 'Manzanillo',
       province: 'Limón',
       photo: 'https://www.costarica.com/contentAsset/image/98a636e4-8f43-447e-b564-7f50a962b6a1/fileAsset/filter/Resize,Jpeg/resize_w/1000/Jpeg_q/.8/',
-      description: 'Manzanillo esta ubicado a 4 horas en carro desde la capital San José y al sur del famoso Parque Nacional Cahuita. Sus playas están consideradas como una de las más pintorescas de Costa Rica, con un clima fantástico alrededor de todo el año.',
+      description: 'Manzanillo está ubicado a 4 horas en carro desde la capital San José y al sur del famoso Parque Nacional Cahuita. Sus playas están consideradas como una de las más pintorescas de Costa Rica, con un clima fantástico alrededor de todo el año.',
       location: '9.6328645,-82.6582748',
       services: [
       {
@@ -133,7 +134,7 @@ class TouristDestination extends Component {
                 </Button>
                 </CardItem>
                 <Button transparent>
-                  <Text>Añadir a lista por visitar</Text>
+                {this.state.isAddToVisit ? <Text style={{color:'red'}}>Remover de lista por visitar</Text> : <Text>Añadir a lista por visitar</Text>}
                 </Button>
               </Card>
             </Tab>
