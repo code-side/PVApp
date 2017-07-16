@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { welcome } from '../actions';
+import { welcome, saveToken } from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
@@ -32,6 +32,7 @@ class Home extends Component {
             Ver interes turistico
           </Text>
         </TouchableOpacity>
+        <Text>{this.props.token}</Text>
       </View>
     );
   }
@@ -39,8 +40,9 @@ class Home extends Component {
 
 const mapStateToProps = state => {
   return {
-    data: state.db.msg
+    data: state.db.msg,
+    token: state.db.token
   };
 };
 
-export default connect(mapStateToProps, { welcome })(Home);
+export default connect(mapStateToProps, { saveToken })(Home);
