@@ -5,14 +5,6 @@ import { Container, Content, Text, Button } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 class RegisterProfilePicture extends Component {
 
-state = {
-   modalVisible: true,
- }
-
- setModalVisible(visible) {
-   this.setState({modalVisible: visible});
- }
-
   takePicture() {
   this.camera.capture()
     .then((data) => console.log(data))
@@ -31,7 +23,7 @@ state = {
        style={styles.preview}
        aspect={Camera.constants.Aspect.fill}>
 
-       <View style={styles.modalPicture}>
+       <View style={styles.modalConfirmation}>
         <Text > Desea tomar foto de perfil? </Text>
        </View>
        <View style={{flexDirection: 'row'}}>
@@ -60,6 +52,12 @@ capture: {
   color: '#FFF',
   padding: 10,
   margin: 40
+},
+modalConfirmation: {
+  backgroundColor: '#fff',
+  height: Dimensions.get('window').height-80/2,
+  width: Dimensions.get('window').width/2,
+  marginBottom: Dimensions.get('window').height/2
 }
 })
 
