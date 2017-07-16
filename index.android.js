@@ -1,16 +1,16 @@
 import React, { PureComponent } from 'react';
-import { AppRegistry, View } from 'react-native';
-//import Card from './src/components/Card';
-//import CardSection from './src/components/CardSection';
-import TouristDestination from './src/views/TouristDestination';
+import { AppRegistry } from 'react-native';
+//import ProvinceInfo from './src/views/provinceInfo';
+import TouristDestination from './src/views/touristDestination';
 
 export default class PVApp extends PureComponent {
-render() {
+
+  render() {
     return (
-      <View>
-          <TouristDestination/>
-      </View>
- );
- }
- }
+      //<ProvinceInfo/>,
+      <TouristDestination/>
+    );
+  }
+}
+
 AppRegistry.registerComponent('PVApp', () => PVApp);
