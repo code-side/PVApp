@@ -3,60 +3,9 @@ import { Image, Linking } from 'react-native';
 import { Container, Text, Content, Button, Tabs, Tab, List, ListItem, Thumbnail, Body } from 'native-base';
 import { Row, Grid } from 'react-native-easy-grid';
 import I18n from '../services/languageService';
-import { EMERGENCY_ICONS } from './emergencyContact';
+import { connect } from 'react-redux';
 
-export default class ProvinceInfo extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      province: props.province || this.getDefault()
-    };
-  }
-
-  getDefault() {
-    var prov = {
-      name: 'San José',
-      photo: 'http://s2.eestatic.com/2016/05/17/actualidad/Actualidad_125498519_5032260_1706x960.jpg',
-      history: 'Juan de Cavallón funda en 1561 el primer poblado español, la ciudad de Garcimuñoz, en el valle de Santa Ana. A finales del siglo XVI se pobló el valle de Aserrí y su principal centro de población fue nombrado Mata Redonda. Para facilitar el tránsito entre San Bartolomé de Barva y Aserrí o Curridabat, se creó el sitio llamado Boca del Monte. La primera ermita de adobe, así como las primeras casas que la rodearon se fundó el 21 de mayo de 1737.',
-      culture: 'Esta provincia cuenta con una amplia gama de museos, hoteles, restaurantes, parques, centros de conferencias, parques temáticos, modernos centros comerciales de lujo, cines, teatros, galerías, balnearios, estadios y varios lugares para la recreación nocturna y la vida cosmopolita.',
-      coordinates: '9.9356124,-84.1484506,13z',
-      cantons: [
-        'San José',
-        'Escazú',
-        'Alajuelita',
-        'Vásques de Coronado',
-        'Moravia',
-        'Montes de Oca'
-      ],
-      emergencyContacts: [
-        {
-          name: 'Policia Municipal',
-          type: 'police',
-          contact: '911',
-          workingHours: '24/7',
-          coordinates: '9.9368345,-84.1099237,17z'
-        },
-        {
-          name: 'Guia telefonica',
-          type: 'help',
-          contact: '110',
-          workingHours: '24/7',
-          coordinates: '9.9356124,-84.1484506,13z'
-        },
-        {
-          name: 'Servicio Grua',
-          type: 'crane',
-          contact: '70477349',
-          workingHours: 'L-V de 8am a 5pm',
-          coordinates: '9.9356124,-84.1484506,13z'
-        }
-      ]
-    };
-
-    return prov;
-  }
+class ProvinceInfo extends Component {
 
   renderCantonItem(canton) {
     return (
@@ -101,11 +50,11 @@ export default class ProvinceInfo extends Component {
             <Row style={ styles.header }>
               <Image
                 style={{ flex: 1 }}
-                source={{ uri: this.state.province.photo }}
+                source={{ uri: this.props.province.photo }}
               />
             </Row>
             <Row style={{ backgroundColor:'#5069c3' }}>
-              <Text style={styles.mainTitle}>{ this.state.province.name }</Text>
+              <Text style={styles.mainTitle}>{ this.props.province.name }</Text>
             </Row>
           </Grid>
 
@@ -118,14 +67,14 @@ export default class ProvinceInfo extends Component {
                   <Text style={styles.titles}>{ I18n.t('provinceInfo.history') }</Text>
                 </Row>
                 <Row>
-                  <Text style={styles.textContainer}>{this.state.province.history}</Text>
+                  <Text style={styles.textContainer}>{this.props.province.history}</Text>
                 </Row>
 
                 <Row>
                   <Text style={styles.titles}>{ I18n.t('provinceInfo.culture') }</Text>
                 </Row>
                 <Row>
-                  <Text style={styles.textContainer}>{this.state.province.culture}</Text>
+                  <Text style={styles.textContainer}>{this.props.province.culture}</Text>
                 </Row>
 
                 {/* Cantones */}
@@ -134,7 +83,7 @@ export default class ProvinceInfo extends Component {
                 </Row>
                 <Row>
                   <List
-                    dataArray={ this.state.province.cantons }
+                    dataArray={ this.props.province.cantons }
                     renderRow={ (item) => this.renderCantonItem(item) }/>
                 </Row>
               </Grid>
@@ -143,13 +92,13 @@ export default class ProvinceInfo extends Component {
             {/* Emergency Contacts */}
             <Tab heading={I18n.t('provinceInfo.tabs.contacts')}>
               {
-                this.state.province.emergencyContacts.length > 0 ?
+                this.props.province.emergencyContacts.length > 0 ?
                 (
                   <List
-                    dataArray={ this.state.province.emergencyContacts }
+                    dataArray={ this.props.province.emergencyContacts }
                     renderRow={ (item) => this.renderContactItem(item) }/>
                 ) : (
-                  <Text style={ styles.noItems }>{I18n.t('noContacts')}</Text>
+                  <Text style={ styles.noItems }>{I18n.t('provinceInfo.noContacts')}</Text>
                 )
               }
             </Tab>
@@ -163,6 +112,15 @@ export default class ProvinceInfo extends Component {
 export const PROVINCE_ICONS = {
   location: require('../resources/images/prov_location.png'),
   phone: require('../resources/images/prov_phone.png')
+};
+
+export const EMERGENCY_ICONS = {
+  police: require('../resources/images/em_police.png'),
+  crane: require('../resources/images/em_crane.png'),
+  firefighters: require('../resources/images/em_firefighters.png'),
+  hospital: require('../resources/images/em_hospital.png'),
+  ambulance: require('../resources/images/em_ambulance.png'),
+  help: require('../resources/images/gen_help.png')
 };
 
 const styles = {
@@ -188,10 +146,10 @@ const styles = {
   },
   textContainer: {
     fontSize: 14,
-     paddingLeft: 10,
-     paddingRight: 10,
-     textAlign: 'justify',
-     flexWrap: 'wrap'
+    paddingLeft: 10,
+    paddingRight: 10,
+    textAlign: 'justify',
+    flexWrap: 'wrap'
   },
   listItem: {
     padding: 10,
@@ -206,3 +164,11 @@ const styles = {
     textAlignVertical: 'center'
   }
 };
+
+const mapStateToProps = state => {
+  return {
+    province: state.provinceReducer.selected
+  };
+};
+
+export default connect(mapStateToProps, null)(ProvinceInfo);

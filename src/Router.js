@@ -1,14 +1,14 @@
 import React from 'react';
 import { Router, Scene } from 'react-native-router-flux';
-import Login from './views/Login'
+import Login from './views/Login';
 import I18n from './services/languageService';
 import Home from './views/Home';
 import Register from './views/Register';
 import RegisterProfilePicture from './views/RegisterProfilePicture';
 
 // Provinces
-import ProvinceList from './views/provinceList';
-import ProvinceInfo from './views/provinceInfo';
+import ProvinceList from './views/ProvinceList';
+import ProvinceInfo from './views/ProvinceInfo';
 
 const RouterComponent = () => {
   return (
