@@ -21,21 +21,10 @@ class Login extends Component {
       password: "",
       exist: true
     };
+    this.registerToken();
   }
 
-  login = () =>{
-    if(this.state.username !== "" && this.state.password !== "" ){
-      this.validateCredentials();
-    }else{
-      this.setState({exist:false});
-    }
-  }
-  register(){
-    Actions.register();
-  }
-
-  validateCredentials = () =>{
-    console.log('validate');
+  registerToken = () =>{
     return fetch('http://192.168.86.206:8080/api/authenticate',{
      method: "POST",
      headers: {
@@ -52,31 +41,46 @@ class Login extends Component {
    .then((response) => response.json())
    .then(async (responseJson) => {
      this.props.saveToken( 'Bearer ' + responseJson.id_token);
-     return fetch('http://192.168.86.206:8080/api/authenticateUser',{
-       method: "POST",
-       headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'application/json',
-         'Authorization': ' Bearer ' + responseJson.id_token
-
-       },
-       body: JSON.stringify(
-        {
-              username: this.state.username,
-              password: this.state.password
-       })
-    })
-     .then((response) => response.json())
-     .then(async (responseJson) => {
-       Actions.home();
-     })
-     .catch((error) => {
-       console.error(error);
-     });
+  
    })
    .catch((error) => {
      console.error(error);
    });
+  }
+
+  login = () =>{
+    if(this.state.username !== "" && this.state.password !== "" ){
+      this.validateCredentials();
+    }else{
+      this.setState({exist:false});
+    }
+  }
+  registerView(){
+    Actions.register();
+  }
+
+  validateCredentials = () =>{
+    return fetch('http://192.168.86.206:8080/api/authenticateUser',{
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': this.props.token
+
+      },
+      body: JSON.stringify(
+       {
+             username: this.state.username,
+             password: this.state.password
+      })
+    })
+    .then((response) => response.json())
+    .then(async (responseJson) => {
+      Actions.home();
+    })
+    .catch((error) => {
+      console.error(error);
+    });
   }
 
   render() {
@@ -102,7 +106,7 @@ class Login extends Component {
         <TouchableOpacity style={{marginTop:15}}>
           <Text> Olvido su contraseña?</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{marginTop:15}} onPress={() => this.register()}>
+        <TouchableOpacity style={{marginTop:15}} onPress={() => this.registerView()}>
           <Text> Registrarse a la aplicación</Text>
         </TouchableOpacity>
         <Button primary style={{marginLeft:80,marginTop:15}}
@@ -138,7 +142,8 @@ const styles = ({
 
 const mapStateToProps = state => {
   return {
-    data: state.db.msg
+    data: state.db.msg,
+    token: state.db.token
   };
 };
 

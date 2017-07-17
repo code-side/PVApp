@@ -22,7 +22,22 @@ class Home extends Component {
       <Footer>
        <FooterTab>
          <Button full>
-           <Text>Footer</Text>
+           <Text>Inicio</Text>
+         </Button>
+       </FooterTab>
+       <FooterTab>
+         <Button full>
+           <Text>Favoritos</Text>
+         </Button>
+       </FooterTab>
+       <FooterTab>
+         <Button full>
+           <Text>Visitados</Text>
+         </Button>
+       </FooterTab>
+       <FooterTab>
+         <Button full>
+           <Text>Perfil</Text>
          </Button>
        </FooterTab>
      </Footer>
