@@ -11,51 +11,8 @@ export default class ProvinceInfo extends Component {
     super(props);
 
     this.state = {
-      province: props.province || this.getDefault()
+      province: props.province
     };
-  }
-
-  getDefault() {
-    var prov = {
-      name: 'San José',
-      photo: 'http://s2.eestatic.com/2016/05/17/actualidad/Actualidad_125498519_5032260_1706x960.jpg',
-      history: 'Juan de Cavallón funda en 1561 el primer poblado español, la ciudad de Garcimuñoz, en el valle de Santa Ana. A finales del siglo XVI se pobló el valle de Aserrí y su principal centro de población fue nombrado Mata Redonda. Para facilitar el tránsito entre San Bartolomé de Barva y Aserrí o Curridabat, se creó el sitio llamado Boca del Monte. La primera ermita de adobe, así como las primeras casas que la rodearon se fundó el 21 de mayo de 1737.',
-      culture: 'Esta provincia cuenta con una amplia gama de museos, hoteles, restaurantes, parques, centros de conferencias, parques temáticos, modernos centros comerciales de lujo, cines, teatros, galerías, balnearios, estadios y varios lugares para la recreación nocturna y la vida cosmopolita.',
-      coordinates: '9.9356124,-84.1484506,13z',
-      cantons: [
-        'San José',
-        'Escazú',
-        'Alajuelita',
-        'Vásques de Coronado',
-        'Moravia',
-        'Montes de Oca'
-      ],
-      emergencyContacts: [
-        {
-          name: 'Policia Municipal',
-          type: 'police',
-          contact: '911',
-          workingHours: '24/7',
-          coordinates: '9.9368345,-84.1099237,17z'
-        },
-        {
-          name: 'Guia telefonica',
-          type: 'help',
-          contact: '110',
-          workingHours: '24/7',
-          coordinates: '9.9356124,-84.1484506,13z'
-        },
-        {
-          name: 'Servicio Grua',
-          type: 'crane',
-          contact: '70477349',
-          workingHours: 'L-V de 8am a 5pm',
-          coordinates: '9.9356124,-84.1484506,13z'
-        }
-      ]
-    };
-
-    return prov;
   }
 
   renderCantonItem(canton) {

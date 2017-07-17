@@ -10,7 +10,7 @@ class Home extends Component {
 
   componentWillMount() {
     //this.props.welcome('Welcome to PVApp!');
-    console.log(this.props);
+    //console.log(this.props);
   }
 
   render(){
@@ -18,6 +18,7 @@ class Home extends Component {
       <Container>
       <Content>
         <Text>{this.props.token}</Text>
+        <Text onPress={() => Actions.provList()}>Ver provincias</Text>
       </Content>
       <Footer>
        <FooterTab>
