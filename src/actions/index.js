@@ -1,4 +1,4 @@
-const SERVER_IP = '10.223.29.134';
+const SERVER_IP = '192.168.1.9';
 
 const saveToken = (data) => {
   return {
@@ -8,7 +8,6 @@ const saveToken = (data) => {
 };
 
 export const login = ({username, password}) => {
-  // Authenticate to get token
   return (dispatch) => {
     return fetch('http://' + SERVER_IP + ':8080/api/authenticate', {
      method: 'POST',
@@ -28,6 +27,22 @@ export const login = ({username, password}) => {
    .then(async (responseJson) => {
      const token = responseJson.id_token;
      saveToken(' Bearer ' + token);
+     return fetch('http://' + SERVER_IP + ':8080/api/authenticateUser', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': ' Bearer ' + token
+      },
+      body: JSON.stringify(
+       {
+         username: username,
+         password: password
+      })
+   })
+    .then((response) => response.json())
+    // Save token and load static info
+    .then(async (authUserResponse) => {
      let staticData = {};
 
      invoke(token, 'provinces', 'GET', {})
@@ -52,6 +67,7 @@ export const login = ({username, password}) => {
          }); // end touristicInterests invoke
        }); // end ticoStops invoke
      }); // end provinces invoke
+   }); // end of authenticate User
    }); // end token then
  }; // end dispatch function
 }; // end login function

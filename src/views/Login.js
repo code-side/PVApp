@@ -18,7 +18,7 @@ class Login extends Component {
 
   login = () =>{
     if (this.state.username !== '' && this.state.password !== ''){
-      const {username, password} = this.props;
+      const {username, password} = this.state;
       this.props.login({username, password});
       Actions.home();
     } else {
