@@ -41,7 +41,7 @@ class Login extends Component {
    .then((response) => response.json())
    .then(async (responseJson) => {
      this.props.saveToken( 'Bearer ' + responseJson.id_token);
-  
+
    })
    .catch((error) => {
      console.error(error);
