@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Container, Content, Footer, FooterTab, Button } from 'react-native';
 import { welcome, saveToken } from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
@@ -33,7 +33,9 @@ class Home extends Component {
           </Text>
         </TouchableOpacity>
         <Text>{this.props.token}</Text>
-      </View>
+        <Text onPress={() => Actions.provList()}>Ver provincias</Text>
+
+    </View>
     );
   }
 }
