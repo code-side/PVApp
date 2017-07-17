@@ -36,7 +36,7 @@ class Login extends Component {
 
   validateCredentials = () =>{
     console.log('validate');
-    return fetch('http://192.168.86.206:8080/api/authenticate',{
+    return fetch('http://192.168.86.23:8080/api/authenticate',{
      method: "POST",
      headers: {
        'Accept': 'application/json',
@@ -52,7 +52,7 @@ class Login extends Component {
    .then((response) => response.json())
    .then(async (responseJson) => {
      this.props.saveToken( 'Bearer ' + responseJson.id_token);
-     return fetch('http://192.168.86.206:8080/api/authenticateUser',{
+     return fetch('http://192.168.86.23:8080/api/authenticateUser',{
        method: "POST",
        headers: {
          'Accept': 'application/json',

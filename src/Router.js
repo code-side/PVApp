@@ -1,6 +1,6 @@
 import React from 'react';
 import { Router, Scene } from 'react-native-router-flux';
-import Login from './views/Login'
+import Login from './views/Login';
 import Home from './views/Home';
 import Register from './views/Register';
 import RegisterProfilePicture from './views/RegisterProfilePicture';

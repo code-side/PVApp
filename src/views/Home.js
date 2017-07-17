@@ -45,4 +45,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { saveToken })(Home);
+export default connect(mapStateToProps, { welcome, saveToken })(Home);
