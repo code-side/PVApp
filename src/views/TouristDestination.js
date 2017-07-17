@@ -99,7 +99,7 @@ class TouristDestination extends Component {
                     <Right>
                       <Thumbnail
                       square
-                      source={ TOURISTDEST_ICONS.flag }
+                      source={ TOURISTDEST_ICONS.hotel }
                       style={ styles.listButton }
                       />
                     </Right>
@@ -152,8 +152,7 @@ hotel: require('../resources/images/td_hotel.png'),
 location: require('../resources/images/prov_location.png'),
 restaurant: require('../resources/images/td_rest.png'),
 supermarket: require('../resources/images/td_supermarket.png'),
-wifi: require('../resources/images/td_wifi.png'),
-flag: require('../resources/images/flag.png')
+wifi: require('../resources/images/td_wifi.png')
 };
 
 const styles = {
