@@ -5,31 +5,6 @@ import { Row, Grid } from 'react-native-easy-grid';
 
 export default class TicoStop extends Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      ticoStop: props.ticoStop || this.getDefault()
-    };
-  }
-
-  getDefault() {
-    var Tico_Stop = {
-      _id: 1234,
-      name: 'Museo Nacional',
-      historical_review: 'Una putada muy vieja que hay en chepe centro.',
-      coordinates: '9°55′58″N 84°04′17″O',
-      photo: 'https://upload.wikimedia.org/wikipedia/commons/0/01/Vistamuseocr.jpg',
-      address: 'La actual localización del museo es el antiguo Cuartel Bellavista.',
-      province:{
-        province_id: 1234,
-        name:'San José',
-        canton: 'San José'
-      }
-    };
-      return Tico_Stop;
-  }
-
   render() {
     return (
       <Container>
@@ -38,7 +13,7 @@ export default class TicoStop extends Component {
             <Row style={ styles.header }>
               <Image
                 style={{ flex: 1 }}
-                source={{ uri: this.state.ticoStop.photo }}
+                source={{ uri: this.props.ticoStop.photo }}
               />
             </Row>
           </Grid>
@@ -50,21 +25,21 @@ export default class TicoStop extends Component {
               <Text style={styles.titles}>Reseña histórica:</Text>
             </Row>
             <Row>
-              <Text style={styles.textContainer}>{this.state.ticoStop.historical_review}</Text>
+              <Text style={styles.textContainer}>{this.props.ticoStop.historicalReview}</Text>
             </Row>
 
             <Row>
               <Text style={styles.titles}>Dirección:</Text>
             </Row>
             <Row>
-              <Text style={styles.textContainer}>{this.state.ticoStop.address}</Text>
+              <Text style={styles.textContainer}>{this.props.ticoStop.address}</Text>
             </Row>
 
             <Row>
               <Text style={styles.titles}>Ubicación:</Text>
             </Row>
             <Row>
-              <Text style={styles.textContainer}>{this.state.ticoStop.province.canton + ' , ' + this.state.ticoStop.province.name}</Text>
+              <Text style={styles.textContainer}>{this.props.ticoStop.province.canton + ' , ' + this.props.ticoStop.province.name}</Text>
             </Row>
           </Grid>
         </Content>

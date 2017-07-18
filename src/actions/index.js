@@ -1,4 +1,4 @@
-const SERVER_IP = '10.223.29.134';
+const SERVER_IP = '192.168.86.23';
 
 const saveToken = (data) => {
   return {

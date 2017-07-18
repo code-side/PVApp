@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Container, Content, Footer, FooterTab, Button } from 'react-native';
-import { welcome, saveToken } from '../actions';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { saveToken } from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
 class Home extends Component {
-
-  componentWillMount() {
-    this.props.welcome('Welcome to PVApp!');
-  }
 
   ticoStopList() {
     Actions.ticoStopList();
@@ -47,4 +43,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { welcome, saveToken })(Home);
+export default connect(mapStateToProps, { saveToken })(Home);

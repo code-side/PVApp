@@ -6,61 +6,6 @@ import Moment from 'moment';
 
 export default class TouristicInterest extends Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      touristicInterest: props.touristicInterest || this.getDefault()
-    };
-  }
-
-  getDefault() {
-    Moment.locale('es');
-    var Touristic_Interest =
-    {
-      _id: 1234,
-      name: 'Adobe rent a car',
-      type: 'Rent a car',
-      working_hours: 'L-V de 8am a 5pm',
-      contact: '8888-8888',
-      address: 'Avenida central',
-      coordinates: '9.6328645,-82.6582748',
-      logo: 'http://www.parajesdetiquicia.com/adobe_rent_a_car_costa_rica/adobe_rent_a_car_costa_rica_logo.gif',
-      province:
-      {
-        province_id: 1234,
-        name: 'San José',
-        canton: 'San José'
-      },
-      reviews: [
-        {
-          comment: 'Muy buen servicio al cliente',
-          rating: 4,
-          user: {
-            user_id: 1234,
-            name: 'Deus',
-            photo: 'https://www.ischool.berkeley.edu/sites/default/files/default_images/avatar.jpeg'
-          },
-          published: Moment('3-7-2017', 'DD-MM-YYYY').fromNow(),
-          reported: 0
-        },
-        {
-          comment: 'Son lo peor, kys!',
-          rating: 1,
-          user: {
-            user_id: 4567,
-            name: 'Alomatics',
-            photo: 'https://www.ischool.berkeley.edu/sites/default/files/default_images/avatar.jpeg'
-          },
-          published: Moment('4-7-2017', 'DD-MM-YYYY').fromNow(),
-          reported: 0
-        }
-      ]
-    };
-
-    return Touristic_Interest;
-  }
-
   renderReviews(reviews) {
     return (
       <Card>
@@ -115,7 +60,7 @@ export default class TouristicInterest extends Component {
             <Row style={ styles.header }>
               <Image
                 style={{ flex: 1 }}
-                source={{ uri: this.state.touristicInterest.logo }}
+                source={{ uri: this.props.touristicInterest.photo }}
               />
             </Row>
           </Grid>
@@ -129,31 +74,31 @@ export default class TouristicInterest extends Component {
                   <Text style={styles.titles}>Horario de atención:</Text>
                 </Row>
                 <Row>
-                  <Text style={styles.textContainer}>{this.state.touristicInterest.working_hours}</Text>
+                  <Text style={styles.textContainer}>{this.props.touristicInterest.workingHours}</Text>
                 </Row>
 
                 <Row>
                   <Text style={styles.titles}>Contacto:</Text>
                 </Row>
                 <Row>
-                  <Text style={styles.textContainer}>{this.state.touristicInterest.contact}</Text>
+                  <Text style={styles.textContainer}>{this.props.touristicInterest.contact}</Text>
                 </Row>
 
                 <Row>
                   <Text style={styles.titles}>Ubicación:</Text>
                 </Row>
                 <Row>
-                  <Text style={styles.textContainer}>{this.state.touristicInterest.address}</Text>
+                  <Text style={styles.textContainer}>{this.props.touristicInterest.address}</Text>
                 </Row>
                 <Row>
-                  <Text style={styles.textContainer}>{this.state.touristicInterest.province.canton + ', ' + this.state.touristicInterest.province.name}</Text>
+                  <Text style={styles.textContainer}>{this.props.touristicInterest.province.canton + ', ' + this.props.touristicInterest.province.name}</Text>
                 </Row>
               </Grid>
             </Tab>
 
             <Tab heading="Comentarios">
               <List
-                dataArray={this.state.touristicInterest.reviews}
+                dataArray={this.props.touristicInterest.reviews}
                 renderRow={(item) => this.renderReviews(item)}
               />
             </Tab>

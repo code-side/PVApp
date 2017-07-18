@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { TouchableOpacity } from 'react-native';
-import { Container, Text, Card, List, Thumbnail } from 'native-base';
+import { Container, Text, Card, CardItem, List, Thumbnail, Left } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { ticoStopList } from 'actions';
 
 class TicoStopList extends Component {
 
@@ -13,12 +12,16 @@ class TicoStopList extends Component {
 
   renderTicoStops(item) {
     return (
-      <Card>
-        <TouchableOpacity onPress={()=>this.viewTicoStop(item)}>
-            <Thumbnail square source={{uri: item.photo}} />
-            <Text>{item.name}</Text>
-        </TouchableOpacity>
-      </Card>
+      <TouchableOpacity onPress={()=>this.viewTicoStop(item)}>
+        <Card>
+          <CardItem>
+            <Left>
+              <Thumbnail square source={{uri: item.photo}} />
+              <Text>{item.name}</Text>
+            </Left>
+          </CardItem>
+        </Card>
+      </TouchableOpacity>
     );
   }
 
@@ -26,7 +29,7 @@ class TicoStopList extends Component {
     return (
       <Container>
         <List
-          dataArray={this.state.ticoStopList}
+          dataArray={this.props.ticoStopList}
           renderRow={(item) => this.renderTicoStops(item)}
         />
       </Container>
@@ -37,9 +40,8 @@ class TicoStopList extends Component {
 
 const mapStateToProps = state => {
   return {
-    token: state.db.token,
-    ticoStopList: state.db.ticoStopList
+    ticoStopList: state.db.staticData.ticoStops
   };
 };
 
-export default connect(mapStateToProps, { ticoStopList })(TicoStopList);
+export default connect(mapStateToProps)(TicoStopList);
