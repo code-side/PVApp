@@ -1,10 +1,20 @@
 import React from 'react';
+
 import { Router, Scene } from 'react-native-router-flux';
+
 import Login from './views/Login';
 import I18n from './services/languageService';
 import Home from './views/Home';
 import Register from './views/Register';
 import RegisterProfilePicture from './views/RegisterProfilePicture';
+
+//TicoStop
+import TicoStopList from './views/TicoStopList';
+import TicoStop from './views/TicoStop';
+
+//TouristicInterest
+import TouristicInterestList from './views/TouristicInterestList';
+import TouristicInterest from './views/TouristicInterest';
 
 // Provinces
 import ProvinceList from './views/provinceList';
@@ -13,6 +23,7 @@ import ProvinceInfo from './views/provinceInfo';
 //touristDestionations
 import TouristDestinationList from './views/TouristDestinationList';
 import TouristDestination from './views/TouristDestination';
+
 
 import Splash from './views/Splash';
 
@@ -35,24 +46,29 @@ const RouterComponent = () => {
      <Scene key="provInfo" component={ProvinceInfo} />
      <Scene key="touristDestionations" component={TouristDestinationList} title="Destinos turisticos"/>
      <Scene key="touristDestionation" component={TouristDestination} title="Destino turisticos"/>
+     <Scene key="ticoStopList" component={TicoStopList} title="Tico Stops"/>
+     <Scene key="ticoStop" component={TicoStop}/>
+     <Scene key="touristicInterestList" component={TouristicInterestList} title="Interés turístico"/>
+     <Scene key="touristicInterest" component={TouristicInterest}/>
      <Scene key="appSettings" component={AppSettings} title="Perfil"/>
+
     </Router>
   );
 };
 
 const styles = {
   navBar: {
-    backgroundColor:'#5069c3'
+    backgroundColor: '#5069c3'
   },
-  navBarTitle:{
-    color:'#FFFFFF',
+  navBarTitle: {
+    color: '#FFFFFF',
     fontWeight: 'bold'
   },
-  barButtonTextStyle:{
-    color:'#FFFFFF'
+  barButtonTextStyle: {
+    color: '#FFFFFF'
   },
-  barButtonIconStyle:{
-    tintColor:'rgb(255,255,255)'
+  barButtonIconStyle: {
+    tintColor: 'rgb(255,255,255)'
   }
 };
 

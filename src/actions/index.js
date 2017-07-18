@@ -1,4 +1,4 @@
-const SERVER_IP = '192.168.86.243';
+const SERVER_IP = '192.168.86.23';
 
 export const saveLoggedUser = (user) =>{
   return {
