@@ -16,7 +16,7 @@ class Splash extends Component {
 
 verifiedUser() {
   AsyncStorage.getItem('@loggedUser:key').then((user)=>{
-    if (user !== undefined){
+    if (user !== null){
         user = JSON.parse(user);
         const {username = user.email, password, token = this.props.token} = user;
         this.props.login({username, password, token}).then(()=>{

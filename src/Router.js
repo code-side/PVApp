@@ -38,7 +38,7 @@ const RouterComponent = () => {
   barButtonIconStyle={styles.barButtonIconStyle}
   sceneStyle={{ paddingTop: 54 }}>
      <Scene key="splash" component={Splash} initial />
-     <Scene key="login" component={Login} />
+     <Scene key="login" component={Login} type="reset"/>
      <Scene key="register" component={Register} title="Registro" />
      <Scene key= "registerProfilePicture" component ={ RegisterProfilePicture } title="Registro" />
      <Scene key="home" component={Home} type="reset" title="PVApp" />

@@ -3,7 +3,7 @@ import {  Content } from 'native-base';
 import { Text, View, TextInput, TouchableOpacity, Button, AsyncStorage} from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { login, saveLoggedUser } from '../actions';
+import { login } from '../actions';
 
 class Login extends Component {
 
@@ -99,4 +99,4 @@ const mapStateToProps = state => {
 };
 
 
-export default connect(mapStateToProps, { login, saveLoggedUser })(Login);
+export default connect(mapStateToProps, { login })(Login);
