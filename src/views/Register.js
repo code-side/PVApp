@@ -11,14 +11,14 @@ class Register extends Component {
     super(props);
     this.state = {
       user:{
-        name: "",
-        email:"",
-        password:"",
-        birthday:"",
-        nationality:"",
-        gender:""
+        name: '',
+        email: '',
+        password: '',
+        birthday: '',
+        nationality: '',
+        gender: ''
       }
-    }
+    };
   }
 
   openDatePicker = async () =>{
@@ -31,7 +31,8 @@ class Register extends Component {
       if (action !== DatePickerAndroid.dismissedAction) {
         // Selected year, month (0-11), day
         console.log(this.state.user);
-        user = [...this.state.user, this.state.user.birthday: "newDate"]
+        let user = {...this.state.user, birthday: 'newDate'}
+        console.log(user);
         this.setState({ user:  user});
       }
     } catch ({code, message}) {
@@ -44,12 +45,16 @@ class Register extends Component {
   }
 
   render(){
-    return(
+    return (
       <Container>
         <Content>
           <Form>
             <Item stackedLabel>
               <Label>Nombre</Label>
+              <Input />
+            </Item>
+            <Item stackedLabel>
+              <Label>Email</Label>
               <Input />
             </Item>
             <Item stackedLabel>
@@ -72,7 +77,8 @@ class Register extends Component {
         </Footer>
       </Container>
 
-    )}
+    );
+  }
 }
 
 export default Register;

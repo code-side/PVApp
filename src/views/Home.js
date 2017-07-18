@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { Text } from 'react-native';
 import { saveToken } from '../actions';
 import { connect } from 'react-redux';
 import {Container, Content, Footer, FooterTab, Button } from 'native-base';
@@ -7,11 +7,6 @@ import { Actions } from 'react-native-router-flux';
 
 
 class Home extends Component {
-
-  componentWillMount() {
-    //this.props.welcome('Welcome to PVApp!');
-    //console.log(this.props);
-  }
 
   render(){
     return (
