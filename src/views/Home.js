@@ -2,18 +2,49 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { saveToken } from '../actions';
 import { connect } from 'react-redux';
+import {Container, Content, Footer, FooterTab, Button } from 'native-base';
+import { Actions } from 'react-native-router-flux';
+
 
 class Home extends Component {
 
   componentWillMount() {
     //this.props.welcome('Welcome to PVApp!');
-    console.log(this.props);
+    //console.log(this.props);
   }
+
   render(){
     return (
-      <View>
+      <Container>
+      <Content>
         <Text>{this.props.token}</Text>
-      </View>
+        <Text onPress={() => Actions.provInfo()}>Ver provincias</Text>
+        <Text>{this.props.token}</Text>
+        <Text onPress={()=> Actions.touristDestinationList()}>Ver Destinos Turísticos</Text>
+      </Content>
+      <Footer>
+       <FooterTab>
+         <Button full>
+           <Text>Inicio</Text>
+         </Button>
+       </FooterTab>
+       <FooterTab>
+         <Button full>
+           <Text>Favoritos</Text>
+         </Button>
+       </FooterTab>
+       <FooterTab>
+         <Button full>
+           <Text>Visitados</Text>
+         </Button>
+       </FooterTab>
+       <FooterTab>
+         <Button full>
+           <Text>Perfil</Text>
+         </Button>
+       </FooterTab>
+     </Footer>
+    </Container>
     );
   }
 }

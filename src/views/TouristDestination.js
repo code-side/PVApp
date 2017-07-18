@@ -1,55 +1,25 @@
 import React, { Component } from 'react';
-import { Image, Linking} from 'react-native';
+import { Image, Linking, TouchableOpacity} from 'react-native';
 import { Row, Grid } from 'react-native-easy-grid';
-import { Container, Header, Text, Content, Button, Tabs, Tab, List, Thumbnail, Left, Body, Icon, Card, CardItem, Right } from 'native-base';
+import { Container, Header, Text, Content, Button, Tabs, Tab, List, Thumbnail, Left, Body, Icon, Card, CardItem, Right, ListItem } from 'native-base';
+import I18n from '../services/languageService';
 
 
 class TouristDestination extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      touristDest: props.touristDest || this.getDefault(),
       isAddToVisit: false
-    };
+      };
+      console.log(this.props);
   }
-  getDefault() {
-    var touristD = {
-      name: 'Manzanillo',
-      province: 'Limón',
-      photo: 'https://www.costarica.com/contentAsset/image/98a636e4-8f43-447e-b564-7f50a962b6a1/fileAsset/filter/Resize,Jpeg/resize_w/1000/Jpeg_q/.8/',
-      description: 'Manzanillo está ubicado a 4 horas en carro desde la capital San José y al sur del famoso Parque Nacional Cahuita. Sus playas están consideradas como una de las más pintorescas de Costa Rica, con un clima fantástico alrededor de todo el año.',
-      location: '9.6328645,-82.6582748',
-      services: [
-      {
-        name: 'Hoteles',
-        type: 'hotel',
-      },
-      {
-        name: 'Restaurantes',
-        type: 'restaurant',
-      },
-      {
-        name: 'Supermercados',
-        type: 'supermarket',
-      },
-      {
-        name: 'WiFi',
-        type: 'wifi',
-      },
-      ]
-    };
 
-    return touristD;
-  }
-  renderTDestItem(destination) {
+
+  renderTDestItem(attribute) {
     return (
-      <Card style={{flex: 0}}>
-      <CardItem style={{ flexDirection: 'row'}}>
-        <Thumbnail square style={styles.icons} source={ TOURISTDEST_ICONS[destination.type] } />
-        <Text>{ destination.name }</Text>
-      </CardItem>
-      </Card>
+      <ListItem>
+          <Text>{ attribute.name }</Text>
+    </ListItem>
     );
   }
   invoke(type, resource) {
@@ -64,80 +34,58 @@ class TouristDestination extends Component {
   render() {
     return (
       <Container>
-        {/* AppHeader */}
-        <Header>
-          <Left>
-            <Button transparent>
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
-        </Header>
-
+        {/* Header */}
         <Content>
           <Grid>
             <Row style={ styles.header }>
               <Image
                 style={{ flex: 1 }}
-                source={{ uri: this.state.touristDest.photo }}
+                source={{ uri: this.props.touristDest.photos[0] }}
               />
             </Row>
             <Row style={{ backgroundColor:'#5069c3' }}>
-              <Text style={styles.mainTitle}>{ this.state.touristDest.name }</Text>
+              <Text style={styles.mainTitle}>{ this.props.touristDest.name }</Text>
             </Row>
           </Grid>
+
+          {/* Layout */}
           <Tabs initialPage={0} style={{flex:1}}>
-            <Tab heading="Información">
-
+              <Grid>
                 {/* Info */}
-                <Card>
-                  <CardItem>
-                    <Left>
-                    <Text style={styles.titles}>Provincia:</Text>
-                    <Text style={styles.textContainer}>{this.state.touristDest.province}</Text>
-                    </Left>
+                <Row>
+                  <Text style={styles.titles}>Provincia</Text>
+                </Row>
+                <Row>
+                  <Text style={styles.textContainer}>{this.props.touristDest.province.name}</Text>
+                </Row>
 
-                    <Right>
-                      <Thumbnail
-                      square
-                      source={ TOURISTDEST_ICONS.hotel }
-                      style={ styles.listButton }
-                      />
-                    </Right>
-                  </CardItem>
-
-                <CardItem>
-                <Body>
-                  <Text style={styles.titles}>Descripción:</Text>
-                  <Text style={styles.textContainer}>{this.state.touristDest.description}</Text>
-                </Body>
-                 </CardItem>
-
-                 <CardItem>
-                  <Body>
-                  <Text style={styles.titles}>Servicios:</Text>
-                  </Body>
-                </CardItem>
-
-               <CardItem>
-                <List
-                   dataArray={ this.state.touristDest.services }
-                   renderRow={ (item) => this.renderTDestItem(item) }
-                />
-               </CardItem>
+                <Row>
+                  <Text style={styles.titles}>Descripción</Text>
+                </Row>
+                <Row>
+                  <Text style={styles.textContainer}>{this.props.touristDest.description}</Text>
+                </Row>
+                <Row>
+                  <Text style={styles.titles}>Servicios}</Text>
+                </Row>
+                <Row>
+                  <List
+                    dataArray={ this.props.touristDest.attributes}
+                    renderRow={ (item) => this.renderTDestItem(item) }/>
+                </Row>
+              </Grid>
 
                <CardItem>
                <Body>
                  <Text style={styles.titles}>Ubicación:</Text>
                 </Body>
-                <Button transparent onPress={() => this.invoke('geo', this.state.touristDest)}>
+                <TouchableOpacity onPress={() => this.invoke('geo', this.props.touristDest)}>
                   <Thumbnail square small source={ TOURISTDEST_ICONS .location } style={ styles.listButton } />
-                </Button>
+                </TouchableOpacity>
                 </CardItem>
-                <Button transparent>
-                {this.state.isAddToVisit ? <Text style={{color:'red'}}>Remover de lista por visitar</Text> : <Text>Añadir a lista por visitar</Text>}
-                </Button>
-              </Card>
-            </Tab>
+                 <Button transparent>
+                 {this.state.isAddToVisit ? <Text style={{color:'red'}}>Remover de lista por visitar</Text> : <Text>Añadir a lista por visitar</Text>}
+                 </Button>
 
             <Tab heading="Fotos" />
             <Tab heading="Comentarios" />
@@ -147,6 +95,7 @@ class TouristDestination extends Component {
     );
   }
 }
+
 export const TOURISTDEST_ICONS = {
 hotel: require('../resources/images/td_hotel.png'),
 location: require('../resources/images/prov_location.png'),
