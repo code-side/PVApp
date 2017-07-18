@@ -7,22 +7,19 @@ import { login, saveTokenToApp } from '../actions';
 
 class Login extends Component {
 
- constructor  (props)  {
+ constructor(props) {
     super(props);
     this.state = {
       username: '',
       password: '',
       exist: true
-    }
-  }
-  componentWillMount(){
+    };
     this.props.saveTokenToApp();
   }
 
-
   login = () =>{
     if (this.state.username !== '' && this.state.password !== ''){
-      const {username, password, token = this.props.token } = this.state;
+      const {username, password, token = this.props.token} = this.state;
       this.props.login({username, password, token});
       Actions.home();
     } else {
@@ -85,11 +82,11 @@ const styles = ({
   }
 });
 
-
 const mapStateToProps = state => {
   return {
     token: state.db.token
   };
 };
+
 
 export default connect(mapStateToProps, { login, saveTokenToApp })(Login);

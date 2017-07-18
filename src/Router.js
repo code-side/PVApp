@@ -10,6 +10,10 @@ import RegisterProfilePicture from './views/RegisterProfilePicture';
 import ProvinceList from './views/provinceList';
 import ProvinceInfo from './views/provinceInfo';
 
+//touristDestionations
+import TouristDestinationList from './views/TouristDestinationList'
+import TouristDestination from './views/TouristDestination'
+
 const RouterComponent = () => {
   return (
 <Router
@@ -22,8 +26,10 @@ const RouterComponent = () => {
      <Scene key="register" component={Register} title="Registro" />
      <Scene key= "registerProfilePicture" component ={ RegisterProfilePicture } title="Registro" />
      <Scene key="home" component={Home} title="PVApp"/>
-      <Scene key="provList" component={ProvinceList} title={I18n.t('titles.provinces')} />
-      <Scene key="provInfo" component={ProvinceInfo} />
+     <Scene key="provList" component={ProvinceList} title={I18n.t('titles.provinces')} />
+     <Scene key="provInfo" component={ProvinceInfo} />
+     <Scene key="touristDestionations" component={TouristDestinationList} title="Destinos turisticos"/>
+     <Scene key="touristDestionation" component={TouristDestination} title="Destino turisticos"/>
     </Router>
   );
 };

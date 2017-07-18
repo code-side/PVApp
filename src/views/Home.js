@@ -12,8 +12,8 @@ class Home extends Component {
     return (
       <Container>
       <Content>
-        <Text>{this.props.token}</Text>
         <Text onPress={() => Actions.provList()}>Ver provincias</Text>
+        <Text onPress={() => Actions.touristDestionations()}>Ver provincias</Text>
       </Content>
       <Footer>
        <FooterTab>
