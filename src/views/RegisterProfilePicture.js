@@ -60,7 +60,7 @@ preview: {
  flex: 1,
  justifyContent: 'flex-end',
  alignItems: 'center',
- height: Dimensions.get('window').height-80,
+ height: Dimensions.get('window').height-78,
  width: Dimensions.get('window').width
 },
 capture: {

@@ -1,23 +1,18 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
+import { Footer, FooterTab, Button, Container, Content } from 'native-base';
 import { saveToken } from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
 class Home extends Component {
 
-  ticoStopList() {
-    Actions.ticoStopList();
-  }
-
-  touristicInterestList() {
-    Actions.touristicInterestList();
-  }
-
   render(){
     return (
-      <View>
-        <Text>{this.props.data}</Text>
+      <Container>
+      <Content>
+        <Text onPress={() => Actions.provList()}>Ver provincias</Text>
+        <Text onPress={() => Actions.touristDestionations()}>Ver provincias</Text>
         <TouchableOpacity onPress={()=>this.ticoStopList()}>
           <Text>
             Ver tico stops
@@ -28,10 +23,30 @@ class Home extends Component {
             Ver interes turistico
           </Text>
         </TouchableOpacity>
-        <Text>{this.props.token}</Text>
-        <Text onPress={() => Actions.provList()}>Ver provincias</Text>
-
-    </View>
+      </Content>
+      <Footer>
+       <FooterTab>
+         <Button full>
+           <Text>Inicio</Text>
+         </Button>
+       </FooterTab>
+       <FooterTab>
+         <Button full>
+           <Text>Favoritos</Text>
+         </Button>
+       </FooterTab>
+       <FooterTab>
+         <Button full>
+           <Text>Visitados</Text>
+         </Button>
+       </FooterTab>
+       <FooterTab>
+         <Button full>
+           <Text>Perfil</Text>
+         </Button>
+       </FooterTab>
+     </Footer>
+    </Container>
     );
   }
 }

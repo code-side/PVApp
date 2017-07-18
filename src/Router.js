@@ -1,12 +1,16 @@
 import React from 'react';
 import { Router, Scene } from 'react-native-router-flux';
-import Login from './views/Login'
+import Login from './views/Login';
 import I18n from './services/languageService';
 import Home from './views/Home';
 import Register from './views/Register';
 import RegisterProfilePicture from './views/RegisterProfilePicture';
+
+//TicoStop
 import TicoStopList from './views/TicoStopList';
 import TicoStop from './views/TicoStop';
+
+//TouristicInterest
 import TouristicInterestList from './views/TouristicInterestList';
 import TouristicInterest from './views/TouristicInterest';
 
@@ -14,25 +18,30 @@ import TouristicInterest from './views/TouristicInterest';
 import ProvinceList from './views/provinceList';
 import ProvinceInfo from './views/provinceInfo';
 
+//touristDestionations
+import TouristDestinationList from './views/TouristDestinationList';
+import TouristDestination from './views/TouristDestination';
+
 const RouterComponent = () => {
   return (
-    <Router
-      navigationBarStyle={styles.navBar}
-      titleStyle={styles.navBarTitle}
-      barButtonTextStyle={styles.barButtonTextStyle}
-      barButtonIconStyle={styles.barButtonIconStyle}
-      sceneStyle={{ paddingTop: 54 }}
-    >
-      <Scene key="home" component={Home} title="PVApp" initial />
-      <Scene key="ticoStopList" component={TicoStopList} title="Tico Stops" />
-      <Scene key="ticoStop" component={TicoStop} />
-      <Scene key="touristicInterestList" component={TouristicInterestList} title="Tico Stops" />
-      <Scene key="touristicInterest" component={TouristicInterest} />
-      <Scene key="login" component={Login} initial />
-      <Scene key="register" component={Register} title="Registro" />
-      <Scene key= "registerProfilePicture" component ={ RegisterProfilePicture } title="Registro" />
-      <Scene key="provList" component={ProvinceList} title={I18n.t('titles.provinces')} />
-      <Scene key="provInfo" component={ProvinceInfo} />
+<Router
+  navigationBarStyle={styles.navBar}
+  titleStyle={styles.navBarTitle}
+  barButtonTextStyle={styles.barButtonTextStyle}
+  barButtonIconStyle={styles.barButtonIconStyle}
+  sceneStyle={{ paddingTop: 54 }}>
+     <Scene key="login" component={Login} initial />
+     <Scene key="register" component={Register} title="Registro" />
+     <Scene key= "registerProfilePicture" component ={ RegisterProfilePicture } title="Registro" />
+     <Scene key="home" component={Home} title="PVApp"/>
+     <Scene key="provList" component={ProvinceList} title={I18n.t('titles.provinces')} />
+     <Scene key="provInfo" component={ProvinceInfo} />
+     <Scene key="touristDestionations" component={TouristDestinationList} title="Destinos turisticos"/>
+     <Scene key="touristDestionation" component={TouristDestination} title="Destino turisticos"/>
+     <Scene key="ticoStopList" component={TicoStopList} title="Tico Stops" />
+     <Scene key="ticoStop" component={TicoStop} />
+     <Scene key="touristicInterestList" component={TouristicInterestList} title="Tico Stops" />
+     <Scene key="touristicInterest" component={TouristicInterest} />
     </Router>
   );
 };

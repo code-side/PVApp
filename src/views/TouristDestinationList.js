@@ -4,22 +4,21 @@ import { Container, Text, Content, Card, CardItem, Body } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
-class ProvinceList extends Component {
+class TouristDestinationList extends Component {
 
-  renderProvinces() {
-    console.log(this.props);
-    if (this.props.provinces !== undefined) {
-      let cards = this.props.provinces.map((prov, indx) => {
+  renderTouristDestinations() {
+    if (this.props.touristDestinations !== undefined) {
+      let cards = this.props.touristDestinations.map((touristDest, indx) => {
         return (
-          <TouchableOpacity key={indx} onPress={() => Actions.provInfo({province: prov})}>
+          <TouchableOpacity key={indx} onPress={() => Actions.touristDestionation({touristDest: touristDest})}>
             <Card>
               <CardItem>
                 <Body>
-                  <Text>{prov.name}</Text>
+                  <Text>{touristDest.name}</Text>
                 </Body>
               </CardItem>
               <CardItem cardBody>
-                <Image source={{uri: prov.photo}} style={{height: 200, width: null, flex: 1}}/>
+                <Image source={{uri: touristDest.photo}} style={{height: 200, width: null, flex: 1}}/>
               </CardItem>
             </Card>
           </TouchableOpacity>
@@ -33,7 +32,7 @@ class ProvinceList extends Component {
     return (
       <Container>
         <Content>
-          {this.renderProvinces()}
+          {this.renderTouristDestinations()}
         </Content>
       </Container>
     );
@@ -42,8 +41,8 @@ class ProvinceList extends Component {
 
 const mapStateToProps = state => {
   return {
-    provinces: state.db.staticData.provinces
+    touristDestinations: state.db.staticData.touristDestinations
   };
 };
 
-export default connect(mapStateToProps, null)(ProvinceList);
+export default connect(mapStateToProps, null)(TouristDestinationList);
