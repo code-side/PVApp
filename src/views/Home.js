@@ -8,6 +8,9 @@ import { Actions } from 'react-native-router-flux';
 
 class Home extends Component {
 
+  changeView =()=>{
+    Actions.appSettings();
+  }
   render(){
     return (
       <Container>
@@ -32,7 +35,7 @@ class Home extends Component {
          </Button>
        </FooterTab>
        <FooterTab>
-         <Button full>
+         <Button full onPress={()=> this.changeView()}>
            <Text>Perfil</Text>
          </Button>
        </FooterTab>
