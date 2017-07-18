@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image } from 'react-native';
+import { Image, Linking } from 'react-native';
 import { Container, Text, Content, Fab, Icon, Button } from 'native-base';
 import { Row, Grid } from 'react-native-easy-grid';
 
@@ -10,6 +10,13 @@ export default class TicoStop extends Component {
     this.state = {
       active: false
     };
+  }
+
+  invoke(type, resource, name) {
+    const uriString = 'http://maps.google.com/maps?q=' + resource + '(' + name + ')&z=20';
+    if (Linking.canOpenURL(type + ':' + uriString)) {
+      Linking.openURL(type + ':' + uriString);
+    }
   }
 
   render() {
@@ -58,7 +65,10 @@ export default class TicoStop extends Component {
             position="bottomRight"
             onPress={() => this.setState({ active: !this.state.active })}>
             <Icon name="md-more" />
-            <Button style={{ backgroundColor: '#34A34F' }}>
+            <Button
+              onPress={() => this.invoke('geo', this.props.ticoStop.coordinates, this.props.ticoStop.name)}
+              style={{ backgroundColor: '#34A34F' }}
+            >
               <Icon name="ios-pin-outline" />
             </Button>
             <Button style={{ backgroundColor: '#3B5998' }}>
