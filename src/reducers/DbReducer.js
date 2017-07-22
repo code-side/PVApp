@@ -6,6 +6,8 @@ export default (state = INITIAL_STATE, action) => {
       return {...state, token: action.payload };
     case 'LOAD_STATIC_DATA':
       return {...state, staticData: action.payload};
+      case 'SAVE_LOGGED_USER':
+        return {...state, user: action.payload};
     default:
     return state;
   }

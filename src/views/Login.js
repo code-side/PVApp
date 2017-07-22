@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Content } from 'native-base';
-import { Text, View, TextInput, TouchableOpacity } from 'react-native';
+import {  Content } from 'native-base';
+import { Text, View, TextInput, TouchableOpacity, Button, AsyncStorage} from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { login, saveTokenToApp } from '../actions';
+import { login } from '../actions';
 
 class Login extends Component {
 
@@ -14,14 +14,21 @@ class Login extends Component {
       password: '',
       exist: true
     };
-    this.props.saveTokenToApp();
-  }
+    }
 
   login = () =>{
     if (this.state.username !== '' && this.state.password !== ''){
       const {username, password, token = this.props.token} = this.state;
-      this.props.login({username, password, token});
-      Actions.home();
+      this.props.login({username, password, token}).then(()=>{
+        console.log(this.props.user);
+        if (this.props.user !== undefined){
+          AsyncStorage.setItem('@loggedUser:key', JSON.stringify(this.props.user));
+          Actions.home();
+        } else {
+          this.setState({exist:false});
+        }
+      });
+
     } else {
       this.setState({exist:false});
     }
@@ -51,10 +58,12 @@ class Login extends Component {
         <TouchableOpacity style={{marginTop:15}} onPress={() => Actions.register()}>
           <Text> Registrarse a la aplicación</Text>
         </TouchableOpacity>
-        <Button primary style={{marginLeft:80,marginTop:15}}
-        onPress={() => this.login()}>
-          <Text style={styles.loginButton}> Login </Text>
-        </Button>
+
+        <Button
+        onPress={() => this.login()}
+        style={{marginLeft:80,marginTop:15}}
+        title="Login"/>
+
 
         </View>
       </View>
@@ -84,9 +93,10 @@ const styles = ({
 
 const mapStateToProps = state => {
   return {
-    token: state.db.token
+    token: state.db.token,
+    user: state.db.user
   };
 };
 
 
-export default connect(mapStateToProps, { login, saveTokenToApp })(Login);
+export default connect(mapStateToProps, { login })(Login);
