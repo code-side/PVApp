@@ -9,10 +9,11 @@ class ProvinceList extends Component {
 
   openProvince(province) {
     this.props.selectProvince(province);
-    Actions.provInfo();
+    Actions.provInfo({title: province.name});
   }
 
   renderProvinces() {
+    console.log(this.props);
     if (this.props.provinces !== undefined) {
       let cards = this.props.provinces.map((prov, indx) => {
         return (

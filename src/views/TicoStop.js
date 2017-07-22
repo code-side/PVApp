@@ -1,58 +1,34 @@
 import React, { Component } from 'react';
-import { Image } from 'react-native';
-import { Container, Header, Text, Content, Button, Left, Icon } from 'native-base';
+import { Image, Linking } from 'react-native';
+import { Container, Text, Content, Fab, Icon, Button } from 'native-base';
 import { Row, Grid } from 'react-native-easy-grid';
 
 export default class TicoStop extends Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
-      ticoStop: props.ticoStop || this.getDefault()
+      active: false
     };
   }
 
-  getDefault() {
-    var Tico_Stop = {
-      _id: 1234,
-      name: 'Museo Nacional',
-      historical_review: 'Una putada muy vieja que hay en chepe centro.',
-      coordinates: '9°55′58″N 84°04′17″O',
-      photo: 'https://upload.wikimedia.org/wikipedia/commons/0/01/Vistamuseocr.jpg',
-      address: 'La actual localización del museo es el antiguo Cuartel Bellavista.',
-      province:{
-        province_id: 1234,
-        name:'San José',
-        canton: 'San José'
-      }
-    };
-      return Tico_Stop;
+  invoke(type, resource, name) {
+    const uriString = 'http://maps.google.com/maps?q=' + resource + '(' + name + ')&z=20';
+    if (Linking.canOpenURL(type + ':' + uriString)) {
+      Linking.openURL(type + ':' + uriString);
+    }
   }
 
   render() {
     return (
       <Container>
-        {/* AppHeader */}
-        <Header>
-          <Left>
-            <Button transparent>
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
-        </Header>
-
-        {/* Header */}
         <Content>
           <Grid>
             <Row style={ styles.header }>
               <Image
                 style={{ flex: 1 }}
-                source={{ uri: this.state.ticoStop.photo }}
+                source={{ uri: this.props.ticoStop.photo }}
               />
-            </Row>
-            <Row style={{ backgroundColor:'#5069c3' }}>
-              <Text style={styles.mainTitle}>{ this.state.ticoStop.name }</Text>
             </Row>
           </Grid>
 
@@ -63,24 +39,45 @@ export default class TicoStop extends Component {
               <Text style={styles.titles}>Reseña histórica:</Text>
             </Row>
             <Row>
-              <Text style={styles.textContainer}>{this.state.ticoStop.historical_review}</Text>
+              <Text style={styles.textContainer}>{this.props.ticoStop.historicalReview}</Text>
             </Row>
 
             <Row>
               <Text style={styles.titles}>Dirección:</Text>
             </Row>
             <Row>
-              <Text style={styles.textContainer}>{this.state.ticoStop.address}</Text>
+              <Text style={styles.textContainer}>{this.props.ticoStop.address}</Text>
             </Row>
 
             <Row>
               <Text style={styles.titles}>Ubicación:</Text>
             </Row>
             <Row>
-              <Text style={styles.textContainer}>{this.state.ticoStop.province.canton + ' , ' + this.state.ticoStop.province.name}</Text>
+              <Text style={styles.textContainer}>{this.props.ticoStop.province.canton + ' , ' + this.props.ticoStop.province.name}</Text>
             </Row>
           </Grid>
         </Content>
+        <Fab
+            active={this.state.active}
+            direction="up"
+            containerStyle={{ }}
+            style={{ backgroundColor: '#5067FF' }}
+            position="bottomRight"
+            onPress={() => this.setState({ active: !this.state.active })}>
+            <Icon name="md-more" />
+            <Button
+              onPress={() => this.invoke('geo', this.props.ticoStop.coordinates, this.props.ticoStop.name)}
+              style={{ backgroundColor: '#34A34F' }}
+            >
+              <Icon name="ios-pin-outline" />
+            </Button>
+            <Button style={{ backgroundColor: '#3B5998' }}>
+              <Icon name="ios-flag-outline" />
+            </Button>
+            <Button style={{ backgroundColor: '#DD5144' }}>
+              <Icon name="ios-heart-outline" />
+            </Button>
+          </Fab>
       </Container>
     );
   }
