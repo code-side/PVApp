@@ -3,7 +3,7 @@ import { Button, Content } from 'native-base';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import { login } from '../actions';
+import { login, saveTokenToApp } from '../actions';
 
 class Login extends Component {
 
@@ -14,12 +14,13 @@ class Login extends Component {
       password: '',
       exist: true
     };
+    this.props.saveTokenToApp();
   }
 
   login = () =>{
     if (this.state.username !== '' && this.state.password !== ''){
-      const {username, password} = this.state;
-      this.props.login({username, password});
+      const {username, password, token = this.props.token} = this.state;
+      this.props.login({username, password, token});
       Actions.home();
     } else {
       this.setState({exist:false});
@@ -81,4 +82,11 @@ const styles = ({
   }
 });
 
-export default connect(null, { login })(Login);
+const mapStateToProps = state => {
+  return {
+    token: state.db.token
+  };
+};
+
+
+export default connect(mapStateToProps, { login, saveTokenToApp })(Login);

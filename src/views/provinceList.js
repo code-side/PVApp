@@ -7,10 +7,11 @@ import { connect } from 'react-redux';
 class ProvinceList extends Component {
 
   renderProvinces() {
+    console.log(this.props);
     if (this.props.provinces !== undefined) {
       let cards = this.props.provinces.map((prov, indx) => {
         return (
-          <TouchableOpacity key={indx} onPress={() => Actions.provInfo({province: prov})}>
+          <TouchableOpacity key={indx} onPress={() => Actions.provInfo({title: prov.name, province: prov})}>
             <Card>
               <CardItem>
                 <Body>

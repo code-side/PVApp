@@ -1,38 +1,39 @@
-const SERVER_IP = '192.168.1.10';
+const SERVER_IP = '192.168.86.24';
 
-const saveToken = (data) => {
-  return {
-    type: 'SAVE_TOKEN',
-    payload: data
-  };
+export const saveTokenToApp = () => {
+  return (dispatch) => {
+  return fetch('http://' + SERVER_IP + ':8080/api/authenticate', {
+   method: 'POST',
+   headers: {
+     'Accept': 'application/json',
+     'Content-Type': 'application/json',
+   },
+   body: JSON.stringify(
+    {
+      username: 'user',
+      password: 'user',
+      rememberMe: true
+   })
+  })
+  .then((response) => response.json())
+  // Save token and load static info
+  .then(async (responseJson) => {
+   const token = responseJson.id_token;
+   dispatch({type: 'SAVE_TOKEN', payload:'Bearer ' + token});
+ });
+ };
 };
 
-export const login = ({username, password}) => {
+export const login = ({username, password, token}) => {
+  console.log(token);
   return (dispatch) => {
-    return fetch('http://' + SERVER_IP + ':8080/api/authenticate', {
-     method: 'POST',
-     headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'application/json',
-     },
-     body: JSON.stringify(
-      {
-        username: 'user',
-        password: 'user',
-        rememberMe: true
-     })
-  })
-   .then((response) => response.json())
-   // Save token and load static info
-   .then(async (responseJson) => {
-     const token = responseJson.id_token;
-     saveToken(' Bearer ' + token);
+
      return fetch('http://' + SERVER_IP + ':8080/api/authenticateUser', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': ' Bearer ' + token
+        'Authorization': token
       },
       body: JSON.stringify(
        {
@@ -43,6 +44,7 @@ export const login = ({username, password}) => {
     .then((response) => response.json())
     // Save token and load static info
     .then(async (authUserResponse) => {
+      console.log(authUserResponse);
      let staticData = {};
 
      invoke(token, 'provinces', 'GET', {})
@@ -68,7 +70,6 @@ export const login = ({username, password}) => {
        }); // end ticoStops invoke
      }); // end provinces invoke
    }); // end of authenticate User
-   }); // end token then
  }; // end dispatch function
 }; // end login function
 
@@ -80,7 +81,7 @@ export const invoke = (token, url, method, body) => {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': ' Bearer ' + token
+        'Authorization': token
       }
    })
    .then((response) => response.json());
@@ -90,7 +91,7 @@ export const invoke = (token, url, method, body) => {
      headers: {
        'Accept': 'application/json',
        'Content-Type': 'application/json',
-       'Authorization': ' Bearer ' + token
+       'Authorization': token
      },
      body: JSON.stringify(body)
   })

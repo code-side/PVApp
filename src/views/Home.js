@@ -1,59 +1,76 @@
-import React, { Component } from 'react';
-import { View, Text } from 'react-native';
-import { saveToken } from '../actions';
-import { connect } from 'react-redux';
-import {Container, Content, Footer, FooterTab, Button } from 'native-base';
-import { Actions } from 'react-native-router-flux';
-
+import React, {Component} from 'react';
+import {
+  Footer,
+  FooterTab,
+  Button,
+  Container,
+  Content,
+  List,
+  ListItem,
+  Text
+} from 'native-base';
+import {saveToken} from '../actions';
+import {connect} from 'react-redux';
+import {Actions} from 'react-native-router-flux';
 
 class Home extends Component {
 
-  componentWillMount() {
-    //this.props.welcome('Welcome to PVApp!');
-    //console.log(this.props);
-  }
-
-  render(){
+  render() {
     return (
       <Container>
-      <Content>
-        <Text>{this.props.token}</Text>
-        <Text onPress={() => Actions.provInfo()}>Ver provincias</Text>
-        <Text>{this.props.token}</Text>
-        <Text onPress={()=> Actions.touristDestinationList()}>Ver Destinos Turísticos</Text>
-      </Content>
-      <Footer>
-       <FooterTab>
-         <Button full>
-           <Text>Inicio</Text>
-         </Button>
-       </FooterTab>
-       <FooterTab>
-         <Button full>
-           <Text>Favoritos</Text>
-         </Button>
-       </FooterTab>
-       <FooterTab>
-         <Button full>
-           <Text>Visitados</Text>
-         </Button>
-       </FooterTab>
-       <FooterTab>
-         <Button full>
-           <Text>Perfil</Text>
-         </Button>
-       </FooterTab>
-     </Footer>
-    </Container>
+        <Content>
+          <List>
+            <ListItem onPress={() => Actions.provList()}>
+              <Text>
+                Ver provincias
+              </Text>
+            </ListItem>
+            <ListItem onPress={() => Actions.touristDestionations()}>
+              <Text>
+                Ver destinos turisticos
+              </Text>
+            </ListItem>
+            <ListItem onPress={() => Actions.ticoStopList()}>
+              <Text>
+                Ver tico stops
+              </Text>
+            </ListItem>
+            <ListItem onPress={() => Actions.touristicInterestList()}>
+              <Text>
+                Ver interes turistico
+              </Text>
+            </ListItem>
+          </List>
+        </Content>
+        <Footer>
+          <FooterTab>
+            <Button full>
+              <Text>Inicio</Text>
+            </Button>
+          </FooterTab>
+          <FooterTab>
+            <Button full>
+              <Text>Favoritos</Text>
+            </Button>
+          </FooterTab>
+          <FooterTab>
+            <Button full>
+              <Text>Visitados</Text>
+            </Button>
+          </FooterTab>
+          <FooterTab>
+            <Button full>
+              <Text>Perfil</Text>
+            </Button>
+          </FooterTab>
+        </Footer>
+      </Container>
     );
   }
 }
 
 const mapStateToProps = state => {
-  return {
-    data: state.db.msg,
-    token: state.db.token
-  };
+  return {data: state.db.msg, token: state.db.token};
 };
 
-export default connect(mapStateToProps, { saveToken })(Home);
+export default connect(mapStateToProps, {saveToken})(Home);

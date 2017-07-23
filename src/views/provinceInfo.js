@@ -61,25 +61,22 @@ export default class ProvinceInfo extends Component {
                 source={{ uri: this.state.province.photo }}
               />
             </Row>
-            <Row style={{ backgroundColor:'#5069c3' }}>
-              <Text style={styles.mainTitle}>{ this.state.province.name }</Text>
-            </Row>
           </Grid>
 
           {/* Layout */}
           <Tabs initialPage={0} style={{flex:1}}>
-            <Tab heading={I18n.t('provinceInfo.tabs.info')}>
+            <Tab heading="Información">
               <Grid>
                 {/* Info */}
                 <Row>
-                  <Text style={styles.titles}>{ I18n.t('provinceInfo.history') }</Text>
+                  <Text style={styles.titles}>Historia</Text>
                 </Row>
                 <Row>
                   <Text style={styles.textContainer}>{this.state.province.history}</Text>
                 </Row>
 
                 <Row>
-                  <Text style={styles.titles}>{ I18n.t('provinceInfo.culture') }</Text>
+                  <Text style={styles.titles}>Cultura</Text>
                 </Row>
                 <Row>
                   <Text style={styles.textContainer}>{this.state.province.culture}</Text>
@@ -87,7 +84,7 @@ export default class ProvinceInfo extends Component {
 
                 {/* Cantones */}
                 <Row>
-                  <Text style={styles.titles}>{ I18n.t('provinceInfo.cantons') }</Text>
+                  <Text style={styles.titles}>Cantones</Text>
                 </Row>
                 <Row>
                   <List
@@ -98,7 +95,7 @@ export default class ProvinceInfo extends Component {
             </Tab>
 
             {/* Emergency Contacts */}
-            <Tab heading={I18n.t('provinceInfo.tabs.contacts')}>
+            <Tab heading="Contactos de emergencia">
               {
                 this.state.province.emergencyContacts.length > 0 ?
                 (

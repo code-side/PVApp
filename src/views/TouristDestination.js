@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Image, Linking, TouchableOpacity} from 'react-native';
+import { Image, Linking} from 'react-native';
 import { Row, Grid } from 'react-native-easy-grid';
-import { Container, Header, Text, Content, Button, Tabs, Tab, List, Thumbnail, Left, Body, Icon, Card, CardItem, Right, ListItem } from 'native-base';
-import I18n from '../services/languageService';
+import { Container, Header, Text, Content, Button, Tabs, Tab, List, Thumbnail, Left, Body, Icon, Card, CardItem, Right } from 'native-base';
 
 
 class TouristDestination extends Component {
@@ -10,16 +9,15 @@ class TouristDestination extends Component {
     super(props);
     this.state = {
       isAddToVisit: false
-      };
-      console.log(this.props);
+    };
   }
-
-
-  renderTDestItem(attribute) {
+  renderTDestItem(destination) {
     return (
-      <ListItem>
-          <Text>{ attribute.name }</Text>
-    </ListItem>
+      <Card style={{flex: 0}}>
+      <CardItem style={{ flexDirection: 'row'}}>
+        <Text>{ destination.name }</Text>
+      </CardItem>
+      </Card>
     );
   }
   invoke(type, resource) {
@@ -34,7 +32,6 @@ class TouristDestination extends Component {
   render() {
     return (
       <Container>
-        {/* Header */}
         <Content>
           <Grid>
             <Row style={ styles.header }>
@@ -47,45 +44,49 @@ class TouristDestination extends Component {
               <Text style={styles.mainTitle}>{ this.props.touristDest.name }</Text>
             </Row>
           </Grid>
-
-          {/* Layout */}
           <Tabs initialPage={0} style={{flex:1}}>
-              <Grid>
-                {/* Info */}
-                <Row>
-                  <Text style={styles.titles}>Provincia</Text>
-                </Row>
-                <Row>
-                  <Text style={styles.textContainer}>{this.props.touristDest.province.name}</Text>
-                </Row>
+            <Tab heading="Información">
 
-                <Row>
-                  <Text style={styles.titles}>Descripción</Text>
-                </Row>
-                <Row>
+                {/* Info */}
+                <Card>
+                  <CardItem>
+                    <Left>
+                    <Text style={styles.titles}>Provincia:</Text>
+                    <Text style={styles.textContainer}>{this.props.touristDest.province.name}</Text>
+                    </Left>
+                  </CardItem>
+
+                <CardItem>
+                <Body>
+                  <Text style={styles.titles}>Descripción:</Text>
                   <Text style={styles.textContainer}>{this.props.touristDest.description}</Text>
-                </Row>
-                <Row>
-                  <Text style={styles.titles}>Servicios}</Text>
-                </Row>
-                <Row>
-                  <List
-                    dataArray={ this.props.touristDest.attributes}
-                    renderRow={ (item) => this.renderTDestItem(item) }/>
-                </Row>
-              </Grid>
+                </Body>
+                 </CardItem>
+
+                 <CardItem>
+                  <Body>
+                  <Text style={styles.titles}>Servicios:</Text>
+                  </Body>
+                </CardItem>
+
+               <CardItem>
+                <List
+                   dataArray={ this.props.touristDest.attributes }
+                   renderRow={ (item) => this.renderTDestItem(item) }
+                />
+               </CardItem>
 
                <CardItem>
                <Body>
                  <Text style={styles.titles}>Ubicación:</Text>
                 </Body>
-                <TouchableOpacity onPress={() => this.invoke('geo', this.props.touristDest)}>
-                  <Thumbnail square small source={ TOURISTDEST_ICONS .location } style={ styles.listButton } />
-                </TouchableOpacity>
+
                 </CardItem>
-                 <Button transparent>
-                 {this.state.isAddToVisit ? <Text style={{color:'red'}}>Remover de lista por visitar</Text> : <Text>Añadir a lista por visitar</Text>}
-                 </Button>
+                <Button transparent>
+                {this.state.isAddToVisit ? <Text style={{color:'red'}}>Remover de lista por visitar</Text> : <Text>Añadir a lista por visitar</Text>}
+                </Button>
+              </Card>
+            </Tab>
 
             <Tab heading="Fotos" />
             <Tab heading="Comentarios" />
@@ -96,13 +97,6 @@ class TouristDestination extends Component {
   }
 }
 
-export const TOURISTDEST_ICONS = {
-hotel: require('../resources/images/td_hotel.png'),
-location: require('../resources/images/prov_location.png'),
-restaurant: require('../resources/images/td_rest.png'),
-supermarket: require('../resources/images/td_supermarket.png'),
-wifi: require('../resources/images/td_wifi.png')
-};
 
 const styles = {
   header: {
