@@ -44,6 +44,11 @@ class Home extends Component {
                 Ver interes turistico
               </Text>
             </ListItem>
+            <ListItem onPress={() => Actions.config()}>
+              <Text>
+                Configuracion
+              </Text>
+            </ListItem>
           </List>
         </Content>
         <Footer>

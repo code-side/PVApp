@@ -7,6 +7,13 @@ export const saveLoggedUser = (user) =>{
   };
 };
 
+export const updateConfig = (config) =>{
+  return {
+    type: 'UPDATE_CONFIG',
+    payload: config
+  };
+};
+
 export const saveTokenToApp = () => {
   return (dispatch) => {
   return fetch('http://' + SERVER_IP + ':8080/api/authenticate', {
@@ -51,8 +58,7 @@ export const login = ({username, password, token}) => {
     .then((response) => response.json())
     // Save token and load static info
     .then(async (authUserResponse) => {
-    console.log(authUserResponse);
-     dispatch({type: 'SAVE_LOGGED_USER', payload:authUserResponse});
+     dispatch({type: 'SAVE_LOGGED_USER', payload: authUserResponse});
      let staticData = {};
 
      invoke(token, 'provinces', 'GET', {})
@@ -71,8 +77,13 @@ export const login = ({username, password, token}) => {
            .then(async (touristDestinationsResponse) => {
              staticData.touristDestinations = touristDestinationsResponse;
 
-             // Save object with all static info
-             dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
+             invoke(token, 'attributes', 'GET', {})
+             .then(async (attributesResponse) => {
+               staticData.attributes = attributesResponse;
+
+               // Save object with all static info
+               dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
+             }); // end attributes invoke
            }); // end touristDestinations invoke
          }); // end touristicInterests invoke
        }); // end ticoStops invoke

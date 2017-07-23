@@ -29,6 +29,8 @@ import Splash from './views/Splash';
 
 import AppSettings from './views/AppSettings';
 
+import Configuration from './views/Configuration';
+
 const RouterComponent = () => {
   return (
 <Router
@@ -51,7 +53,7 @@ const RouterComponent = () => {
      <Scene key="touristicInterestList" component={TouristicInterestList} title="Interés turístico"/>
      <Scene key="touristicInterest" component={TouristicInterest}/>
      <Scene key="appSettings" component={AppSettings} title="Perfil"/>
-
+     <Scene key="config" component={Configuration} title={I18n.t('titles.settings')}/>
     </Router>
   );
 };

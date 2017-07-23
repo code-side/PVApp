@@ -4,7 +4,8 @@ export default {
     provinces: 'Provinces',
     ticoStops: 'Tico Stops',
     touristictInterest: 'Touristict Interest',
-    touristictDestination: 'Touristict Destination'
+    touristictDestination: 'Touristict Destination',
+    settings: 'Settings'
   },
   provinceInfo: {
     history: 'History:',
@@ -14,6 +15,17 @@ export default {
     tabs: {
       info: 'Information',
       contacts: 'Emergency contacts'
+    }
+  },
+  appConfig: {
+    notifications: 'Notifications',
+    sections: {
+      languages: 'Languages',
+      general: 'General'
+    },
+    langNames: {
+      en: 'English',
+      es: 'Spanish'
     }
   }
 };

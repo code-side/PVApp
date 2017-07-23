@@ -8,7 +8,8 @@ I18n.translations = {
   es
 };
 
-I18n.defaultLocale = 'es';
+I18n.languages = ['en', 'es'];
+I18n.defaultLocale = 'en';
 I18n.locale = I18n.currentLocale();
 
 export default I18n;

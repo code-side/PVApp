@@ -1,43 +1,54 @@
-import React, { Component } from 'react';
-import { View, AsyncStorage } from 'react-native';
-import { Actions } from 'react-native-router-flux';
-import { saveTokenToApp, login } from '../actions';
-import { connect } from 'react-redux';
-
+import React, {Component} from 'react';
+import {View, AsyncStorage} from 'react-native';
+import {Actions} from 'react-native-router-flux';
+import {saveTokenToApp, login, updateConfig} from '../actions';
+import {connect} from 'react-redux';
+import I18n from '../services/languageService';
 
 class Splash extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.props.saveTokenToApp().then(()=>{
-        this.verifiedUser();
-    }
-  );
+    this.loadAppConfig();
+    this.props.saveTokenToApp().then(() => {
+      this.verifiedUser();
+    });
   }
 
-verifiedUser() {
-  AsyncStorage.getItem('@loggedUser:key').then((user)=>{
-    if (user !== null){
+  verifiedUser() {
+    AsyncStorage.getItem('@loggedUser:key').then((user) => {
+      if (user !== null) {
         user = JSON.parse(user);
-        const {username = user.email, password, token = this.props.token} = user;
-        this.props.login({username, password, token}).then(()=>{
-        Actions.home();
+        const {
+          username = user.email,
+          password,
+          token = this.props.token
+        } = user;
+        this.props.login({username, password, token}).then(() => {
+          Actions.home();
         });
-    } else {
+      } else {
         Actions.login();
-    }
-  });
- }
-  render(){
-    return (
-        <View />
-    );
+      }
+    });
+  }
+
+  loadAppConfig() {
+    AsyncStorage.getItem('@app_config:key').then((strConfig) =>{
+      if (strConfig !== null) {
+        let config = JSON.parse(strConfig);
+        this.props.updateConfig(config);
+        I18n.locale = config.lang;
+      }
+    });
+  }
+
+  render() {
+    return (<View/>);
   }
 }
+
 const mapStateToProps = state => {
-  return {
-    token: state.db.token
-  };
+  return {token: state.db.token};
 };
 
-
-export default connect(mapStateToProps, { saveTokenToApp, login })(Splash);
+export default connect(mapStateToProps, {saveTokenToApp, login, updateConfig})(Splash);
