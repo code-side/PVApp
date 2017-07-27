@@ -10,7 +10,7 @@ class TouristDestinationList extends Component {
     if (this.props.touristDestinations !== undefined) {
       let cards = this.props.touristDestinations.map((touristDest, indx) => {
         return (
-          <TouchableOpacity key={indx} onPress={() => Actions.touristDestionation({touristDest: touristDest})}>
+          <TouchableOpacity key={indx} onPress={() => Actions.touristDestionation({title: touristDest.name, touristDest: touristDest})}>
             <Card>
               <CardItem>
                 <Left>

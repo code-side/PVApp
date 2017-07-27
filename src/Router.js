@@ -1,7 +1,7 @@
 import React from 'react';
 import {Router, Scene} from 'react-native-router-flux';
 import Login from './views/Login';
-import I18n from './services/languageService';
+//import I18n from './services/languageService';
 import Home from './views/Home';
 import Register from './views/Register';
 import RegisterProfilePicture from './views/RegisterProfilePicture';
@@ -21,6 +21,9 @@ import ProvinceInfo from './views/provinceInfo';
 //touristDestionations
 import TouristDestinationList from './views/TouristDestinationList';
 import TouristDestination from './views/TouristDestination';
+
+//MapView
+import Nearby from './views/Nearby';
 
 const RouterComponent = () => {
   return (
@@ -43,6 +46,7 @@ const RouterComponent = () => {
       <Scene key="ticoStop" component={TicoStop}/>
       <Scene key="touristicInterestList" component={TouristicInterestList} title="Interés turístico"/>
       <Scene key="touristicInterest" component={TouristicInterest}/>
+      <Scene key="showMap" component={Nearby}/>
     </Router>
   );
 };

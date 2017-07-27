@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import { Image, Linking} from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 import { Row, Grid } from 'react-native-easy-grid';
-import { Container, Header, Text, Content, Button, Tabs, Tab, List, Thumbnail, Left, Body, Icon, Card, CardItem, Right } from 'native-base';
+import { Container, Text, Content, Button, Tabs, Tab, List, Left, Body, Card, CardItem, Fab, Icon } from 'native-base';
 
 
 class TouristDestination extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isAddToVisit: false
+      isAddToVisit: false,
+      active: false
     };
   }
+
   renderTDestItem(destination) {
     return (
       <Card style={{flex: 0}}>
@@ -20,15 +23,41 @@ class TouristDestination extends Component {
       </Card>
     );
   }
+
   invoke(type, resource) {
     if (Linking.canOpenURL(type + ':' + resource.location)) {
       Linking.openURL(type + ':' + resource.location);
     }
   }
 
+  takePhoto(){
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+      includeBase64: true
+    }).then(image => {
+      this.props.touristDest.photos.push( `data:${image.mime};base64,` + image.data );
+    });
+  }
+
+  renderPhotos(item) {
+    return (
+      <Card style={{flex: 0}}>
+      <CardItem style={{ flexDirection: 'row'}}>
+        <Image
+          style={{width: 50, height: 50}}
+          source={{uri: item}}
+        />
+      </CardItem>
+      </Card>
+    );
+  }
+
   noItems(text) {
     return (<Text style={styles.noItems}>{text}</Text>);
   }
+
   render() {
     return (
       <Container>
@@ -39,9 +68,6 @@ class TouristDestination extends Component {
                 style={{ flex: 1 }}
                 source={{ uri: this.props.touristDest.photos[0] }}
               />
-            </Row>
-            <Row style={{ backgroundColor:'#5069c3' }}>
-              <Text style={styles.mainTitle}>{ this.props.touristDest.name }</Text>
             </Row>
           </Grid>
           <Tabs initialPage={0} style={{flex:1}}>
@@ -88,10 +114,38 @@ class TouristDestination extends Component {
               </Card>
             </Tab>
 
-            <Tab heading="Fotos" />
+            <Tab heading="Fotos">
+              <List
+                 dataArray={ this.props.touristDest.photos }
+                 renderRow={ (item) => this.renderPhotos(item) }
+              />
+            </Tab>
             <Tab heading="Comentarios" />
           </Tabs>
         </Content>
+
+        <Fab
+            active={this.state.active}
+            direction="up"
+            containerStyle={{ }}
+            style={{ backgroundColor: '#5067FF' }}
+            position="bottomRight"
+            onPress={() => this.setState({ active: !this.state.active })}>
+            <Icon name="md-more" />
+            <Button
+              onPress={() => this.takePhoto()}
+              style={{ backgroundColor: '#34A34F' }}
+            >
+              <Icon name="ios-pin-outline" />
+            </Button>
+            <Button style={{ backgroundColor: '#3B5998' }}>
+              <Icon name="ios-flag-outline" />
+            </Button>
+            <Button style={{ backgroundColor: '#DD5144' }}>
+              <Icon name="ios-heart-outline" />
+            </Button>
+          </Fab>
+
       </Container>
     );
   }
