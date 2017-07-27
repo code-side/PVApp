@@ -15,11 +15,15 @@ import {Actions} from 'react-native-router-flux';
 
 class Home extends Component {
 
+  showMapView() {
+    Actions.showMap({title: 'Nearby'});
+  }
 
   changeView =()=>{
     Actions.appSettings();
   }
-  render(){
+
+  render() {
     return (
       <Container>
         <Content>
@@ -44,6 +48,11 @@ class Home extends Component {
                 Ver interes turistico
               </Text>
             </ListItem>
+            <ListItem onPress={() => Actions.config()}>
+              <Text>
+                Configuracion
+              </Text>
+            </ListItem>
           </List>
         </Content>
         <Footer>
@@ -58,8 +67,8 @@ class Home extends Component {
             </Button>
           </FooterTab>
           <FooterTab>
-            <Button full>
-              <Text>Visitados</Text>
+            <Button full onPress={() => this.showMapView()}>
+              <Text>Mapa</Text>
             </Button>
           </FooterTab>
           <FooterTab>

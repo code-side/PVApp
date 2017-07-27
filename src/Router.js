@@ -6,6 +6,9 @@ import Login from './views/Login';
 import I18n from './services/languageService';
 import Home from './views/Home';
 import Register from './views/Register';
+import AppSettings from './views/AppSettings';
+import Configuration from './views/Configuration';
+import Splash from './views/Splash';
 import RegisterProfilePicture from './views/RegisterProfilePicture';
 
 //TicoStop
@@ -17,41 +20,41 @@ import TouristicInterestList from './views/TouristicInterestList';
 import TouristicInterest from './views/TouristicInterest';
 
 // Provinces
-import ProvinceList from './views/provinceList';
-import ProvinceInfo from './views/provinceInfo';
+import ProvinceList from './views/ProvinceList';
+import ProvinceInfo from './views/ProvinceInfo';
 
 //touristDestionations
 import TouristDestinationList from './views/TouristDestinationList';
 import TouristDestination from './views/TouristDestination';
 
-
-import Splash from './views/Splash';
-
-import AppSettings from './views/AppSettings';
+//MapView
+import Nearby from './views/Nearby';
 
 const RouterComponent = () => {
   return (
-<Router
-  navigationBarStyle={styles.navBar}
-  titleStyle={styles.navBarTitle}
-  barButtonTextStyle={styles.barButtonTextStyle}
-  barButtonIconStyle={styles.barButtonIconStyle}
-  sceneStyle={{ paddingTop: 54 }}>
-     <Scene key="splash" component={Splash} initial />
-     <Scene key="login" component={Login} type="reset"/>
-     <Scene key="register" component={Register} title="Registro" />
-     <Scene key= "registerProfilePicture" component ={ RegisterProfilePicture } title="Registro" />
-     <Scene key="home" component={Home} type="reset" title="PVApp" />
-     <Scene key="provList" component={ProvinceList} title={I18n.t('titles.provinces')} />
-     <Scene key="provInfo" component={ProvinceInfo} />
-     <Scene key="touristDestionations" component={TouristDestinationList} title="Destinos turisticos"/>
-     <Scene key="touristDestionation" component={TouristDestination} title="Destino turisticos"/>
-     <Scene key="ticoStopList" component={TicoStopList} title="Tico Stops"/>
-     <Scene key="ticoStop" component={TicoStop}/>
-     <Scene key="touristicInterestList" component={TouristicInterestList} title="Interés turístico"/>
-     <Scene key="touristicInterest" component={TouristicInterest}/>
-     <Scene key="appSettings" component={AppSettings} title="Perfil"/>
-
+    <Router
+      navigationBarStyle={styles.navBar}
+      titleStyle={styles.navBarTitle}
+      barButtonTextStyle={styles.barButtonTextStyle}
+      barButtonIconStyle={styles.barButtonIconStyle}
+      sceneStyle={{ paddingTop: 54 }}
+    >
+      <Scene key="splash" component={Splash} initial/>
+      <Scene key="login" component={Login} title=""/>
+      <Scene key="register" component={Register} title="Registro"/>
+      <Scene key="registerProfilePicture" component ={RegisterProfilePicture} title="Registro"/>
+      <Scene key="home" component={Home} title="PVApp"/>
+      <Scene key="provList" component={ProvinceList} title="Provincias"/>
+      <Scene key="provInfo" component={ProvinceInfo}/>
+      <Scene key="touristDestionations" component={TouristDestinationList} title="Destinos turísticos"/>
+      <Scene key="touristDestionation" component={TouristDestination}/>
+      <Scene key="ticoStopList" component={TicoStopList} title="Tico Stops"/>
+      <Scene key="ticoStop" component={TicoStop}/>
+      <Scene key="touristicInterestList" component={TouristicInterestList} title="Interés turístico"/>
+      <Scene key="touristicInterest" component={TouristicInterest}/>
+      <Scene key="showMap" component={Nearby}/>
+      <Scene key="appSettings" component={AppSettings} title="Perfil"/>
+      <Scene key="config" component={Configuration} title={I18n.t('titles.settings')}/>
     </Router>
   );
 };
