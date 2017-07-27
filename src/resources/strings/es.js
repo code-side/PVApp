@@ -7,6 +7,14 @@ export default {
     touristictDestination: 'Destino turístico',
     settings: 'Ajustes'
   },
+  general: {
+    tags: 'Etiquetas',
+    search: 'Buscar',
+    map: 'Mapa'
+  },
+  touristDestionation: {
+    tabDestinations: 'Destinos'
+  },
   provinceInfo: {
     history: 'Historia:',
     culture: 'Cultura:',
