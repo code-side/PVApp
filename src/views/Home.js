@@ -19,6 +19,10 @@ class Home extends Component {
     Actions.showMap({title: 'Nearby'});
   }
 
+  changeView =()=>{
+    Actions.appSettings();
+  }
+
   render() {
     return (
       <Container>
@@ -44,6 +48,11 @@ class Home extends Component {
                 Ver interes turistico
               </Text>
             </ListItem>
+            <ListItem onPress={() => Actions.config()}>
+              <Text>
+                Configuracion
+              </Text>
+            </ListItem>
           </List>
         </Content>
         <Footer>
@@ -63,7 +72,7 @@ class Home extends Component {
             </Button>
           </FooterTab>
           <FooterTab>
-            <Button full>
+            <Button full onPress={()=>this.changeView()}>
               <Text>Perfil</Text>
             </Button>
           </FooterTab>

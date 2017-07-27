@@ -3,17 +3,9 @@ import { Image, Linking } from 'react-native';
 import { Container, Text, Content, Button, Tabs, Tab, List, ListItem, Thumbnail, Body } from 'native-base';
 import { Row, Grid } from 'react-native-easy-grid';
 import I18n from '../services/languageService';
-import { EMERGENCY_ICONS } from './emergencyContact';
+import { connect } from 'react-redux';
 
-export default class ProvinceInfo extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      province: props.province
-    };
-  }
+class ProvinceInfo extends Component {
 
   renderCantonItem(canton) {
     return (
@@ -58,7 +50,7 @@ export default class ProvinceInfo extends Component {
             <Row style={ styles.header }>
               <Image
                 style={{ flex: 1 }}
-                source={{ uri: this.state.province.photo }}
+                source={{ uri: this.props.province.photo }}
               />
             </Row>
           </Grid>
@@ -72,14 +64,14 @@ export default class ProvinceInfo extends Component {
                   <Text style={styles.titles}>Historia</Text>
                 </Row>
                 <Row>
-                  <Text style={styles.textContainer}>{this.state.province.history}</Text>
+                  <Text style={styles.textContainer}>{this.props.province.history}</Text>
                 </Row>
 
                 <Row>
                   <Text style={styles.titles}>Cultura</Text>
                 </Row>
                 <Row>
-                  <Text style={styles.textContainer}>{this.state.province.culture}</Text>
+                  <Text style={styles.textContainer}>{this.props.province.culture}</Text>
                 </Row>
 
                 {/* Cantones */}
@@ -88,7 +80,7 @@ export default class ProvinceInfo extends Component {
                 </Row>
                 <Row>
                   <List
-                    dataArray={ this.state.province.cantons }
+                    dataArray={ this.props.province.cantons }
                     renderRow={ (item) => this.renderCantonItem(item) }/>
                 </Row>
               </Grid>
@@ -97,13 +89,13 @@ export default class ProvinceInfo extends Component {
             {/* Emergency Contacts */}
             <Tab heading="Contactos de emergencia">
               {
-                this.state.province.emergencyContacts.length > 0 ?
+                this.props.province.emergencyContacts.length > 0 ?
                 (
                   <List
-                    dataArray={ this.state.province.emergencyContacts }
+                    dataArray={ this.props.province.emergencyContacts }
                     renderRow={ (item) => this.renderContactItem(item) }/>
                 ) : (
-                  <Text style={ styles.noItems }>{I18n.t('noContacts')}</Text>
+                  <Text style={ styles.noItems }>{I18n.t('provinceInfo.noContacts')}</Text>
                 )
               }
             </Tab>
@@ -117,6 +109,15 @@ export default class ProvinceInfo extends Component {
 export const PROVINCE_ICONS = {
   location: require('../resources/images/prov_location.png'),
   phone: require('../resources/images/prov_phone.png')
+};
+
+export const EMERGENCY_ICONS = {
+  police: require('../resources/images/em_police.png'),
+  crane: require('../resources/images/em_crane.png'),
+  firefighters: require('../resources/images/em_firefighters.png'),
+  hospital: require('../resources/images/em_hospital.png'),
+  ambulance: require('../resources/images/em_ambulance.png'),
+  help: require('../resources/images/gen_help.png')
 };
 
 const styles = {
@@ -142,10 +143,10 @@ const styles = {
   },
   textContainer: {
     fontSize: 14,
-     paddingLeft: 10,
-     paddingRight: 10,
-     textAlign: 'justify',
-     flexWrap: 'wrap'
+    paddingLeft: 10,
+    paddingRight: 10,
+    textAlign: 'justify',
+    flexWrap: 'wrap'
   },
   listItem: {
     padding: 10,
@@ -160,3 +161,11 @@ const styles = {
     textAlignVertical: 'center'
   }
 };
+
+const mapStateToProps = state => {
+  return {
+    province: state.provinceReducer.selected
+  };
+};
+
+export default connect(mapStateToProps, null)(ProvinceInfo);

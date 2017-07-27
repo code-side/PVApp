@@ -1,9 +1,14 @@
 import React from 'react';
-import {Router, Scene} from 'react-native-router-flux';
+
+import { Router, Scene } from 'react-native-router-flux';
+
 import Login from './views/Login';
-//import I18n from './services/languageService';
+import I18n from './services/languageService';
 import Home from './views/Home';
 import Register from './views/Register';
+import AppSettings from './views/AppSettings';
+import Configuration from './views/Configuration';
+import Splash from './views/Splash';
 import RegisterProfilePicture from './views/RegisterProfilePicture';
 
 //TicoStop
@@ -15,8 +20,8 @@ import TouristicInterestList from './views/TouristicInterestList';
 import TouristicInterest from './views/TouristicInterest';
 
 // Provinces
-import ProvinceList from './views/provinceList';
-import ProvinceInfo from './views/provinceInfo';
+import ProvinceList from './views/ProvinceList';
+import ProvinceInfo from './views/ProvinceInfo';
 
 //touristDestionations
 import TouristDestinationList from './views/TouristDestinationList';
@@ -34,7 +39,8 @@ const RouterComponent = () => {
       barButtonIconStyle={styles.barButtonIconStyle}
       sceneStyle={{ paddingTop: 54 }}
     >
-      <Scene key="login" component={Login} initial/>
+      <Scene key="splash" component={Splash} initial/>
+      <Scene key="login" component={Login} title=""/>
       <Scene key="register" component={Register} title="Registro"/>
       <Scene key="registerProfilePicture" component ={RegisterProfilePicture} title="Registro"/>
       <Scene key="home" component={Home} title="PVApp"/>
@@ -47,6 +53,8 @@ const RouterComponent = () => {
       <Scene key="touristicInterestList" component={TouristicInterestList} title="Interés turístico"/>
       <Scene key="touristicInterest" component={TouristicInterest}/>
       <Scene key="showMap" component={Nearby}/>
+      <Scene key="appSettings" component={AppSettings} title="Perfil"/>
+      <Scene key="config" component={Configuration} title={I18n.t('titles.settings')}/>
     </Router>
   );
 };
