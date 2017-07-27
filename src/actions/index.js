@@ -1,4 +1,4 @@
-const SERVER_IP = '10.223.29.134';
+const SERVER_IP = '192.168.86.25';
 
 export const saveLoggedUser = (user) =>{
   return {
@@ -15,7 +15,6 @@ export const updateConfig = (config) =>{
 };
 
 export const saveTokenToApp = () => {
-  console.log("ok?");
   return (dispatch) => {
   return fetch('http://' + SERVER_IP + ':8080/api/authenticate', {
    method: 'POST',

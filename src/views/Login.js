@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {  Content } from 'native-base';
-import { Text, View, TextInput, TouchableOpacity, Button, AsyncStorage} from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, Button, AsyncStorage, ActivityIndicator} from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { login } from '../actions';
@@ -10,9 +10,10 @@ class Login extends Component {
  constructor(props) {
     super(props);
     this.state = {
-      username: 'jorge.argds@gmail.com',
-      password: 'asd',
-      exist: true
+      username: '',
+      password: '',
+      exist: true,
+      animating: false
     };
     }
 
@@ -63,7 +64,11 @@ class Login extends Component {
         onPress={() => this.login()}
         style={{marginLeft:80,marginTop:15}}
         title="Login"/>
-
+        <ActivityIndicator
+        animating={this.state.animating}
+        style={[styles.centering, {height: 80}]}
+        size="large"
+        />
 
         </View>
       </View>
@@ -88,6 +93,11 @@ const styles = ({
   },
   loginButton:{
     color: '#FFF'
+  },
+  centering: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 8,
   }
 });
 
