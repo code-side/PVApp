@@ -115,22 +115,24 @@ class TouristDestinationList extends Component {
           <Tabs initialPage={0} style={{flex:1}}>
             <Tab heading={I18n.t('touristDestionation.tabDestinations')}>
               <Row>
-                <FlatList
-                  data={this.props.touristDestinations}
-                  horizontal={true}
-                  renderItem={({touristDest}) => {
-                    <Card style={{ width: 160, height: 240 }}>
-                      <CardItem cardBody>
-                       <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: touristDest.photos[0]}} />
-                     </CardItem>
-                     <CardItem>
-                       <Left>
-                         <Text style={{textAlign: 'center', flex: 1}}>{touristDest.name}</Text>
-                       </Left>
-                     </CardItem>
-                   </Card>;
-                  }}
-                />
+                {/*
+                  <FlatList
+                    data={this.props.touristDestinations}
+                    horizontal={true}
+                    renderItem={({touristDest}) => {
+                      <Card style={{ width: 160, height: 240 }}>
+                        <CardItem cardBody>
+                         <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: touristDest.photos[0]}} />
+                       </CardItem>
+                       <CardItem>
+                         <Left>
+                           <Text style={{textAlign: 'center', flex: 1}}>{touristDest.name}</Text>
+                         </Left>
+                       </CardItem>
+                     </Card>;
+                    }}
+                  />
+                  */}
                 {this.renderTouristDestinations()}
               </Row>
             </Tab>

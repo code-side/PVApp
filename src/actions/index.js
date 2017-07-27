@@ -15,6 +15,7 @@ export const updateConfig = (config) =>{
 };
 
 export const saveTokenToApp = () => {
+  console.log("ok?");
   return (dispatch) => {
   return fetch('http://' + SERVER_IP + ':8080/api/authenticate', {
    method: 'POST',
@@ -33,6 +34,7 @@ export const saveTokenToApp = () => {
   // Save token and load static info
   .then(async (responseJson) => {
    const token = responseJson.id_token;
+   console.log(token);
    dispatch({type: 'SAVE_TOKEN', payload:'Bearer ' + token});
  });
  };
@@ -77,10 +79,10 @@ export const login = ({username, password, token}) => {
            .then(async (touristDestinationsResponse) => {
              staticData.touristDestinations = touristDestinationsResponse;
 
-             invoke(token, 'attributes', 'GET', {})
+             invoke(token, 'Attributes', 'GET', {})
              .then(async (attributesResponse) => {
                staticData.attributes = attributesResponse;
-
+               console.log(staticData);
                // Save object with all static info
                dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
              }); // end attributes invoke
