@@ -1,37 +1,37 @@
 import React, { Component } from 'react';
 import { StyleSheet, Dimensions, Modal, View, TouchableOpacity } from 'react-native';
-import Camera from 'react-native-camera';
+import ImagePicker from 'react-native-image-crop-picker';
 import { Container, Content, Text, Button } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+
 class RegisterProfilePicture extends Component {
+
+
 
   constructor(props){
     super(props);
     this.state  = {
       confirmation: true
-    }
+    };
+    // cloudinary.config({
+    //   cloud_name: 'codesidedevs',
+    //   api_key: '748436656856871',
+    //   api_secret: 'mvN_DfjWnvWgA7ZCaQyUdn4-p4Y'
+    // });
   }
 
   takePicture() {
-  this.camera.capture()
-    .then((data) => console.log(data))
-    .catch(err => console.error(err));
-  }
-  enablePictureMode =()=>{
-    this.setState({confirmation: !this.state.confirmation});
+  //   cloudinary.uploader.upload('http://www.example.com/image.jpg', function(result) {
+  //     console.log(result);
+  // });
   }
 
   render(){
-    return(
+    return (
       <Container>
       <Content>
-      <Camera
-       ref={(cam) => {
-         this.camera = cam;
-       }}
-       type = "front"
-       style={styles.preview}
-       aspect={Camera.constants.Aspect.fill}>
+
        <View>
         {this.state.confirmation ?
         <View style={styles.modalConfirmation}>
@@ -40,18 +40,16 @@ class RegisterProfilePicture extends Component {
           <Button transparent info>
             <Text>Más tarde</Text>
           </Button>
-          <Button transparent info onPress={() => this.enablePictureMode()}>
+          <Button transparent info onPress={() => this.takePicture()}>
             <Text>Si</Text>
           </Button>
         </View>
-       </View> : <View></View>
+       </View> : <View />
       }
       </View>
-        <Text onPress={this.takePicture.bind(this)}><Icon name="camera" size={40}/></Text>
-       </Camera>
        </Content>
        </Container>
-    )
+    );
   }
 }
 
