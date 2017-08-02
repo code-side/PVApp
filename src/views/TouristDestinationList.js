@@ -22,7 +22,7 @@ class TouristDestinationList extends Component {
     };
   }
 
-  componentWillMount(){
+  /*componentWillMount(){
     this.props.attributes.forEach(x => this.props.attributes.push(x));
     this.props.attributes.forEach(x => this.props.attributes.push(x));
     this.props.attributes.forEach(x => this.props.attributes.push(x));
@@ -30,21 +30,23 @@ class TouristDestinationList extends Component {
     this.props.touristDestinations.forEach(x => this.props.touristDestinations.push(x));
     this.props.touristDestinations.forEach(x => this.props.touristDestinations.push(x));
     this.props.touristDestinations.forEach(x => this.props.touristDestinations.push(x));
-  }
+  }*/
 
   renderTouristDestinations() {
     return this.props.touristDestinations.map((touristDest, indx) => {
       return (
-        <Card key={indx} style={{ width: 160, height: 240 }}>
-          <CardItem cardBody>
-           <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: touristDest.photos[0]}} />
-         </CardItem>
-         <CardItem>
-           <Left>
-             <Text style={{textAlign: 'center', flex: 1}}>{touristDest.name}</Text>
-           </Left>
-         </CardItem>
-        </Card>
+        <TouchableOpacity key={indx} onPress={() => Actions.touristDestionation({title:touristDest.name, touristDest:touristDest})}>
+          <Card style={{ width: 160, height: 240 }}>
+            <CardItem cardBody>
+             <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: touristDest.photos[0].url}} />
+           </CardItem>
+           <CardItem>
+             <Left>
+               <Text style={{textAlign: 'center', flex: 1}}>{touristDest.name}</Text>
+             </Left>
+           </CardItem>
+          </Card>
+        </TouchableOpacity>
       );
     });
   }
