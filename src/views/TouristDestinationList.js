@@ -1,149 +1,267 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, Animated, View, ScrollView, FlatList, Image } from 'react-native';
+import { TouchableOpacity, View, ScrollView, Image } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import I18n from '../services/languageService';
-import MapView from 'react-native-maps';
-import { Container, Tabs, Tab, Text, Content, Header, Title, Input, Icon, List, ListItem, Grid, Row, Body, Button, Item, DeckSwiper, Card, CardItem, Left, Thumbnail } from 'native-base';
+import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import Modal from 'react-native-modal';
+import { Container, Text, CheckBox, Separator, Content, Footer, FooterTab,Header, Title, Input, List, ListItem, Row, Button, Item, Card, CardItem, Left, Right } from 'native-base';
 
 class TouristDestinationList extends Component {
 
   constructor(props) {
     super(props);
+
+    this.mapDestWithProvinces = {};
+    this.appliedTags = [];
     this.state = {
       showAdvancedSearchBar: false,
-      tags: [],
-      region: {
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }
+      showAttributesModalPicker: false,
+      tempTags: []
     };
   }
 
-  componentWillMount(){
-    this.props.attributes.forEach(x => this.props.attributes.push(x));
-    this.props.attributes.forEach(x => this.props.attributes.push(x));
-    this.props.attributes.forEach(x => this.props.attributes.push(x));
+  filterDestinations(province) {
+    let results = [];
 
-    this.props.touristDestinations.forEach(x => this.props.touristDestinations.push(x));
-    this.props.touristDestinations.forEach(x => this.props.touristDestinations.push(x));
-    this.props.touristDestinations.forEach(x => this.props.touristDestinations.push(x));
-  }
+    this.props.touristDestinations.forEach(dest => {
+      if (dest.province.id === province.id) {
+        if (this.appliedTags.length === 0) {
+          results.push(dest);
+        } else {
+          let exit = false;
+          let i = 0;
 
-  renderTouristDestinations() {
-    return this.props.touristDestinations.map((touristDest, indx) => {
-      return (
-        <Card key={indx} style={{ width: 160, height: 240 }}>
-          <CardItem cardBody>
-           <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: touristDest.photos[0]}} />
-         </CardItem>
-         <CardItem>
-           <Left>
-             <Text style={{textAlign: 'center', flex: 1}}>{touristDest.name}</Text>
-           </Left>
-         </CardItem>
-        </Card>
-      );
+          while (!exit && i < this.appliedTags.length) {
+            exit = (dest.attributes.indexOf(this.appliedTags[i++]) !== -1);
+
+            if (exit) {
+              results.push(dest);
+            }
+          }
+        }
+      }
     });
+
+    return results;
   }
 
-  changeAdvancedBarVisibility() {
-    this.state.showAdvancedSearchBar = !this.state.showAdvancedSearchBar;
-    this.setState(this.state);
+  renderProvincesWithDestinations(listIndex, provinceName, destinations) {
+    return (
+      <ListItem key={listIndex}>
+        <View>
+          <Separator bordered>
+            <Text style={styles.provinceName}>{provinceName}</Text>
+          </Separator>
+
+          <ScrollView horizontal={true}>
+            <Row>
+              {this.renderTouristDestinations(destinations)}
+            </Row>
+          </ScrollView>
+        </View>
+      </ListItem>
+    );
+  }
+
+  renderTouristDestinations(destinations) {
+    let i = 0;
+    return destinations.map((touristDest, indx) => {
+      if (i++ < 10) {
+        return (
+          <TouchableOpacity key={indx} style={{ width: 180, height: 240 }} onPress={() => Actions.touristDestionation({title: touristDest.name, touristDest: touristDest})}>
+            <Card>
+              <CardItem cardBody>
+                <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: touristDest.photos[0].url}} />
+              </CardItem>
+              <CardItem>
+                <Left>
+                  <Text style={{ flex: 1, textAlign: 'center' }}>{touristDest.name}</Text>
+                </Left>
+              </CardItem>
+            </Card>
+          </TouchableOpacity>
+        );
+      } else if (i === 11) {
+        return (
+          <TouchableOpacity key={indx} style={{ width: 180, height: 240 }} onPress={() => {}}>
+            <Image
+              source={SEE_BACKGROUND_CARD}
+              style={styles.seeMoreBackground}>
+              <Card style={{backgroundColor: 'transparent', width: 180, height: 240}}>
+                <CardItem>
+                  <Left style={{ marginTop: 25 }}>
+                    <Text style={{fontWeight: 'bold', fontSize: 16}}>{I18n.t('general.seeMore')}</Text>
+                  </Left>
+                  <Right style={{ marginTop: 25, marginRight: 10 }}>
+                    <AwesomeIcon name="arrow-right" backgroundColor="#fff" color="#000" size={20} />
+                  </Right>
+                </CardItem>
+              </Card>
+            </Image>
+          </TouchableOpacity>
+        );
+      }
+    });
   }
 
   getAdvancedSearchBar() {
     return (
-      <View style={{flex: 1, height: 175}}>
-        <ScrollView style={{flex: 1, height: 175}}>
-          <View style={{flexDirection: 'row', flexWrap: 'wrap', flex: 1}}>
-            {this.props.attributes.map((attr, indx) => {
-              if (this.state.tags.indexOf(attr) === -1) {
-                return <Button style={{margin: 5}} key={indx} rounded small light onPress={() => this.tagToSearch(attr)}>
-                  <Text>{attr.name}</Text>
-                </Button>;
-              } else {
-                return <Button style={{margin: 5}} key={indx} rounded small success onPress={() => this.tagToSearch(attr)}>
-                  <Text>{attr.name}</Text>
-                </Button>;
-              }
-            })}
-          </View>
-        </ScrollView>
+      <View style={{ flex: 1, paddingBottom: 15, backgroundColor: '#3f51b5' }}>
+        <Item rounded style={{marginTop: 15, backgroundColor: '#fff'}}>
+          <Input style={{height: 45}} placeholder={I18n.t('touristDestionation.searchLegend')}/>
+
+          <Button rounded light onPress={() => this.openModal()}>
+            <AwesomeIcon name="plus" backgroundColor="#fff" color="#000" size={18} />
+            <Text style={{marginLeft: 10}}>{I18n.t('general.filters')}</Text>
+          </Button>
+        </Item>
       </View>
     );
   }
 
-  tagToSearch(tag) {
-    let indx = this.state.tags.indexOf(tag);
+  renderAttributesModal() {
+    const appyTags = () => {
+      this.appliedTags = [];
+      this.state.tempTags.forEach(x => this.appliedTags.push(x));
+      this.closeModal();
+    };
 
-    if (indx !== -1)
-    {
-      this.state.tags.splice(indx, 1);
+    return (
+      <Modal
+        isVisible={this.state.showAttributesModalPicker}
+        onBackButtonPress={() => this.closeModal()}>
+
+       <View style={styles.modalStyle}>
+         {/* Modal title */}
+         <Header style={styles.modalHeader}>
+           <Title style={{marginTop: 12}}>{I18n.t('general.advancedSearch')}</Title>
+         </Header>
+
+         {/* Load attribute list */}
+         <ScrollView style={{flex: 1}}>
+           {
+             this.props.attributes.map((attr, indx) => {
+               return <ListItem key={indx} style={{marginRight: 20}} onPress={() => this.tagToSearch(attr)}>
+                 <Left>
+                   <Text>{attr.name}</Text>
+                 </Left>
+                 <Right>
+                   <CheckBox checked={this.state.tempTags.indexOf(attr) !== -1} onPress={() => this.tagToSearch(attr)}/>
+                 </Right>
+               </ListItem>;
+             })
+           }
+         </ScrollView>
+
+         {/* Button actions */}
+         <Footer style={styles.modalFooter}>
+           <FooterTab style={{borderBottomLeftRadius: 8}}>
+             <Button full onPress={() => this.closeModal()}>
+               <Text style={{fontSize: 14}}>{I18n.t('general.cancel')}</Text>
+             </Button>
+           </FooterTab>
+           <FooterTab style={{borderBottomRightRadius: 8}}>
+             <Button full onPress={() => appyTags()}>
+               <Text style={{fontSize: 14}}>{I18n.t('general.apply')}</Text>
+             </Button>
+           </FooterTab>
+         </Footer>
+       </View>
+      </Modal>
+    );
+  }
+
+  openModal() {
+    let _tempTags = [];
+    this.appliedTags.forEach(x => _tempTags.push(x));
+    this.setState({...this.state, tempTags: _tempTags, showAttributesModalPicker: true});
+  }
+
+  closeModal() {
+    this.setState({...this.state, tempTags: [], showAttributesModalPicker: false});
+  }
+
+  tagToSearch(tag) {
+    let indx = this.state.tempTags.indexOf(tag);
+
+    if (indx !== -1) {
+      this.state.tempTags.splice(indx, 1);
     } else {
-      this.state.tags.push(tag);
+      this.state.tempTags.push(tag);
     }
 
     this.setState(this.state);
   }
 
-  onRegionChange(region) {
-    console.log(region);
-    this.setState({ region });
-  }
-
   render() {
     return (
       <Container>
-        <Header searchBar rounded>
-          <Item>
-            <Icon name="ios-search" />
-            <Input placeholder={I18n.t('general.search')} />
-            <TouchableOpacity onPress={() => this.changeAdvancedBarVisibility()}>
-              <Icon name={this.state.showAdvancedSearchBar === false ? 'ios-arrow-down' : 'ios-arrow-up'} />
-            </TouchableOpacity>
-          </Item>
-          <Button transparent>
-            <Text>{I18n.t('general.search')}</Text>
-          </Button>
-        </Header>
+        {/* Advanced search modal, Attributes */}
+        {this.renderAttributesModal()}
+
+        {/* View main content */}
         <Content>
+          {/* "Header" search button */}
+          <Button full onPress={() => this.setState({...this.state, showAdvancedSearchBar: !this.state.showAdvancedSearchBar})}>
+            <Text style={{marginRight: 10}}>{I18n.t('general.searcher')}</Text>
+            <AwesomeIcon name={this.state.showAdvancedSearchBar ? 'chevron-up' : 'chevron-down'} backgroundColor="transparent" color="#fff" size={14} />
+          </Button>
+
+          {/* Collapsible search panel */}
           {this.state.showAdvancedSearchBar && this.getAdvancedSearchBar()}
 
-          <Tabs initialPage={0} style={{flex:1}}>
-            <Tab heading={I18n.t('touristDestionation.tabDestinations')}>
-              <Row>
-                {/*
-                  <FlatList
-                    data={this.props.touristDestinations}
-                    horizontal={true}
-                    renderItem={({touristDest}) => {
-                      <Card style={{ width: 160, height: 240 }}>
-                        <CardItem cardBody>
-                         <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: touristDest.photos[0]}} />
-                       </CardItem>
-                       <CardItem>
-                         <Left>
-                           <Text style={{textAlign: 'center', flex: 1}}>{touristDest.name}</Text>
-                         </Left>
-                       </CardItem>
-                     </Card>;
-                    }}
-                  />
-                  */}
-                {this.renderTouristDestinations()}
-              </Row>
-            </Tab>
-
-
-          </Tabs>
+          {/* List of provinces with destinations */}
+          <List>
+            {
+              this.props.provinces.map((prov, indx) => {
+                let destinations = this.filterDestinations(prov);
+                if (destinations.length > 0) {
+                  return this.renderProvincesWithDestinations(indx, prov.name, destinations);
+                }
+              })
+            }
+          </List>
         </Content>
       </Container>
     );
   }
 }
+
+const SEE_BACKGROUND_CARD = require('../resources/images/seeMoreBackground.jpg');
+const styles = {
+  modalHeader: {
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8
+  },
+  modalStyle: {
+    margin: 20,
+    flex: 1,
+    justifyContent: 'flex-start',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#fff'
+  },
+  modalFooter: {
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8
+  },
+  provinceName: {
+    position: 'relative',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  seeMoreBackground: {
+    flex: 1,
+    width: undefined,
+    height: undefined,
+    backgroundColor:'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
+};
 
 const mapStateToProps = state => {
   return {
