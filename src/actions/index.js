@@ -1,4 +1,11 @@
-const SERVER_IP = '192.168.86.24';
+const SERVER_IP = '192.168.86.22';
+
+export const saveLoggedUser = (user) =>{
+  return {
+    type: 'SAVE_LOGGED_USER',
+    payload: user
+  };
+};
 
 export const saveTokenToApp = () => {
   return (dispatch) => {
@@ -25,7 +32,7 @@ export const saveTokenToApp = () => {
 };
 
 export const login = ({username, password, token}) => {
-  console.log(token);
+  console.log(username, password, token);
   return (dispatch) => {
 
      return fetch('http://' + SERVER_IP + ':8080/api/authenticateUser', {
@@ -44,7 +51,8 @@ export const login = ({username, password, token}) => {
     .then((response) => response.json())
     // Save token and load static info
     .then(async (authUserResponse) => {
-      console.log(authUserResponse);
+    console.log(authUserResponse);
+     dispatch({type: 'SAVE_LOGGED_USER', payload:authUserResponse});
      let staticData = {};
 
      invoke(token, 'provinces', 'GET', {})
@@ -69,7 +77,9 @@ export const login = ({username, password, token}) => {
          }); // end touristicInterests invoke
        }); // end ticoStops invoke
      }); // end provinces invoke
-   }); // end of authenticate User
+   }).catch((error) => {
+         console.log(error);
+  }); // end of authenticate User
  }; // end dispatch function
 }; // end login function
 
