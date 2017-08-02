@@ -25,7 +25,7 @@ class RegisterProfilePicture extends Component {
   // });
   }
   registerUser =() =>{
-    const { token = this.props.token, user = this.props.user} = {};
+    const { token = this.props.token, user = this.props.registrationUser} = {};
     this.props.regiseterUser({token, user}).then(() =>{
       if (this.props.user !== undefined){
         AsyncStorage.setItem('@loggedUser:key', JSON.stringify(this.props.user));

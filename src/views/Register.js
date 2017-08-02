@@ -37,10 +37,8 @@ class Register extends Component {
       });
       if (action !== DatePickerAndroid.dismissedAction) {
         // Selected year, month (0-11), day
-        console.log(this.state.user);
         let user = { ...this.state.user, birthday: new Date(year, month, day) }
         this.setState({birthday: month + '/' + day + '/' + year})
-        console.log(user);
         this.setState({ user:  user});
       }
     } catch ({code, message}) {
@@ -48,16 +46,12 @@ class Register extends Component {
     }
   }
   setGender = (selectedGender) =>{
-    console.log(selectedGender);
     let user = {...this.state.user, gender: selectedGender.value};
-    this.setState({ user:  user});
+    this.setState({ user:  user, selectedGender: selectedGender});
   }
 
   continue = () =>{
-    Actions.registerProfilePicture({user:this.state.user});
-  }
-  changePass = (pass)=>{
-    console.log(pass);
+    Actions.registerProfilePicture({registrationUser:this.state.user});
   }
 
   render(){
@@ -96,7 +90,7 @@ class Register extends Component {
 
             <Label>Genero</Label>
             <Picker
-              selectedValue={this.state.user.gender}
+              selectedValue={this.state.selectedGender}
               onValueChange={(selectedGender, itemIndex) => this.setGender(selectedGender)}>
                 {genders}
             </Picker>
