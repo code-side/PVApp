@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Image, Linking} from 'react-native';
+import { Image, Linking, Alert} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { Row, Grid } from 'react-native-easy-grid';
+import { connect } from 'react-redux';
+import { saveFavoriteDest } from '../actions';
 import { Container, Text, Content, Button, Tabs, Tab, List, Left, Body, Card, CardItem, Fab, Icon } from 'native-base';
 
 
@@ -9,7 +11,6 @@ class TouristDestination extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isAddToVisit: false,
       active: false
     };
   }
@@ -40,6 +41,37 @@ class TouristDestination extends Component {
       this.props.touristDest.photos.push( `data:${image.mime};base64,` + image.data );
     });
   }
+favoriteList = ()=>{
+  let isAlreadySaved = false;
+  let actionMessage = '';
+  for (var i = 0; i < this.props.user.favoriteList.length; i++){
+    console.log(this.props.user.favoriteList[i]);
+    if (this.props.touristDest.id === this.props.user.favoriteList[i].id){
+      isAlreadySaved = true;
+      this.removeTouristDestFromList(i);
+      actionMessage = 'Se removió el destino turistico de la lista de favoritos.';
+      break;
+    }
+  }
+  if (!isAlreadySaved){
+    this.props.user.favoriteList.push({id: this.props.touristDest.id, name: this.props.touristDest.name,
+    description: this.props.touristDest.description, photos: this.props.touristDest.photos });
+    actionMessage = 'Se agregó el destino turistico a la lista de favoritos.';
+  }
+  const {token = this.props.token, user = this.props.user} = {};
+  this.props.saveFavoriteDest({token, user}).then(()=>{
+    Alert.alert(
+    'Lista de favoritos',
+    actionMessage,
+    [],
+    { cancelable: true }
+    );
+    this.setState({active:false});
+  });
+}
+removeTouristDestFromList =(i)=>{
+  this.props.user.favoriteList.splice(i,1);
+}
 
   renderPhotos(item) {
     return (
@@ -108,9 +140,6 @@ class TouristDestination extends Component {
                 </Body>
 
                 </CardItem>
-                <Button transparent>
-                {this.state.isAddToVisit ? <Text style={{color:'red'}}>Remover de lista por visitar</Text> : <Text>Añadir a lista por visitar</Text>}
-                </Button>
               </Card>
             </Tab>
 
@@ -141,7 +170,7 @@ class TouristDestination extends Component {
             <Button style={{ backgroundColor: '#3B5998' }}>
               <Icon name="ios-flag-outline" />
             </Button>
-            <Button style={{ backgroundColor: '#DD5144' }}>
+            <Button style={{ backgroundColor: '#DD5144' }} onPress={()=> this.favoriteList()}>
               <Icon name="ios-heart-outline" />
             </Button>
           </Fab>
@@ -214,4 +243,11 @@ const styles = {
   }
 };
 
-export default TouristDestination;
+const mapStateToProps = state => {
+  return {
+    token: state.db.token,
+    user: state.db.user
+  };
+};
+
+export default connect(mapStateToProps, { saveFavoriteDest })(TouristDestination);

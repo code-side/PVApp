@@ -1,4 +1,4 @@
-const SERVER_IP = '192.168.86.22';
+const SERVER_IP = '192.168.1.8';
 
 export const saveLoggedUser = (user) =>{
   return {
@@ -37,6 +37,25 @@ export const saveTokenToApp = () => {
    dispatch({type: 'SAVE_TOKEN', payload:'Bearer ' + token});
  });
  };
+};
+
+export const saveFavoriteDest = ({token, user})=> {
+  return (dispatch)=>{
+    return fetch('http://' + SERVER_IP + ':8080/api/p-v-app-users', {
+      method:'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': token
+      },
+      body: JSON.stringify(user)
+    })
+    .then((response) => response.json())
+    // Save token and load static info
+    .then(async (userResponse) => {
+      dispatch({type: 'SAVE_LOGGED_USER', payload: userResponse});
+   });
+  };
 };
 
 export const login = ({username, password, token}) => {
