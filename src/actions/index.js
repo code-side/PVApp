@@ -1,17 +1,11 @@
 const SERVER_IP = '10.223.29.134';
 
-export const saveLoggedUser = (user) =>{
-  return {
-    type: 'SAVE_LOGGED_USER',
-    payload: user
-  };
+export const saveLoggedUser = (user) => {
+  return {type: 'SAVE_LOGGED_USER', payload: user};
 };
 
-export const updateConfig = (config) =>{
-  return {
-    type: 'UPDATE_CONFIG',
-    payload: config
-  };
+export const updateConfig = (config) => {
+  return {type: 'UPDATE_CONFIG', payload: config};
 };
 
 export const saveTokenToApp = () => {
@@ -41,40 +35,31 @@ export const saveTokenToApp = () => {
 export const login = ({username, password, token}) => {
   return (dispatch) => {
 
-     return fetch('http://' + SERVER_IP + ':8080/api/authenticateUser', {
+    return fetch('http://' + SERVER_IP + ':8080/api/authenticateUser', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': token
       },
-      body: JSON.stringify(
-       {
-         username: username,
-         password: password
-      })
-   })
-    .then((response) => response.json())
+      body: JSON.stringify({username: username, password: password})
+    }).then((response) => response.json())
     // Save token and load static info
-    .then(async (authUserResponse) => {
-     dispatch({type: 'SAVE_LOGGED_USER', payload: authUserResponse});
-     let staticData = {};
+      .then(async(authUserResponse) => {
+      dispatch({type: 'SAVE_LOGGED_USER', payload: authUserResponse});
+      let staticData = {};
 
-     invoke(token, 'provinces', 'GET', {})
-     .then(async (provincesResponse) => {
-       staticData.provinces = provincesResponse;
+      invoke(token, 'provinces', 'GET', {}).then(async(provincesResponse) => {
+        staticData.provinces = provincesResponse;
 
-       invoke(token, 'tico-stops', 'GET', {})
-       .then(async (ticoStopsResponse) => {
-         staticData.ticoStops = ticoStopsResponse;
+        invoke(token, 'tico-stops', 'GET', {}).then(async(ticoStopsResponse) => {
+          staticData.ticoStops = ticoStopsResponse;
 
-         invoke(token, 'touristic-interests', 'GET', {})
-         .then(async (touristicInterestsResponse) => {
-           staticData.touristicInterests = touristicInterestsResponse;
+          invoke(token, 'touristic-interests', 'GET', {}).then(async(touristicInterestsResponse) => {
+            staticData.touristicInterests = touristicInterestsResponse;
 
-           invoke(token, 'tourist-destinations', 'GET', {})
-           .then(async (touristDestinationsResponse) => {
-             staticData.touristDestinations = touristDestinationsResponse;
+            invoke(token, 'tourist-destinations', 'GET', {}).then(async(touristDestinationsResponse) => {
+              staticData.touristDestinations = touristDestinationsResponse;
 
              invoke(token, 'attributes', 'GET', {})
              .then(async (attributesResponse) => {
@@ -103,26 +88,21 @@ export const invoke = (token, url, method, body) => {
         'Content-Type': 'application/json',
         'Authorization': token
       }
-   })
-   .then((response) => response.json());
- } else {
-   return fetch('http://' + SERVER_IP + ':8080/api/' + url, {
-     method: method,
-     headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'application/json',
-       'Authorization': token
-     },
-     body: JSON.stringify(body)
-  })
-  .then((response) => response.json());
- }
+    }).then((response) => response.json());
+  } else {
+    return fetch('http://' + SERVER_IP + ':8080/api/' + url, {
+      method: method,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': token
+      },
+      body: JSON.stringify(body)
+    }).then((response) => response.json());
+  }
 };
 
 // Province Actions
 export const selectProvince = data => {
-  return {
-    type: 'SELECT_PROVINCE',
-    payload: data
-  };
+  return {type: 'SELECT_PROVINCE', payload: data};
 };

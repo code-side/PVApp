@@ -304,11 +304,7 @@ const styles = {
 };
 
 const mapStateToProps = state => {
-  return {
-    touristDestinations: state.db.staticData.touristDestinations,
-    provinces: state.db.staticData.provinces,
-    attributes: state.db.staticData.attributes
-  };
+  return {touristDestinations: state.db.staticData.touristDestinations, provinces: state.db.staticData.provinces, attributes: state.db.staticData.attributes};
 };
 
 export default connect(mapStateToProps, null)(TouristDestinationList);
