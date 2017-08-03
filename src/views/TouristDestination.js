@@ -78,12 +78,11 @@ class TouristDestination extends Component {
       <Container>
         <Content>
           <Grid>
-            <Row style={styles.header}>
-              <Image style={{
-                flex: 1
-              }} source={{
-                uri: this.props.touristDest.photos[0].url
-              }}/>
+            <Row style={ styles.header }>
+              <Image
+                style={{ flex: 1 }}
+                source={{ uri: this.props.touristDest.photos[0].url }}
+              />
             </Row>
           </Grid>
           <Tabs initialPage={0} style={{
