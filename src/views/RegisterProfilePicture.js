@@ -2,14 +2,11 @@ import React, { Component } from 'react';
 import { StyleSheet, Dimensions, View, AsyncStorage } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { Container, Content, Text, Button } from 'native-base';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 import { regiseterUser } from '../actions';
 import { Actions } from 'react-native-router-flux';
 
 class RegisterProfilePicture extends Component {
-
-
 
   constructor(props){
     super(props);
@@ -18,12 +15,20 @@ class RegisterProfilePicture extends Component {
     };
 
   }
-
-  takePicture() {
-  //   cloudinary.uploader.upload('http://www.example.com/image.jpg', function(result) {
-  //     console.log(result);
-  // });
+  takePhoto(){
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+      includeBase64: true
+    }).then(image => {
+      console.log(image);
+      this.props.registrationUser.photo = { url:`data:${image.mime};base64,` + image.data};
+      console.log(this.props.registrationUser);
+      this.registerUser();
+    });
   }
+
   registerUser =() =>{
     const { token = this.props.token, user = this.props.registrationUser} = {};
     this.props.regiseterUser({token, user}).then(() =>{
@@ -49,7 +54,7 @@ class RegisterProfilePicture extends Component {
           <Button transparent info onPress={() => this.registerUser()}>
             <Text>Más tarde</Text>
           </Button>
-          <Button transparent info onPress={() => this.takePicture()}>
+          <Button transparent info onPress={() => this.takePhoto()}>
             <Text>Si</Text>
           </Button>
         </View>

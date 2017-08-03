@@ -106,7 +106,6 @@ export const login = ({
 }; // end login function
 
 export const regiseterUser = ({token, user}) => {
-  console.log(token,user)
   return (dispatch) => {
     return fetch('http://' + SERVER_IP + ':8080/api/p-v-app-users', {
         method: 'POST',

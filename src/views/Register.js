@@ -1,5 +1,5 @@
 import React, {Component } from 'react';
-import { DatePickerAndroid, TouchableOpacity, Picker} from 'react-native'
+import { DatePickerAndroid, TouchableOpacity, Picker, View} from 'react-native';
 import { Container, Content, Form, Item, Input, Label, Text, Button, Footer, FooterTab } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Actions } from 'react-native-router-flux';
@@ -14,9 +14,10 @@ class Register extends Component {
         name: '',
         email: '',
         password: '',
-        birthday: '',
+        birthday: null,
         nationality: '',
-        gender: ''
+        gender: '',
+        photo: null
       },genders_en:[
       {name:'Seleccione un genero', value:''},
       {name:'Male', value:'Male'},
@@ -24,21 +25,33 @@ class Register extends Component {
       {name:'Other',value:'Other'},
     ],
     birthday:'',
-    selectedGender:''
+    selectedGender:'',
+    confirmPassword:'',
+    isNameValid: true,
+    isEmailValid: true,
+    isPasswordValid: true,
+    isGenderValid: true,
+    isBirthdayValid:true,
+    passwordMessage: '',
     };
   }
 
   openDatePicker = async () =>{
+    let userBirthDay;
+    if (this.state.user.birthday !== null){
+       userBirthDay = this.state.user.birthday;
+    } else {
+      userBirthDay = new Date();
+    }
     try {
       const {action, year, month, day} = await DatePickerAndroid.open({
-        // Use `new Date()` for current date.
-        // May 25 2020. Month 0 is January.
-        date: new Date(2020, 4, 25)
+          date: userBirthDay,
+          maxDate: new Date()
       });
       if (action !== DatePickerAndroid.dismissedAction) {
         // Selected year, month (0-11), day
-        let user = { ...this.state.user, birthday: new Date(year, month, day) }
-        this.setState({birthday: month + '/' + day + '/' + year})
+        let user = { ...this.state.user, birthday: new Date(year, month, day) };
+        this.setState({birthday: (month + 1) + '/' + day + '/' + year});
         this.setState({ user:  user});
       }
     } catch ({code, message}) {
@@ -51,29 +64,85 @@ class Register extends Component {
   }
 
   continue = () =>{
-    Actions.registerProfilePicture({registrationUser:this.state.user});
+    if (this.validateUser()){
+        Actions.registerProfilePicture({registrationUser:this.state.user});
+    }
+  }
+  validateUser = () =>{
+    if (this.validateUserName() && this.validateEmail()  && this.validatePassword() &&
+        this.validateGender() && this.validateBirthday()){
+      return true;
+    }
+    return false;
+  }
+  validateUserName = () =>{
+    if (this.state.user.name !== ''){
+    var re = /^([a-zA-Z])\w{4,}/;
+    this.setState({isNameValid: re.test(this.state.user.name)});
+    return re.test(this.state.user.name);
+  }
+    this.setState({isNameValid: false});
+  return false;
   }
 
+  validateEmail = () => {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    this.setState({isEmailValid: re.test(this.state.user.email)});
+    return re.test(this.state.user.email);
+  };
+
+  validatePassword = ()=>{
+    if (this.state.user.password !== '' || this.state.confirmPassword !== ''){
+      if (this.state.user.password !== this.state.confirmPassword){
+        this.setState({passwordMessage:'Las contraseñas no coinciden',isPasswordValid: false});
+        return false;
+      }
+      var re = /^([a-zA-Z])\w{3,}/;
+      console.log(re.test(this.state.user.passoword));
+      this.setState({isPasswordValid: re.test(this.state.user.email), passwordMessage:'La contraseña debe tener más de 3 caracteres'});
+      return re.test(this.state.user.passoword);
+    } else {
+      this.setState({passwordMessage:'Ingrese una contraseña',isPasswordValid: false});
+      return false;
+    }
+  }
+
+  validateGender = () =>{
+    return true;
+  }
+
+  validateBirthday = ()=>{
+    if (this.state.user.birthday === null){
+      this.setState({isBirthdayValid: false});
+      return false;
+    }
+    this.setState({isBirthdayValid: true});
+    return true;
+  }
+
+
   render(){
-    let genders = this.state.genders_en.map( (f, i) => {
-      return <Picker.Item key={i} value={f} label={f.name} />
+    let genders = this.state.genders_en.map((f, i) => {
+      return <Picker.Item key={i} value={f} label={f.name} />;
     });
     return (
       <Container>
         <Content>
           <Form>
-            <Item stackedLabel>
+           <Item stackedLabel>
               <Label>Nombre</Label>
               <Input
               onChangeText={(name) => this.setState({user : {...this.state.user, name: name}})}
               value={this.state.user.name}/>
             </Item>
+             {!this.state.isNameValid && <Label style={{color:'red',marginLeft:15}}>El nombre solo puede contener caracteres</Label>}
             <Item stackedLabel>
               <Label>Email</Label>
               <Input
               onChangeText={(email) => this.setState({user : {...this.state.user, email:email}})}
               value={this.state.user.email}/>
             </Item>
+              {!this.state.isEmailValid && <Label style={{color:'red',marginLeft:15}}>Ingrese una dirección de correo valida</Label>}
             <Item stackedLabel>
               <Label>Contraseña</Label>
               <Input
@@ -85,9 +154,12 @@ class Register extends Component {
             <Item stackedLabel>
               <Label>Confirmar contraseña</Label>
               <Input
+              onChangeText={(confirmPassword) => this.setState({confirmPassword})}
+              value={this.state.confirmPassword}
               secureTextEntry={true}/>
             </Item>
-
+            {!this.state.isPasswordValid && <Label style={{color:'red',marginLeft:15}}>{this.state.passwordMessage}</Label>}
+            <View style={{marginLeft:15}}>
             <Label>Genero</Label>
             <Picker
               selectedValue={this.state.selectedGender}
@@ -95,10 +167,11 @@ class Register extends Component {
                 {genders}
             </Picker>
 
-
             <TouchableOpacity style={{marginTop:10}} onPress={this.openDatePicker}>
               <Text> Fecha de  nacimiento <Icon name="birthday-cake" size={20}/> : {this.state.birthday}</Text>
             </TouchableOpacity>
+            {!this.state.isBirthdayValid && <Label style={{color:'red'}}>Selecciones una fecha de nacimiento valida</Label>}
+            </View>
           </Form>
 
         </Content>
