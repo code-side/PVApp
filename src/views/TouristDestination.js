@@ -47,7 +47,7 @@ class TouristDestination extends Component {
       <CardItem style={{ flexDirection: 'row'}}>
         <Image
           style={{width: 50, height: 50}}
-          source={{uri: item}}
+          source={{uri: item.url}}
         />
       </CardItem>
       </Card>

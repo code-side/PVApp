@@ -17,30 +17,66 @@ class TouristDestinationList extends Component {
     this.state = {
       showAdvancedSearchBar: false,
       showAttributesModalPicker: false,
+      searchText: '',
       tempTags: []
     };
   }
 
   filterDestinations(province) {
     let results = [];
+    let searchText = this.state.searchText.toLowerCase().trim();
 
-    this.props.touristDestinations.forEach(dest => {
-      if (dest.province.id === province.id) {
-        if (this.appliedTags.length === 0) {
+    for (let dest of this.props.touristDestinations) {
+      if (dest.province.name === province.name) {
+        // If no search request accept the destionation by default
+
+        if (this.appliedTags.length === 0 && searchText.length === 0) {
           results.push(dest);
         } else {
-          let exit = false;
+          // Search by attributes
+          let hasAttributes = (dest.attributes.length > 0);
           let i = 0;
 
-          while (!exit && i < this.appliedTags.length) {
-            exit = (dest.attributes.indexOf(this.appliedTags[i++]) !== -1);
+          while (hasAttributes && i < this.appliedTags.length) {
+            let tag = this.appliedTags[i++];
+            let hasTag = (dest.attributes.find((x) => x.name === tag.name) !== undefined);
+            hasAttributes = (hasAttributes && hasTag);
+          }
 
-            if (exit) {
-              results.push(dest);
+          // Search for property text match (if has value)
+          let matchText = false;
+
+          if (searchText.length > 0) {
+            let keys = searchText.split(' ');
+            let hasTextMatch = false;
+            i = 0;
+
+            while (!hasTextMatch && i < keys.length) {
+              let key = keys[i].trim();
+              hasTextMatch = dest.name.toLowerCase().includes(key) ||
+                             dest.province.name.toLowerCase().includes(key);
+              i++;
             }
+            matchText = hasTextMatch;
+          }
+
+          // If tag or text conditions are true, add the destination to result list
+          if (hasAttributes && ((searchText.length === 0) || (searchText.length > 0 && matchText))) {
+            results.push(dest);
           }
         }
       }
+    }
+
+    // Sort results by rating from better to worse
+    results.sort((arg1, arg2) => {
+      let globalRating1 = 0;
+      let globalRating2 = 0;
+
+      arg1.reviews.forEach((r) => {globalRating1 += r.rating;});
+      arg2.reviews.forEach((r) => {globalRating2 += r.rating;});
+
+      return globalRating1 < globalRating2;
     });
 
     return results;
@@ -50,7 +86,7 @@ class TouristDestinationList extends Component {
     return (
       <ListItem key={listIndex}>
         <View>
-          <Separator bordered>
+          <Separator bordered style={{flex: 1}}>
             <Text style={styles.provinceName}>{provinceName}</Text>
           </Separator>
 
@@ -109,7 +145,11 @@ class TouristDestinationList extends Component {
     return (
       <View style={{ flex: 1, paddingBottom: 15, backgroundColor: '#3f51b5' }}>
         <Item rounded style={{marginTop: 15, backgroundColor: '#fff'}}>
-          <Input style={{height: 45}} placeholder={I18n.t('touristDestionation.searchLegend')}/>
+          <Input
+            style={{height: 45}}
+            value={this.state.searchText}
+            onChangeText={(text) => this.setState({searchText: text})}
+            placeholder={I18n.t('touristDestionation.searchLegend')}/>
 
           <Button rounded light onPress={() => this.openModal()}>
             <AwesomeIcon name="plus" backgroundColor="#fff" color="#000" size={18} />
