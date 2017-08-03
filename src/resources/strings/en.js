@@ -9,11 +9,17 @@ export default {
   },
   general: {
     tags: 'Tags',
+    searcher: 'Searcher',
     search: 'Search',
-    map: 'Map'
+    advancedSearch: 'Advanced Search',
+    map: 'Map',
+    seeMore: 'See more',
+    filters: 'Filters',
+    apply: 'Apply',
+    cancel: 'Cancel'
   },
   touristDestionation: {
-    tabDestinations: 'Destinations'
+    searchLegend: 'Search: Prinvinces, Places...'
   },
   provinceInfo: {
     history: 'History:',

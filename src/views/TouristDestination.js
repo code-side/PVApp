@@ -50,19 +50,13 @@ class TouristDestination extends Component {
 
   renderPhotos(item) {
     return (
-      <Card style={{
-        flex: 0
-      }}>
-        <CardItem style={{
-          flexDirection: 'row'
-        }}>
-          <Image style={{
-            width: 50,
-            height: 50
-          }} source={{
-            uri: item.url
-          }}/>
-        </CardItem>
+      <Card style={{flex: 0}}>
+      <CardItem style={{ flexDirection: 'row'}}>
+        <Image
+          style={{width: 50, height: 50}}
+          source={{uri: item.url}}
+        />
+      </CardItem>
       </Card>
     );
   }

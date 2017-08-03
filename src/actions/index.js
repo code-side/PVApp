@@ -1,4 +1,4 @@
-const SERVER_IP = '192.168.86.23';
+const SERVER_IP = '10.223.29.134';
 
 export const saveLoggedUser = (user) => {
   return {type: 'SAVE_LOGGED_USER', payload: user};
@@ -10,28 +10,29 @@ export const updateConfig = (config) => {
 
 export const saveTokenToApp = () => {
   return (dispatch) => {
-    return fetch('http://' + SERVER_IP + ':8080/api/authenticate', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({username: 'user', password: 'user', rememberMe: true})
-    }).then((response) => response.json())
-    // Save token and load static info
-      .then(async(responseJson) => {
-      const token = responseJson.id_token;
-      console.log(token);
-      dispatch({
-        type: 'SAVE_TOKEN',
-        payload: 'Bearer ' + token
-      });
-    });
-  };
+  return fetch('http://' + SERVER_IP + ':8080/api/authenticate', {
+   method: 'POST',
+   headers: {
+     'Accept': 'application/json',
+     'Content-Type': 'application/json',
+   },
+   body: JSON.stringify(
+    {
+      username: 'user',
+      password: 'user',
+      rememberMe: true
+   })
+  })
+  .then((response) => response.json())
+  // Save token and load static info
+  .then(async (responseJson) => {
+   const token = responseJson.id_token;
+   dispatch({type: 'SAVE_TOKEN', payload:'Bearer ' + token});
+ });
+ };
 };
 
 export const login = ({username, password, token}) => {
-  console.log(username, password, token);
   return (dispatch) => {
 
     return fetch('http://' + SERVER_IP + ':8080/api/authenticateUser', {
@@ -60,20 +61,21 @@ export const login = ({username, password, token}) => {
             invoke(token, 'tourist-destinations', 'GET', {}).then(async(touristDestinationsResponse) => {
               staticData.touristDestinations = touristDestinationsResponse;
 
-              invoke(token, 'Attributes', 'GET', {}).then(async(attributesResponse) => {
-                staticData.attributes = attributesResponse;
-                console.log(staticData);
-                // Save object with all static info
-                dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
-              }); // end attributes invoke
-            }); // end touristDestinations invoke
-          }); // end touristicInterests invoke
-        }); // end ticoStops invoke
-      }); // end provinces invoke
-    }).catch((error) => {
-      console.log(error);
-    }); // end of authenticate User
-  }; // end dispatch function
+             invoke(token, 'attributes', 'GET', {})
+             .then(async (attributesResponse) => {
+               staticData.attributes = attributesResponse;
+
+               // Save object with all static info
+               dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
+             }); // end attributes invoke
+           }); // end touristDestinations invoke
+         }); // end touristicInterests invoke
+       }); // end ticoStops invoke
+     }); // end provinces invoke
+   }).catch((error) => {
+         console.log(error);
+  }); // end of authenticate User
+ }; // end dispatch function
 }; // end login function
 
 // Generic method to make http request to PVApp API
