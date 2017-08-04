@@ -6,7 +6,6 @@ import {
   Container,
   Content,
   List,
-  ListItem,
   Text,
   Row,
   Card,
@@ -20,6 +19,7 @@ import {saveToken} from '../actions';
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { selectProvince } from '../actions';
 
 class Home extends Component {
 
@@ -50,6 +50,68 @@ class Home extends Component {
         </TouchableOpacity>
       );
     });
+  }
+  renderTuristicInterestList() {
+    return this.props.turisticInterestList.map((turisticInt, indx) => {
+      return (
+        <TouchableOpacity key={indx} onPress={() => Actions.touristicInterest({title:turisticInt.name, touristicInterest:turisticInt})}>
+          <Card style={{ width: 180, height: 240 }}>
+            <CardItem cardBody>
+             <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: turisticInt.photo}} />
+           </CardItem>
+           <CardItem>
+              <Left>
+                <Body>
+                  <Text>{turisticInt.name}</Text>
+                  <Text note>{turisticInt.province.name}</Text>
+                </Body>
+              </Left>
+            </CardItem>
+          </Card>
+        </TouchableOpacity>
+      );
+    });
+  }
+  renderTicoStops() {
+    return this.props.ticoStopList.map((ticoStop, indx) => {
+      return (
+        <TouchableOpacity key={indx} onPress={() => Actions.ticoStop({title:ticoStop.name, ticoStop:ticoStop})}>
+          <Card style={{ width: 180, height: 240 }}>
+            <CardItem cardBody>
+             <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: ticoStop.photo}} />
+           </CardItem>
+           <CardItem>
+              <Left>
+                <Body>
+                  <Text>{ticoStop.name}</Text>
+                  <Text note>{ticoStop.province.name}</Text>
+                </Body>
+              </Left>
+            </CardItem>
+          </Card>
+        </TouchableOpacity>
+      );
+    });
+  }
+  renderProvinces() {
+    return this.props.provinces.map((province, indx) => {
+      return (
+        <TouchableOpacity key={indx} onPress={() => Actions.provInfo({title:province.name, province:province})}>
+          <Card style={{ width: 180, height: 240 }}>
+            <CardItem cardBody>
+             <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: province.photo}} />
+           </CardItem>
+           <CardItem>
+              <Left>
+                <Body>
+                  <Text>{province.name}</Text>
+                </Body>
+              </Left>
+            </CardItem>
+          </Card>
+        </TouchableOpacity>
+      );
+     });
   }
   emptyCards(){
   return (
@@ -84,23 +146,42 @@ class Home extends Component {
             <Row>
                {this.props.touristDestinations ? this.renderTouristDestinations() : this.emptyCards()}
             </Row>
-            <ListItem onPress={() => Actions.provList()}>
-              <Text>
-                Ver provincias
-              </Text>
-            </ListItem>
 
-            <ListItem onPress={() => Actions.ticoStopList()}>
-              <Text>
-                Ver tico stops
+            <Row>
+              <Text style={{fontWeight: 'bold', marginLeft:15}}>
+                Intereses turisticos
               </Text>
-            </ListItem>
-            <ListItem onPress={() => Actions.touristicInterestList()}>
-              <Text>
-                Ver interes turistico
-              </Text>
-            </ListItem>
+              <Right>
+                <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.touristicInterestList()}>Ver todos  <Icon name="angle-right" size={20} color="#ACACAC"/></Text>
+              </Right>
+            </Row>
+            <Row>
+               {this.props.turisticInterestList ? this.renderTuristicInterestList() : this.emptyCards()}
+            </Row>
 
+            <Row>
+              <Text style={{fontWeight: 'bold', marginLeft:15}}>
+                TicoStops
+              </Text>
+              <Right>
+                <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.ticoStopList()}>Ver todos  <Icon name="angle-right" size={20} color="#ACACAC"/></Text>
+              </Right>
+            </Row>
+            <Row>
+               {this.props.ticoStopList ? this.renderTicoStops() : this.emptyCards()}
+            </Row>
+
+            <Row>
+              <Text style={{fontWeight: 'bold', marginLeft:15}}>
+                Provincias
+              </Text>
+              <Right>
+                <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.provList()}>Ver todos  <Icon name="angle-right" size={20} color="#ACACAC"/></Text>
+              </Right>
+            </Row>
+            <Row>
+               {this.props.provinces ? this.renderProvinces() : this.emptyCards()}
+            </Row>
           </List>
 
         </Content>
@@ -139,7 +220,10 @@ const mapStateToProps = state => {
   return {
     data: state.db.msg,
     touristDestinations: state.db.staticData.touristDestinations,
+    turisticInterestList: state.db.staticData.touristicInterests,
+    ticoStopList: state.db.staticData.ticoStops,
+    provinces: state.db.staticData.provinces,
     token: state.db.token};
 };
 
-export default connect(mapStateToProps, {saveToken})(Home);
+export default connect(mapStateToProps, {saveToken, selectProvince})(Home);
