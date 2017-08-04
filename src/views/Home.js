@@ -7,8 +7,14 @@ import {
   Content,
   List,
   ListItem,
-  Text
+  Text,
+  Row,
+  Card,
+  CardItem,
+  Left,
+  Right
 } from 'native-base';
+import { TouchableOpacity, Image } from 'react-native';
 import {saveToken} from '../actions';
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
@@ -21,6 +27,41 @@ class Home extends Component {
 
   changeView =()=>{
     Actions.appSettings();
+  }
+  renderTouristDestinations() {
+    console.log(this.props.touristDestinations);
+    return this.props.touristDestinations.map((touristDest, indx) => {
+      return (
+        <TouchableOpacity key={indx} onPress={() => Actions.touristDestionation({title:touristDest.name, touristDest:touristDest})}>
+          <Card style={{ width: 160, height: 240 }}>
+            <CardItem cardBody>
+             <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: touristDest.photos[0].url}} />
+           </CardItem>
+           <CardItem>
+             <Left>
+               <Text style={{textAlign: 'center', flex: 1}}>{touristDest.name}</Text>
+             </Left>
+           </CardItem>
+          </Card>
+        </TouchableOpacity>
+      );
+    });
+  }
+  emptyCards(){
+  return (
+    <TouchableOpacity>
+    <Card style={{ width: 160, height: 240 }}>
+      <CardItem cardBody>
+        <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: 'https://www.theclementimall.com/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png'}} />
+      </CardItem>
+      <CardItem>
+        <Left>
+          <Text style={{paddingLeft:20}}>Loading</Text>
+        </Left>
+      </CardItem>
+    </Card>
+    </TouchableOpacity>
+  );
   }
 
   render() {
@@ -54,6 +95,17 @@ class Home extends Component {
               </Text>
             </ListItem>
           </List>
+            <Row>
+              <Text style={{fontWeight: 'bold'}}>
+                Destinos turisticos
+              </Text>
+              <Right>
+                <Text onPress={() => Actions.touristDestionations()}>Mostrar todos</Text>
+              </Right>
+            </Row>
+            <Row>
+               {this.props.touristDestinations ? this.renderTouristDestinations() : this.emptyCards()}
+            </Row>
         </Content>
         <Footer>
           <FooterTab>
@@ -83,7 +135,10 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => {
-  return {data: state.db.msg, token: state.db.token};
+  return {
+    data: state.db.msg,
+    touristDestinations: state.db.staticData.touristDestinations,
+    token: state.db.token};
 };
 
 export default connect(mapStateToProps, {saveToken})(Home);

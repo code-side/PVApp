@@ -77,12 +77,12 @@ class Register extends Component {
   }
   validateUserName = () =>{
     if (this.state.user.name !== ''){
-    var re = /^([a-zA-Z])\w{4,}/;
+    var re = /^\w+$/;
     this.setState({isNameValid: re.test(this.state.user.name)});
     return re.test(this.state.user.name);
   }
     this.setState({isNameValid: false});
-  return false;
+    return false;
   }
 
   validateEmail = () => {
@@ -108,7 +108,13 @@ class Register extends Component {
   }
 
   validateGender = () =>{
-    return true;
+    if (this.state.user.gender === ''){
+      this.setState({isGenderValid: false});
+      return false;
+    } else {
+      this.setState({isGenderValid: true});
+      return true;
+    }
   }
 
   validateBirthday = ()=>{
@@ -130,7 +136,7 @@ class Register extends Component {
         <Content>
           <Form>
            <Item stackedLabel>
-              <Label>Nombre</Label>
+              <Label>Nombre de usuario</Label>
               <Input
               onChangeText={(name) => this.setState({user : {...this.state.user, name: name}})}
               value={this.state.user.name}/>
@@ -166,11 +172,11 @@ class Register extends Component {
               onValueChange={(selectedGender, itemIndex) => this.setGender(selectedGender)}>
                 {genders}
             </Picker>
-
+            {!this.state.isGenderValid && <Label style={{color:'red'}}>Seleccione un genero</Label>}
             <TouchableOpacity style={{marginTop:10}} onPress={this.openDatePicker}>
               <Text> Fecha de  nacimiento <Icon name="birthday-cake" size={20}/> : {this.state.birthday}</Text>
             </TouchableOpacity>
-            {!this.state.isBirthdayValid && <Label style={{color:'red'}}>Selecciones una fecha de nacimiento valida</Label>}
+            {!this.state.isBirthdayValid && <Label style={{color:'red'}}>Seleccione una fecha de nacimiento valida</Label>}
             </View>
           </Form>
 
