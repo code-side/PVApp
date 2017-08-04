@@ -1,7 +1,6 @@
 import React, {Component } from 'react';
 import { DatePickerAndroid, TouchableOpacity, Picker, View} from 'react-native';
 import { Container, Content, Form, Item, Input, Label, Text, Button, Footer, FooterTab } from 'native-base';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { Actions } from 'react-native-router-flux';
 
 
@@ -174,7 +173,7 @@ class Register extends Component {
             </Picker>
             {!this.state.isGenderValid && <Label style={{color:'red'}}>Seleccione un genero</Label>}
             <TouchableOpacity style={{marginTop:10}} onPress={this.openDatePicker}>
-              <Text> Fecha de  nacimiento <Icon name="birthday-cake" size={20}/> : {this.state.birthday}</Text>
+              <Text> Fecha de  nacimiento: {this.state.birthday}</Text>
             </TouchableOpacity>
             {!this.state.isBirthdayValid && <Label style={{color:'red'}}>Seleccione una fecha de nacimiento valida</Label>}
             </View>

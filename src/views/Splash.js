@@ -34,11 +34,17 @@ class Splash extends Component {
   }
 
   loadAppConfig() {
+
     AsyncStorage.getItem('@app_config:key').then((strConfig) =>{
       if (strConfig !== null) {
         let config = JSON.parse(strConfig);
         this.props.updateConfig(config);
         I18n.locale = config.lang;
+      } else {
+        this.props.updateConfig({
+          lang: 'en',
+          notifications: true
+        });
       }
     });
   }

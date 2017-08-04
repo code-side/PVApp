@@ -12,12 +12,14 @@ import {
   Card,
   CardItem,
   Left,
-  Right
+  Right,
+  Body
 } from 'native-base';
 import { TouchableOpacity, Image } from 'react-native';
 import {saveToken} from '../actions';
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 class Home extends Component {
 
@@ -29,19 +31,21 @@ class Home extends Component {
     Actions.appSettings();
   }
   renderTouristDestinations() {
-    console.log(this.props.touristDestinations);
     return this.props.touristDestinations.map((touristDest, indx) => {
       return (
         <TouchableOpacity key={indx} onPress={() => Actions.touristDestionation({title:touristDest.name, touristDest:touristDest})}>
-          <Card style={{ width: 160, height: 240 }}>
+          <Card style={{ width: 180, height: 240 }}>
             <CardItem cardBody>
              <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: touristDest.photos[0].url}} />
            </CardItem>
            <CardItem>
-             <Left>
-               <Text style={{textAlign: 'center', flex: 1}}>{touristDest.name}</Text>
-             </Left>
-           </CardItem>
+              <Left>
+                <Body>
+                  <Text>{touristDest.name}</Text>
+                  <Text note>{touristDest.province.name}</Text>
+                </Body>
+              </Left>
+            </CardItem>
           </Card>
         </TouchableOpacity>
       );
@@ -50,7 +54,7 @@ class Home extends Component {
   emptyCards(){
   return (
     <TouchableOpacity>
-    <Card style={{ width: 160, height: 240 }}>
+    <Card style={{ width: 180, height: 240 }}>
       <CardItem cardBody>
         <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: 'https://www.theclementimall.com/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png'}} />
       </CardItem>
@@ -67,18 +71,25 @@ class Home extends Component {
   render() {
     return (
       <Container>
-        <Content>
+        <Content style={{paddingTop:10}}>
           <List>
+            <Row>
+              <Text style={{fontWeight: 'bold', marginLeft:15}}>
+                Destinos turisticos
+              </Text>
+              <Right>
+                <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.touristDestionations()}>Ver todos  <Icon name="angle-right" size={20} color="#ACACAC"/></Text>
+              </Right>
+            </Row>
+            <Row>
+               {this.props.touristDestinations ? this.renderTouristDestinations() : this.emptyCards()}
+            </Row>
             <ListItem onPress={() => Actions.provList()}>
               <Text>
                 Ver provincias
               </Text>
             </ListItem>
-            <ListItem onPress={() => Actions.touristDestionations()}>
-              <Text>
-                Ver destinos turisticos
-              </Text>
-            </ListItem>
+
             <ListItem onPress={() => Actions.ticoStopList()}>
               <Text>
                 Ver tico stops
@@ -89,43 +100,33 @@ class Home extends Component {
                 Ver interes turistico
               </Text>
             </ListItem>
-            <ListItem onPress={() => Actions.config()}>
-              <Text>
-                Configuracion
-              </Text>
-            </ListItem>
+
           </List>
-            <Row>
-              <Text style={{fontWeight: 'bold'}}>
-                Destinos turisticos
-              </Text>
-              <Right>
-                <Text onPress={() => Actions.touristDestionations()}>Mostrar todos</Text>
-              </Right>
-            </Row>
-            <Row>
-               {this.props.touristDestinations ? this.renderTouristDestinations() : this.emptyCards()}
-            </Row>
+
         </Content>
         <Footer>
           <FooterTab>
             <Button full>
-              <Text>Inicio</Text>
+              <Icon name="home" size={25} color="#FFF"/>
+              <Text style={{fontSize:10, fontWeight:'bold'}}>Inicio</Text>
             </Button>
           </FooterTab>
           <FooterTab>
             <Button full>
-              <Text>Favoritos</Text>
+              <Icon name="heart-o" size={25} color="#FFF"/>
+              <Text style={{fontSize:10, fontWeight:'bold'}}>Favortios</Text>
             </Button>
           </FooterTab>
           <FooterTab>
             <Button full onPress={() => this.showMapView()}>
-              <Text>Mapa</Text>
+              <Icon name="map-marker" size={25} color="#FFF"/>
+              <Text style={{fontSize:10, fontWeight:'bold'}}>Mapa</Text>
             </Button>
           </FooterTab>
           <FooterTab>
             <Button full onPress={()=>this.changeView()}>
-              <Text>Perfil</Text>
+              <Icon name="user-o" size={25} color="#FFF"/>
+              <Text style={{fontSize:10, fontWeight:'bold'}}>Perfil</Text>
             </Button>
           </FooterTab>
         </Footer>

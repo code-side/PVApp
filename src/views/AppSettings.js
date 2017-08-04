@@ -19,10 +19,15 @@ class AppSettings extends Component {
       <Container>
         <Content>
         <List>
-            <ListItem itemDivider>
+            <ListItem>
               <Text onPress={()=> this.goToProfile()}>Ver perfil</Text>
             </ListItem>
-            <ListItem itemDivider>
+            <ListItem onPress={() => Actions.config()}>
+              <Text>
+                Configuración
+              </Text>
+            </ListItem>
+            <ListItem>
               <Text onPress={()=> this.closeSession()}>Cerrar sesión</Text>
             </ListItem>
         </List>
