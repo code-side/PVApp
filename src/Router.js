@@ -40,10 +40,10 @@ const RouterComponent = () => {
       sceneStyle={{ paddingTop: 54 }}
     >
       <Scene key="splash" component={Splash} initial/>
-      <Scene key="login" component={Login} title=""/>
+      <Scene key="login" component={Login} title=""  type="reset"/>
       <Scene key="register" component={Register} title="Registro"/>
       <Scene key="registerProfilePicture" component ={RegisterProfilePicture} title="Registro"/>
-      <Scene key="home" component={Home} title="PVApp"/>
+      <Scene key="home" component={Home} title="PVApp" type="reset"/>
       <Scene key="provList" component={ProvinceList} title="Provincias"/>
       <Scene key="provInfo" component={ProvinceInfo}/>
       <Scene key="touristDestionations" component={TouristDestinationList} title="Destinos turísticos"/>

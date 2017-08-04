@@ -8,9 +8,7 @@ import { saveLoggedUser } from '../actions';
 
 class AppSettings extends Component {
   closeSession =() =>{
-    console.log('gg');
     AsyncStorage.removeItem('@loggedUser:key').then(()=>{
-      console.log('pressed')
       this.props.saveLoggedUser(undefined);
       Actions.login();
     });
@@ -21,8 +19,16 @@ class AppSettings extends Component {
       <Container>
         <Content>
         <List>
-            <ListItem itemDivider>
-            <Text onPress={()=> this.closeSession()}>Cerrar sesión</Text>
+            <ListItem>
+              <Text onPress={()=> this.goToProfile()}>Ver perfil</Text>
+            </ListItem>
+            <ListItem onPress={() => Actions.config()}>
+              <Text>
+                Configuración
+              </Text>
+            </ListItem>
+            <ListItem>
+              <Text onPress={()=> this.closeSession()}>Cerrar sesión</Text>
             </ListItem>
         </List>
         </Content>
