@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
-import { Image, Linking} from 'react-native';
+import React, {Component} from 'react';
+import {Image} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import { Row, Grid } from 'react-native-easy-grid';
+import {Row, Grid} from 'react-native-easy-grid';
 import { Container, Text, Content, Button, Tabs, Tab, List, Left, Body, Card, CardItem, Fab, Icon } from 'native-base';
-
+import {invoke} from '../actions';
+import {connect} from 'react-redux';
 
 class TouristDestination extends Component {
   constructor(props) {
@@ -16,29 +17,35 @@ class TouristDestination extends Component {
 
   renderTDestItem(destination) {
     return (
-      <Card style={{flex: 0}}>
-      <CardItem style={{ flexDirection: 'row'}}>
-        <Text>{ destination.name }</Text>
-      </CardItem>
+      <Card style={{
+        flex: 0
+      }}>
+        <CardItem style={{
+          flexDirection: 'row'
+        }}>
+          <Text>{destination.name}</Text>
+        </CardItem>
       </Card>
     );
   }
 
-  invoke(type, resource) {
-    if (Linking.canOpenURL(type + ':' + resource.location)) {
-      Linking.openURL(type + ':' + resource.location);
-    }
-  }
+  // invokeGeo(type, resource) {
+  //   if (Linking.canOpenURL(type + ':' + resource.location)) {
+  //     Linking.openURL(type + ':' + resource.location);
+  //   }
+  // }
 
-  takePhoto(){
-    ImagePicker.openCamera({
-      width: 300,
-      height: 400,
-      cropping: true,
-      includeBase64: true
-    }).then(image => {
-      this.props.touristDest.photos.push( `data:${image.mime};base64,` + image.data );
-    });
+  takePhoto() {
+    ImagePicker.openCamera({width: 300, height: 400, cropping: true, includeBase64: true})
+      .then((image) => {
+        this.props.touristDest.photos.push({
+          reports: [],
+          state: 'inactivo',
+          url: 'data:${image.mime};base64,' + image.data
+        });
+        invoke(this.props.token, 'tourist-destinations', 'PUT', this.props.touristDest);
+      });
+
   }
 
   renderPhotos(item) {
@@ -55,7 +62,9 @@ class TouristDestination extends Component {
   }
 
   noItems(text) {
-    return (<Text style={styles.noItems}>{text}</Text>);
+    return (
+      <Text style={styles.noItems}>{text}</Text>
+    );
   }
 
   render() {
@@ -70,87 +79,91 @@ class TouristDestination extends Component {
               />
             </Row>
           </Grid>
-          <Tabs initialPage={0} style={{flex:1}}>
+          <Tabs initialPage={0} style={{
+            flex: 1
+          }}>
             <Tab heading="Información">
 
-                {/* Info */}
-                <Card>
-                  <CardItem>
-                    <Left>
+              {/* Info */}
+              <Card>
+                <CardItem>
+                  <Left>
                     <Text style={styles.titles}>Provincia:</Text>
                     <Text style={styles.textContainer}>{this.props.touristDest.province.name}</Text>
-                    </Left>
-                  </CardItem>
+                  </Left>
+                </CardItem>
 
                 <CardItem>
-                <Body>
-                  <Text style={styles.titles}>Descripción:</Text>
-                  <Text style={styles.textContainer}>{this.props.touristDest.description}</Text>
-                </Body>
-                 </CardItem>
-
-                 <CardItem>
                   <Body>
-                  <Text style={styles.titles}>Servicios:</Text>
+                    <Text style={styles.titles}>Descripción:</Text>
+                    <Text style={styles.textContainer}>{this.props.touristDest.description}</Text>
                   </Body>
                 </CardItem>
 
-               <CardItem>
-                <List
-                   dataArray={ this.props.touristDest.attributes }
-                   renderRow={ (item) => this.renderTDestItem(item) }
-                />
-               </CardItem>
+                <CardItem>
+                  <Body>
+                    <Text style={styles.titles}>Servicios:</Text>
+                  </Body>
+                </CardItem>
 
-               <CardItem>
-               <Body>
-                 <Text style={styles.titles}>Ubicación:</Text>
-                </Body>
+                <CardItem>
+                  <List dataArray={this.props.touristDest.attributes} renderRow={(item) => this.renderTDestItem(item)}/>
+                </CardItem>
+
+                <CardItem>
+                  <Body>
+                    <Text style={styles.titles}>Ubicación:</Text>
+                  </Body>
 
                 </CardItem>
                 <Button transparent>
-                {this.state.isAddToVisit ? <Text style={{color:'red'}}>Remover de lista por visitar</Text> : <Text>Añadir a lista por visitar</Text>}
+                  {this.state.isAddToVisit
+                    ? <Text style={{
+                        color: 'red'
+                      }}>Remover de lista por visitar</Text>
+                    : <Text>Añadir a lista por visitar</Text>}
                 </Button>
               </Card>
             </Tab>
 
             <Tab heading="Fotos">
-              <List
-                 dataArray={ this.props.touristDest.photos }
-                 renderRow={ (item) => this.renderPhotos(item) }
-              />
+              <List dataArray={this.props.touristDest.photos} renderRow={(item) => this.renderPhotos(item)}/>
             </Tab>
-            <Tab heading="Comentarios" />
+            <Tab heading="Comentarios"/>
           </Tabs>
         </Content>
 
         <Fab
-            active={this.state.active}
-            direction="up"
-            containerStyle={{ }}
-            style={{ backgroundColor: '#5067FF' }}
-            position="bottomRight"
-            onPress={() => this.setState({ active: !this.state.active })}>
-            <Icon name="md-more" />
-            <Button
-              onPress={() => this.takePhoto()}
-              style={{ backgroundColor: '#34A34F' }}
-            >
-              <Icon name="ios-pin-outline" />
-            </Button>
-            <Button style={{ backgroundColor: '#3B5998' }}>
-              <Icon name="ios-flag-outline" />
-            </Button>
-            <Button style={{ backgroundColor: '#DD5144' }}>
-              <Icon name="ios-heart-outline" />
-            </Button>
-          </Fab>
+          active={this.state.active}
+          direction="up"
+          containerStyle={{}}
+          style={{ backgroundColor: '#5067FF' }}
+          position="bottomRight"
+          onPress={() => this.setState({ active: !this.state.active })}
+        >
+          <Icon name="md-more"/>
+          <Button
+            onPress={() => this.takePhoto()}
+            style={{ backgroundColor: '#34A34F' }}
+          >
+            <Icon name="md-camera"/>
+          </Button>
+          <Button
+            style={{ backgroundColor: '#3B5998' }}
+          >
+            <Icon name="md-flag"/>
+          </Button>
+          <Button
+            style={{ backgroundColor: '#DD5144' }}
+          >
+            <Icon name="md-heart"/>
+          </Button>
+        </Fab>
 
       </Container>
     );
   }
 }
-
 
 const styles = {
   header: {
@@ -175,10 +188,10 @@ const styles = {
   },
   textContainer: {
     fontSize: 14,
-     paddingLeft: 10,
-     paddingRight: 10,
-     textAlign: 'justify',
-     flexWrap: 'wrap'
+    paddingLeft: 10,
+    paddingRight: 10,
+    textAlign: 'justify',
+    flexWrap: 'wrap'
   },
   listItem: {
     padding: 10,
@@ -204,14 +217,20 @@ const styles = {
     flex: 1
   },
   listButton: {
-    width:16,
-    height:16
+    width: 16,
+    height: 16
   },
   icons: {
-    width:32,
+    width: 32,
     height: 32,
-    marginRight:5
+    marginRight: 5
   }
 };
 
-export default TouristDestination;
+const mapStateToProps = state => {
+  return {
+    token: state.db.token
+  };
+};
+
+export default connect(mapStateToProps)(TouristDestination);

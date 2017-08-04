@@ -9,11 +9,17 @@ export default {
   },
   general: {
     tags: 'Etiquetas',
+    searcher: 'Buscador',
     search: 'Buscar',
-    map: 'Mapa'
+    advancedSearch: 'Búsqueda avanzada',
+    map: 'Mapa',
+    seeMore: 'Ver todo',
+    filters: 'Filtros',
+    apply: 'Aplicar',
+    cancel: 'Cancelar'
   },
   touristDestionation: {
-    tabDestinations: 'Destinos'
+    searchLegend: 'Buscar: Provincias, Lugares...'
   },
   provinceInfo: {
     history: 'Historia:',
