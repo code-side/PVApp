@@ -20,6 +20,7 @@ import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { selectProvince } from '../actions';
+import { ScrollView } from 'react-native';
 
 class Home extends Component {
 
@@ -143,9 +144,11 @@ class Home extends Component {
                 <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.touristDestionations()}>Ver todos  <Icon name="angle-right" size={20} color="#ACACAC"/></Text>
               </Right>
             </Row>
-            <Row>
-               {this.props.touristDestinations ? this.renderTouristDestinations() : this.emptyCards()}
-            </Row>
+            <ScrollView horizontal={true}>
+              <Row>
+                 {this.props.touristDestinations ? this.renderTouristDestinations() : this.emptyCards()}
+              </Row>
+            </ScrollView>
 
             <Row>
               <Text style={{fontWeight: 'bold', marginLeft:15}}>
@@ -155,9 +158,11 @@ class Home extends Component {
                 <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.touristicInterestList()}>Ver todos  <Icon name="angle-right" size={20} color="#ACACAC"/></Text>
               </Right>
             </Row>
-            <Row>
-               {this.props.turisticInterestList ? this.renderTuristicInterestList() : this.emptyCards()}
-            </Row>
+            <ScrollView horizontal={true}>
+              <Row>
+                 {this.props.turisticInterestList ? this.renderTuristicInterestList() : this.emptyCards()}
+              </Row>
+            </ScrollView>
 
             <Row>
               <Text style={{fontWeight: 'bold', marginLeft:15}}>
@@ -167,9 +172,11 @@ class Home extends Component {
                 <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.ticoStopList()}>Ver todos  <Icon name="angle-right" size={20} color="#ACACAC"/></Text>
               </Right>
             </Row>
-            <Row>
-               {this.props.ticoStopList ? this.renderTicoStops() : this.emptyCards()}
-            </Row>
+            <ScrollView horizontal={true}>
+              <Row>
+                 {this.props.ticoStopList ? this.renderTicoStops() : this.emptyCards()}
+              </Row>
+            </ScrollView>
 
             <Row>
               <Text style={{fontWeight: 'bold', marginLeft:15}}>
@@ -179,9 +186,11 @@ class Home extends Component {
                 <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.provList()}>Ver todos  <Icon name="angle-right" size={20} color="#ACACAC"/></Text>
               </Right>
             </Row>
-            <Row>
-               {this.props.provinces ? this.renderProvinces() : this.emptyCards()}
-            </Row>
+            <ScrollView horizontal={true}>
+              <Row>
+                 {this.props.provinces ? this.renderProvinces() : this.emptyCards()}
+              </Row>
+            </ScrollView>
           </List>
 
         </Content>
