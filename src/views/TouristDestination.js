@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Image, Linking, Alert} from 'react-native';
+import { Image, Alert} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { Row, Grid } from 'react-native-easy-grid';
 import { connect } from 'react-redux';
 import { saveFavoriteDest } from '../actions';
 import { Container, Text, Content, Button, Tabs, Tab, List, Left, Body, Card, CardItem, Fab, Icon } from 'native-base';
-
+import {invoke} from '../actions';
+import {connect} from 'react-redux';
 
 class TouristDestination extends Component {
   constructor(props) {
@@ -17,29 +18,35 @@ class TouristDestination extends Component {
 
   renderTDestItem(destination) {
     return (
-      <Card style={{flex: 0}}>
-      <CardItem style={{ flexDirection: 'row'}}>
-        <Text>{ destination.name }</Text>
-      </CardItem>
+      <Card style={{
+        flex: 0
+      }}>
+        <CardItem style={{
+          flexDirection: 'row'
+        }}>
+          <Text>{destination.name}</Text>
+        </CardItem>
       </Card>
     );
   }
 
-  invoke(type, resource) {
-    if (Linking.canOpenURL(type + ':' + resource.location)) {
-      Linking.openURL(type + ':' + resource.location);
-    }
-  }
+  // invokeGeo(type, resource) {
+  //   if (Linking.canOpenURL(type + ':' + resource.location)) {
+  //     Linking.openURL(type + ':' + resource.location);
+  //   }
+  // }
 
-  takePhoto(){
-    ImagePicker.openCamera({
-      width: 300,
-      height: 400,
-      cropping: true,
-      includeBase64: true
-    }).then(image => {
-      this.props.touristDest.photos.push( `data:${image.mime};base64,` + image.data );
-    });
+  takePhoto() {
+    ImagePicker.openCamera({width: 300, height: 400, cropping: true, includeBase64: true})
+      .then((image) => {
+        this.props.touristDest.photos.push({
+          reports: [],
+          state: 'inactivo',
+          url: 'data:${image.mime};base64,' + image.data
+        });
+        invoke(this.props.token, 'tourist-destinations', 'PUT', this.props.touristDest);
+      });
+
   }
 favoriteList = ()=>{
   let isAlreadySaved = false;
@@ -87,7 +94,9 @@ removeTouristDestFromList =(i)=>{
   }
 
   noItems(text) {
-    return (<Text style={styles.noItems}>{text}</Text>);
+    return (
+      <Text style={styles.noItems}>{text}</Text>
+    );
   }
 
   render() {
@@ -102,54 +111,51 @@ removeTouristDestFromList =(i)=>{
               />
             </Row>
           </Grid>
-          <Tabs initialPage={0} style={{flex:1}}>
+          <Tabs initialPage={0} style={{
+            flex: 1
+          }}>
             <Tab heading="Información">
 
-                {/* Info */}
-                <Card>
-                  <CardItem>
-                    <Left>
+              {/* Info */}
+              <Card>
+                <CardItem>
+                  <Left>
                     <Text style={styles.titles}>Provincia:</Text>
                     <Text style={styles.textContainer}>{this.props.touristDest.province.name}</Text>
-                    </Left>
-                  </CardItem>
+                  </Left>
+                </CardItem>
 
                 <CardItem>
-                <Body>
-                  <Text style={styles.titles}>Descripción:</Text>
-                  <Text style={styles.textContainer}>{this.props.touristDest.description}</Text>
-                </Body>
-                 </CardItem>
-
-                 <CardItem>
                   <Body>
-                  <Text style={styles.titles}>Servicios:</Text>
+                    <Text style={styles.titles}>Descripción:</Text>
+                    <Text style={styles.textContainer}>{this.props.touristDest.description}</Text>
                   </Body>
                 </CardItem>
 
-               <CardItem>
-                <List
-                   dataArray={ this.props.touristDest.attributes }
-                   renderRow={ (item) => this.renderTDestItem(item) }
-                />
-               </CardItem>
+                <CardItem>
+                  <Body>
+                    <Text style={styles.titles}>Servicios:</Text>
+                  </Body>
+                </CardItem>
 
-               <CardItem>
-               <Body>
-                 <Text style={styles.titles}>Ubicación:</Text>
-                </Body>
+                <CardItem>
+                  <List dataArray={this.props.touristDest.attributes} renderRow={(item) => this.renderTDestItem(item)}/>
+                </CardItem>
+
+                <CardItem>
+                  <Body>
+                    <Text style={styles.titles}>Ubicación:</Text>
+                  </Body>
 
                 </CardItem>
+
               </Card>
             </Tab>
 
             <Tab heading="Fotos">
-              <List
-                 dataArray={ this.props.touristDest.photos }
-                 renderRow={ (item) => this.renderPhotos(item) }
-              />
+              <List dataArray={this.props.touristDest.photos} renderRow={(item) => this.renderPhotos(item)}/>
             </Tab>
-            <Tab heading="Comentarios" />
+            <Tab heading="Comentarios"/>
           </Tabs>
         </Content>
 
@@ -180,7 +186,6 @@ removeTouristDestFromList =(i)=>{
   }
 }
 
-
 const styles = {
   header: {
     flex: 1,
@@ -204,10 +209,10 @@ const styles = {
   },
   textContainer: {
     fontSize: 14,
-     paddingLeft: 10,
-     paddingRight: 10,
-     textAlign: 'justify',
-     flexWrap: 'wrap'
+    paddingLeft: 10,
+    paddingRight: 10,
+    textAlign: 'justify',
+    flexWrap: 'wrap'
   },
   listItem: {
     padding: 10,
@@ -233,13 +238,13 @@ const styles = {
     flex: 1
   },
   listButton: {
-    width:16,
-    height:16
+    width: 16,
+    height: 16
   },
   icons: {
-    width:32,
+    width: 32,
     height: 32,
-    marginRight:5
+    marginRight: 5
   }
 };
 
