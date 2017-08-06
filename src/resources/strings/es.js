@@ -4,10 +4,17 @@ export default {
     provinces: 'Provincias',
     ticoStops: 'Tico Stops',
     touristictInterest: 'Interés turístico',
+    touristictInterests: 'Intereses turísticos',
     touristictDestination: 'Destino turístico',
     touristictDestinations: 'Destinos turísticos',
     settings: 'Ajustes',
     survey: 'Encuestas'
+  },
+  home: {
+    home: 'Inicio',
+    favorites: 'Favoritos',
+    map: 'Mapa',
+    profile: 'Perfil'
   },
   general: {
     tags: 'Etiquetas',
@@ -22,7 +29,9 @@ export default {
     close: 'Cerrar',
     noOption: 'No',
     yesOption: 'Si',
-    clear: 'Limpiar'
+    clear: 'Limpiar',
+    viewAll: 'Ver todos',
+    loading: 'Cargando'
   },
   touristDestination: {
     searchLegend: 'Buscar: Provincias, Lugares...',

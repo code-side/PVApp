@@ -15,6 +15,7 @@ import {
   Body
 } from 'native-base';
 import { TouchableOpacity, Image } from 'react-native';
+import I18n from '../services/languageService';
 import {saveToken} from '../actions';
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
@@ -24,17 +25,10 @@ import { ScrollView } from 'react-native';
 
 class Home extends Component {
 
-  showMapView() {
-    Actions.showMap({title: 'Nearby'});
-  }
-
-  changeView =()=>{
-    Actions.appSettings();
-  }
   renderTouristDestinations() {
     return this.props.touristDestinations.map((touristDest, indx) => {
       return (
-        <TouchableOpacity key={indx} onPress={() => Actions.touristDestionation({title:touristDest.name, touristDest:touristDest})}>
+        <TouchableOpacity key={indx} onPress={() => Actions.touristDestination({title:touristDest.name, touristDest:touristDest})}>
           <Card style={{ width: 180, height: 240 }}>
             <CardItem cardBody>
              <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: touristDest.photos[0].url}} />
@@ -52,6 +46,7 @@ class Home extends Component {
       );
     });
   }
+
   renderTuristicInterestList() {
     return this.props.turisticInterestList.map((turisticInt, indx) => {
       return (
@@ -73,6 +68,7 @@ class Home extends Component {
       );
     });
   }
+
   renderTicoStops() {
     return this.props.ticoStopList.map((ticoStop, indx) => {
       return (
@@ -94,6 +90,7 @@ class Home extends Component {
       );
     });
   }
+
   renderProvinces() {
     return this.props.provinces.map((province, indx) => {
       return (
@@ -114,21 +111,22 @@ class Home extends Component {
       );
      });
   }
+
   emptyCards(){
-  return (
-    <TouchableOpacity>
-    <Card style={{ width: 180, height: 240 }}>
-      <CardItem cardBody>
-        <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: 'https://www.theclementimall.com/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png'}} />
-      </CardItem>
-      <CardItem>
-        <Left>
-          <Text style={{paddingLeft:20}}>Loading</Text>
-        </Left>
-      </CardItem>
-    </Card>
-    </TouchableOpacity>
-  );
+    return (
+      <TouchableOpacity>
+      <Card style={{ width: 180, height: 240 }}>
+        <CardItem cardBody>
+          <Image style={{ flex: 1, height: 150, margin: 5 }} source={NO_IMAGE} />
+        </CardItem>
+        <CardItem>
+          <Left>
+            <Text style={{paddingLeft:20}}>{I18n.t('general.loading') + '...'}</Text>
+          </Left>
+        </CardItem>
+      </Card>
+      </TouchableOpacity>
+    );
   }
 
   render() {
@@ -138,10 +136,13 @@ class Home extends Component {
           <List>
             <Row>
               <Text style={{fontWeight: 'bold', marginLeft:15}}>
-                Destinos turisticos
+                {I18n.t('titles.touristictDestinations')}
               </Text>
               <Right>
-                <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.touristDestinations()}>Ver todos  <Icon name="angle-right" size={20} color="#ACACAC"/></Text>
+                <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.touristDestinations()}>
+                  {I18n.t('general.viewAll') + '   '}
+                  <Icon name="angle-right" size={20} color="#ACACAC"/>
+                </Text>
               </Right>
             </Row>
             <ScrollView horizontal={true}>
@@ -150,12 +151,15 @@ class Home extends Component {
               </Row>
             </ScrollView>
 
-            <Row>
+            <Row style={{marginTop: 20}}>
               <Text style={{fontWeight: 'bold', marginLeft:15}}>
-                Intereses turisticos
+                {I18n.t('titles.touristictInterests')}
               </Text>
               <Right>
-                <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.touristicInterestList()}>Ver todos  <Icon name="angle-right" size={20} color="#ACACAC"/></Text>
+                <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.touristicInterestList()}>
+                  {I18n.t('general.viewAll') + '   '}
+                  <Icon name="angle-right" size={20} color="#ACACAC"/>
+                </Text>
               </Right>
             </Row>
             <ScrollView horizontal={true}>
@@ -164,12 +168,15 @@ class Home extends Component {
               </Row>
             </ScrollView>
 
-            <Row>
+            <Row style={{marginTop: 20}}>
               <Text style={{fontWeight: 'bold', marginLeft:15}}>
-                TicoStops
+                {I18n.t('titles.ticoStops')}
               </Text>
               <Right>
-                <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.ticoStopList()}>Ver todos  <Icon name="angle-right" size={20} color="#ACACAC"/></Text>
+                <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.ticoStopList()}>
+                  {I18n.t('general.viewAll') + '   '}
+                  <Icon name="angle-right" size={20} color="#ACACAC"/>
+                </Text>
               </Right>
             </Row>
             <ScrollView horizontal={true}>
@@ -178,12 +185,15 @@ class Home extends Component {
               </Row>
             </ScrollView>
 
-            <Row>
+            <Row style={{marginTop: 20}}>
               <Text style={{fontWeight: 'bold', marginLeft:15}}>
-                Provincias
+                {I18n.t('titles.provinces')}
               </Text>
               <Right>
-                <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.provList()}>Ver todos  <Icon name="angle-right" size={20} color="#ACACAC"/></Text>
+                <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.provList()}>
+                  {I18n.t('general.viewAll') + '   '}
+                  <Icon name="angle-right" size={20} color="#ACACAC"/>
+                </Text>
               </Right>
             </Row>
             <ScrollView horizontal={true}>
@@ -192,31 +202,31 @@ class Home extends Component {
               </Row>
             </ScrollView>
           </List>
-
         </Content>
+
         <Footer>
           <FooterTab>
             <Button full>
               <Icon name="home" size={25} color="#FFF"/>
-              <Text style={{fontSize:10, fontWeight:'bold'}}>Inicio</Text>
+              <Text style={{fontSize:10, fontWeight:'bold'}}>{I18n.t('home.home')}</Text>
             </Button>
           </FooterTab>
           <FooterTab>
             <Button full>
               <Icon name="heart-o" size={25} color="#FFF"/>
-              <Text style={{fontSize:10, fontWeight:'bold'}}>Favortios</Text>
+              <Text style={{fontSize:10, fontWeight:'bold'}}>{I18n.t('home.favorites')}</Text>
             </Button>
           </FooterTab>
           <FooterTab>
-            <Button full onPress={() => this.showMapView()}>
+            <Button full onPress={() => Actions.showMap({title: 'Nearby'})}>
               <Icon name="map-marker" size={25} color="#FFF"/>
-              <Text style={{fontSize:10, fontWeight:'bold'}}>Mapa</Text>
+              <Text style={{fontSize:10, fontWeight:'bold'}}>{I18n.t('home.map')}</Text>
             </Button>
           </FooterTab>
           <FooterTab>
-            <Button full onPress={()=>this.changeView()}>
+            <Button full onPress={() => Actions.appSettings()}>
               <Icon name="user-o" size={25} color="#FFF"/>
-              <Text style={{fontSize:10, fontWeight:'bold'}}>Perfil</Text>
+              <Text style={{fontSize:10, fontWeight:'bold'}}>{I18n.t('home.profile')}</Text>
             </Button>
           </FooterTab>
         </Footer>
@@ -225,6 +235,7 @@ class Home extends Component {
   }
 }
 
+const NO_IMAGE = require('../resources/images/no_image2.png');
 const mapStateToProps = state => {
   return {
     data: state.db.msg,
