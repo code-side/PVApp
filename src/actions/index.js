@@ -91,6 +91,29 @@ export const refreshStaticData = (token) => {
   };
 };
 
+export const regiseterUser = ({token, user}) => {
+  return (dispatch) => {
+    return fetch('http://' + SERVER_IP + ':8080/api/p-v-app-users', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify(user)
+      })
+      .then((response) => response.json())
+
+      .then(async(registerResponse) => {
+        console.log(registerResponse);
+        dispatch({
+          type: 'SAVE_LOGGED_USER',
+          payload: registerResponse
+        });
+      });
+    };
+  };
+
 // Generic method to make http request to PVApp API
 export const invoke = (token, url, method, body) => {
   if (method === 'GET') {
