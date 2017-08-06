@@ -33,7 +33,7 @@ class Home extends Component {
                 Ver provincias
               </Text>
             </ListItem>
-            <ListItem onPress={() => Actions.touristDestionations()}>
+            <ListItem onPress={() => Actions.touristDestinations()}>
               <Text>
                 Ver destinos turisticos
               </Text>

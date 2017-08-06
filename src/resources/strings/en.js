@@ -5,7 +5,9 @@ export default {
     ticoStops: 'Tico Stops',
     touristictInterest: 'Touristict Interest',
     touristictDestination: 'Touristict Destination',
-    settings: 'Settings'
+    touristictDestinations: 'Touristict Destinations',
+    settings: 'Settings',
+    survey: 'Survey'
   },
   general: {
     tags: 'Tags',
@@ -16,10 +18,20 @@ export default {
     seeMore: 'See more',
     filters: 'Filters',
     apply: 'Apply',
-    cancel: 'Cancel'
+    cancel: 'Cancel',
+    close: 'Close',
+    noOption: 'No',
+    yesOption: 'Yes',
+    clear: 'Clear'
   },
-  touristDestionation: {
-    searchLegend: 'Search: Prinvinces, Places...'
+  touristDestination: {
+    searchLegend: 'Search: Provinces, Places...',
+    fastSearch: 'Fast search',
+    survey: {
+      title: 'Fast search',
+      searchBy: 'Search by',
+      finish: 'Filter ready!'
+    }
   },
   provinceInfo: {
     history: 'History:',

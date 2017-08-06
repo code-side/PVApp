@@ -1,3 +1,4 @@
+import I18n from '../services/languageService';
 const SERVER_IP = '10.223.29.134';
 
 export const saveLoggedUser = (user) => {
@@ -53,10 +54,12 @@ export const login = ({username, password, token}) => {
 }; // end login function
 
 export const refreshStaticData = (token) => {
+  const locale = I18n.getLocale();
+
   return (dispatch) => {
     let staticData = {};
 
-    invoke(token, 'provinces', 'GET', {}).then(async(provincesResponse) => {
+    invoke(token, 'provinces?lang=' + locale, 'GET', {}).then(async(provincesResponse) => {
       staticData.provinces = provincesResponse;
       dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
     });
@@ -76,8 +79,13 @@ export const refreshStaticData = (token) => {
       dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
     });
 
-    invoke(token, 'attributes', 'GET', {}).then(async (attributesResponse) => {
+    invoke(token, 'attributes?lang=' + locale, 'GET', {}).then(async (attributesResponse) => {
       staticData.attributes = attributesResponse;
+      dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
+    });
+
+    invoke(token, 'survey-questions?lang=' + locale, 'GET', {}).then(async (surveyQuestions) => {
+      staticData.surveyQuestions = surveyQuestions;
       dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
     });
   };

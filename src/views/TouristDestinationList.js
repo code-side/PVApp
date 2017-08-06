@@ -5,19 +5,21 @@ import { connect } from 'react-redux';
 import I18n from '../services/languageService';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modal';
-import { Container, Text, CheckBox, Separator, Content, Footer, FooterTab,Header, Title, Input, List, ListItem, Row, Button, Item, Card, CardItem, Left, Right } from 'native-base';
+import TouristDestinationSurvey from './TouristDestinationSurvey';
+import { Container, Text, CheckBox, Separator, Content, Fab, Footer, FooterTab, Header, Title, Input, List, ListItem, Row, Button, Item, Card, CardItem, Left, Right } from 'native-base';
 
 class TouristDestinationList extends Component {
 
   constructor(props) {
     super(props);
 
-    this.mapDestWithProvinces = {};
+    this.hideSurveyModal = this.hideSurveyModal.bind(this);
     this.appliedTags = [];
     this.state = {
       showAdvancedSearchBar: false,
       showAttributesModalPicker: false,
       searchText: '',
+      exclusiveSearch: true, // <- Applies AND or OR condition to appliedTags
       tempTags: []
     };
   }
@@ -40,7 +42,7 @@ class TouristDestinationList extends Component {
           while (hasAttributes && i < this.appliedTags.length) {
             let tag = this.appliedTags[i++];
             let hasTag = (dest.attributes.find((x) => x.name === tag.name) !== undefined);
-            hasAttributes = (hasAttributes && hasTag);
+            hasAttributes = this.state.exclusiveSearch ? (hasTag && hasAttributes) : (hasTag || hasAttributes);
           }
 
           // Search for property text match (if has value)
@@ -84,8 +86,8 @@ class TouristDestinationList extends Component {
 
   renderProvincesWithDestinations(listIndex, provinceName, destinations) {
     return (
-      <ListItem key={listIndex}>
-        <View>
+      <ListItem key={listIndex} style={{flex: 1}}>
+        <View style={{flex: 1}}>
           <Separator bordered style={{flex: 1}}>
             <Text style={styles.provinceName}>{provinceName}</Text>
           </Separator>
@@ -105,7 +107,7 @@ class TouristDestinationList extends Component {
     return destinations.map((touristDest, indx) => {
       if (i++ < 10) {
         return (
-          <TouchableOpacity key={indx} style={{ width: 180, height: 240 }} onPress={() => Actions.touristDestionation({title: touristDest.name, touristDest: touristDest})}>
+          <TouchableOpacity key={indx} style={{ width: 180, height: 240 }} onPress={() => Actions.touristDestination({title: touristDest.name, touristDest: touristDest})}>
             <Card>
               <CardItem cardBody>
                 <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: touristDest.photos[0].url}} />
@@ -119,8 +121,15 @@ class TouristDestinationList extends Component {
           </TouchableOpacity>
         );
       } else if (i === 11) {
+        const params = {
+          title: I18n.t('titles.touristictDestinations'),
+          items: destinations,
+          onItemPressed: (_item) => Actions.touristDestination({title: _item.name, touristDest: _item}),
+          itemImage: (_item) => _item.photos[0].url,
+          itemLegend: (_item) => _item.province.name
+        };
         return (
-          <TouchableOpacity key={indx} style={{ width: 180, height: 240 }} onPress={() => {}}>
+          <TouchableOpacity key={indx} style={{ width: 180, height: 240 }} onPress={() => Actions.viewMore(params)}>
             <Image
               source={SEE_BACKGROUND_CARD}
               style={styles.seeMoreBackground}>
@@ -149,7 +158,7 @@ class TouristDestinationList extends Component {
             style={{height: 45}}
             value={this.state.searchText}
             onChangeText={(text) => this.setState({searchText: text})}
-            placeholder={I18n.t('touristDestionation.searchLegend')}/>
+            placeholder={I18n.t('touristDestination.searchLegend')}/>
 
           <Button rounded light onPress={() => this.openModal()}>
             <AwesomeIcon name="plus" backgroundColor="#fff" color="#000" size={18} />
@@ -163,6 +172,7 @@ class TouristDestinationList extends Component {
   renderAttributesModal() {
     const appyTags = () => {
       this.appliedTags = [];
+      this.state.exclusiveSearch = true;
       this.state.tempTags.forEach(x => this.appliedTags.push(x));
       this.closeModal();
     };
@@ -179,6 +189,14 @@ class TouristDestinationList extends Component {
          </Header>
 
          {/* Load attribute list */}
+         <ListItem itemDivider onPress={() => this.setState({tempTags: []})}>
+           <Left>
+             <Text>{I18n.t('general.clear')}</Text>
+           </Left>
+           <Right style={{marginRight: 20}}>
+             <AwesomeIcon name="trash-o"/>
+           </Right>
+         </ListItem>
          <ScrollView style={{flex: 1}}>
            {
              this.props.attributes.map((attr, indx) => {
@@ -187,7 +205,9 @@ class TouristDestinationList extends Component {
                    <Text>{attr.name}</Text>
                  </Left>
                  <Right>
-                   <CheckBox checked={this.state.tempTags.indexOf(attr) !== -1} onPress={() => this.tagToSearch(attr)}/>
+                   <CheckBox
+                     checked={this.state.tempTags.find((x) => x.name === attr.name) !== undefined}
+                     onPress={() => this.tagToSearch(attr)}/>
                  </Right>
                </ListItem>;
              })
@@ -223,7 +243,7 @@ class TouristDestinationList extends Component {
   }
 
   tagToSearch(tag) {
-    let indx = this.state.tempTags.indexOf(tag);
+    let indx = this.state.tempTags.findIndex((x) => x.name === tag.name);
 
     if (indx !== -1) {
       this.state.tempTags.splice(indx, 1);
@@ -234,11 +254,30 @@ class TouristDestinationList extends Component {
     this.setState(this.state);
   }
 
+  hideSurveyModal() {
+    this.appliedTags = [];
+    this.state.tempTags = [];
+    this.state.exclusiveSearch = false;
+
+    this.surveyModal.getTags().forEach(tagName => {
+      let tag = {name: tagName};
+      this.appliedTags.push(tag);
+      this.state.tempTags.push(tag);
+    });
+
+    this.setState({...this.state, searchText: ''});
+  }
+
   render() {
     return (
       <Container>
         {/* Advanced search modal, Attributes */}
         {this.renderAttributesModal()}
+
+        {/* Surveys */}
+        <TouristDestinationSurvey
+          modalRef={(ref) => {this.surveyModal = ref;}}
+          onModalClose={this.hideSurveyModal}/>
 
         {/* View main content */}
         <Content>
@@ -263,6 +302,13 @@ class TouristDestinationList extends Component {
             }
           </List>
         </Content>
+
+        {/* Survey modal trigger */}
+        <Fab
+          position="bottomRight"
+          onPress={() => this.surveyModal.showModal()}>
+          <AwesomeIcon name="filter"/>
+        </Fab>
       </Container>
     );
   }
@@ -304,7 +350,11 @@ const styles = {
 };
 
 const mapStateToProps = state => {
-  return {touristDestinations: state.db.staticData.touristDestinations, provinces: state.db.staticData.provinces, attributes: state.db.staticData.attributes};
+  return {
+    touristDestinations: state.db.staticData.touristDestinations,
+    provinces: state.db.staticData.provinces,
+    attributes: state.db.staticData.attributes
+  };
 };
 
 export default connect(mapStateToProps, null)(TouristDestinationList);

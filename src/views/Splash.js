@@ -39,6 +39,12 @@ class Splash extends Component {
         let config = JSON.parse(strConfig);
         this.props.updateConfig(config);
         I18n.locale = config.lang;
+      } else {
+        this.props.updateConfig({
+          lang: 'en',
+          notifications: true
+        });
+        I18n.locale = 'en';
       }
     });
   }
