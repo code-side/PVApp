@@ -6,201 +6,115 @@ import {
   Container,
   Content,
   List,
+  ListItem,
   Text,
-  Row,
-  Card,
-  CardItem,
-  Left,
-  Right,
-  Body
+  Right
 } from 'native-base';
-import { TouchableOpacity, Image } from 'react-native';
 import I18n from '../services/languageService';
-import {saveToken} from '../actions';
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { selectProvince } from '../actions';
-import { ScrollView } from 'react-native';
+import HorizontalList from './HorizontalList';
+import HorizontalListItem from './HorizontalListItem';
 
 class Home extends Component {
 
-  renderTouristDestinations() {
-    return this.props.touristDestinations.map((touristDest, indx) => {
-      return (
-        <TouchableOpacity key={indx} onPress={() => Actions.touristDestination({title:touristDest.name, touristDest:touristDest})}>
-          <Card style={{ width: 180, height: 240 }}>
-            <CardItem cardBody>
-             <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: touristDest.photos[0].url}} />
-           </CardItem>
-           <CardItem>
-              <Left>
-                <Body>
-                  <Text>{touristDest.name}</Text>
-                  <Text note>{touristDest.province.name}</Text>
-                </Body>
-              </Left>
-            </CardItem>
-          </Card>
-        </TouchableOpacity>
-      );
-    });
-  }
-
-  renderTuristicInterestList() {
-    return this.props.turisticInterestList.map((turisticInt, indx) => {
-      return (
-        <TouchableOpacity key={indx} onPress={() => Actions.touristicInterest({title:turisticInt.name, touristicInterest:turisticInt})}>
-          <Card style={{ width: 180, height: 240 }}>
-            <CardItem cardBody>
-             <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: turisticInt.photo}} />
-           </CardItem>
-           <CardItem>
-              <Left>
-                <Body>
-                  <Text>{turisticInt.name}</Text>
-                  <Text note>{turisticInt.province.name}</Text>
-                </Body>
-              </Left>
-            </CardItem>
-          </Card>
-        </TouchableOpacity>
-      );
-    });
-  }
-
-  renderTicoStops() {
-    return this.props.ticoStopList.map((ticoStop, indx) => {
-      return (
-        <TouchableOpacity key={indx} onPress={() => Actions.ticoStop({title:ticoStop.name, ticoStop:ticoStop})}>
-          <Card style={{ width: 180, height: 240 }}>
-            <CardItem cardBody>
-             <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: ticoStop.photo}} />
-           </CardItem>
-           <CardItem>
-              <Left>
-                <Body>
-                  <Text>{ticoStop.name}</Text>
-                  <Text note>{ticoStop.province.name}</Text>
-                </Body>
-              </Left>
-            </CardItem>
-          </Card>
-        </TouchableOpacity>
-      );
-    });
-  }
-
-  renderProvinces() {
-    return this.props.provinces.map((province, indx) => {
-      return (
-        <TouchableOpacity key={indx} onPress={() => Actions.provInfo({title:province.name, province:province})}>
-          <Card style={{ width: 180, height: 240 }}>
-            <CardItem cardBody>
-             <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: province.photo}} />
-           </CardItem>
-           <CardItem>
-              <Left>
-                <Body>
-                  <Text>{province.name}</Text>
-                </Body>
-              </Left>
-            </CardItem>
-          </Card>
-        </TouchableOpacity>
-      );
-     });
-  }
-
-  emptyCards(){
+  renderSectionHeader(sectionName, action) {
     return (
-      <TouchableOpacity>
-      <Card style={{ width: 180, height: 240 }}>
-        <CardItem cardBody>
-          <Image style={{ flex: 1, height: 150, margin: 5 }} source={NO_IMAGE} />
-        </CardItem>
-        <CardItem>
-          <Left>
-            <Text style={{paddingLeft:20}}>{I18n.t('general.loading') + '...'}</Text>
-          </Left>
-        </CardItem>
-      </Card>
-      </TouchableOpacity>
+      <ListItem itemDivider>
+        <Text style={styles.sectionHeaderText}>{sectionName}</Text>
+        <Right>
+          <Text style={styles.sectionHeaderViewMore} onPress={() => action()}>
+            {I18n.t('general.viewAll') + '   '}
+            <Icon name="angle-right" size={20} color={VIEW_MORE_COLOR}/>
+          </Text>
+        </Right>
+      </ListItem>
     );
+  }
+
+  renderItem(item, addCardNote) {
+    if (item) {
+      return <HorizontalListItem
+        item={item}
+        renderItemText={(_item) => _item.name}
+        renderItemNote={(_item) => (addCardNote ? _item.province.name : '')}
+        renderItemImage={(_item) => {
+          if (_item.photos !== undefined && _item.photos.length > 0) {
+            return _item.photos[0].url;
+          } else {
+            return _item.photo;
+          }
+        }}/>;
+    } else {
+      return <HorizontalListItem renderItemText={(_item) => I18n.t('general.loading') + '...'}/>;
+    }
   }
 
   render() {
     return (
       <Container>
-        <Content style={{paddingTop:10}}>
+        <Content>
           <List>
-            <Row>
-              <Text style={{fontWeight: 'bold', marginLeft:15}}>
-                {I18n.t('titles.touristictDestinations')}
-              </Text>
-              <Right>
-                <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.touristDestinations()}>
-                  {I18n.t('general.viewAll') + '   '}
-                  <Icon name="angle-right" size={20} color="#ACACAC"/>
-                </Text>
-              </Right>
-            </Row>
-            <ScrollView horizontal={true}>
-              <Row>
-                 {this.props.touristDestinations ? this.renderTouristDestinations() : this.emptyCards()}
-              </Row>
-            </ScrollView>
+            {/* Destinations header */}
+            {this.renderSectionHeader(I18n.t('titles.touristictDestinations'), Actions.touristDestinations)}
 
-            <Row style={{marginTop: 20}}>
-              <Text style={{fontWeight: 'bold', marginLeft:15}}>
-                {I18n.t('titles.touristictInterests')}
-              </Text>
-              <Right>
-                <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.touristicInterestList()}>
-                  {I18n.t('general.viewAll') + '   '}
-                  <Icon name="angle-right" size={20} color="#ACACAC"/>
-                </Text>
-              </Right>
-            </Row>
-            <ScrollView horizontal={true}>
-              <Row>
-                 {this.props.turisticInterestList ? this.renderTuristicInterestList() : this.emptyCards()}
-              </Row>
-            </ScrollView>
+            {/* Destinations list */}
+            <HorizontalList
+              items={this.props.touristDestinations ? this.props.touristDestinations : [{}]}
+              renderItem={(item) => this.renderItem(item, true)}
+              showViewMore={false}
+              onItemPressed={(item) => {
+                if (item) {
+                  Actions.touristDestination({title: item.name, touristDest: item});
+                }
+              }}
+            />
 
-            <Row style={{marginTop: 20}}>
-              <Text style={{fontWeight: 'bold', marginLeft:15}}>
-                {I18n.t('titles.ticoStops')}
-              </Text>
-              <Right>
-                <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.ticoStopList()}>
-                  {I18n.t('general.viewAll') + '   '}
-                  <Icon name="angle-right" size={20} color="#ACACAC"/>
-                </Text>
-              </Right>
-            </Row>
-            <ScrollView horizontal={true}>
-              <Row>
-                 {this.props.ticoStopList ? this.renderTicoStops() : this.emptyCards()}
-              </Row>
-            </ScrollView>
+            {/* Services header */}
+            {this.renderSectionHeader(I18n.t('titles.touristictInterests'), Actions.touristicInterestList)}
 
-            <Row style={{marginTop: 20}}>
-              <Text style={{fontWeight: 'bold', marginLeft:15}}>
-                {I18n.t('titles.provinces')}
-              </Text>
-              <Right>
-                <Text style={{marginRight:15, color:'#ACACAC'}} onPress={() => Actions.provList()}>
-                  {I18n.t('general.viewAll') + '   '}
-                  <Icon name="angle-right" size={20} color="#ACACAC"/>
-                </Text>
-              </Right>
-            </Row>
-            <ScrollView horizontal={true}>
-              <Row>
-                 {this.props.provinces ? this.renderProvinces() : this.emptyCards()}
-              </Row>
-            </ScrollView>
+            {/* Services list */}
+            <HorizontalList
+              items={this.props.turisticInterestList ? this.props.turisticInterestList : [{}]}
+              renderItem={(item) => this.renderItem(item, true)}
+              showViewMore={false}
+              onItemPressed={(item) => {
+                if (item) {
+                  Actions.touristicInterest({title: item.name, touristicInterest: item});
+                }
+              }}
+            />
+
+            {/* TicoStops header */}
+            {this.renderSectionHeader(I18n.t('titles.ticoStops'), Actions.ticoStopList)}
+
+            {/* TicoStops list */}
+            <HorizontalList
+              items={this.props.ticoStopList ? this.props.ticoStopList : [{}]}
+              renderItem={(item) => this.renderItem(item, true)}
+              showViewMore={false}
+              onItemPressed={(item) => {
+                if (item) {
+                  Actions.ticoStop({title: item.name, ticoStop: item});
+                }
+              }}
+            />
+
+            {/* Provinces header */}
+            {this.renderSectionHeader(I18n.t('titles.provinces'), Actions.provList)}
+
+            {/* Provinces list */}
+            <HorizontalList
+              items={this.props.provinces ? this.props.provinces : [{}]}
+              renderItem={(item) => this.renderItem(item)}
+              noLimitRestriction={true}
+              onItemPressed={(item) => {
+                if (item) {
+                  Actions.provInfo({title: item.name, province: item});
+                }
+              }}
+            />
           </List>
         </Content>
 
@@ -235,15 +149,26 @@ class Home extends Component {
   }
 }
 
-const NO_IMAGE = require('../resources/images/no_image2.png');
+const VIEW_MORE_COLOR = '#ACACAC';
+const styles = {
+  sectionHeaderText: {
+    fontWeight: 'bold',
+    marginLeft: 5
+  },
+  sectionHeaderViewMore: {
+    marginRight: 5,
+    color: VIEW_MORE_COLOR,
+    width: 100
+  }
+};
+
 const mapStateToProps = state => {
   return {
-    data: state.db.msg,
     touristDestinations: state.db.staticData.touristDestinations,
     turisticInterestList: state.db.staticData.touristicInterests,
     ticoStopList: state.db.staticData.ticoStops,
-    provinces: state.db.staticData.provinces,
-    token: state.db.token};
+    provinces: state.db.staticData.provinces
+  };
 };
 
-export default connect(mapStateToProps, {saveToken, selectProvince})(Home);
+export default connect(mapStateToProps, null)(Home);

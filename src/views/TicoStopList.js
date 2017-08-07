@@ -1,46 +1,107 @@
 import React, { Component } from 'react';
-import { TouchableOpacity } from 'react-native';
-import { Container, Text, Card, CardItem, List, Thumbnail, Left } from 'native-base';
+import { View } from 'react-native';
+import { Container, Content, Text, List, ListItem, Separator } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import I18n from '../services/languageService';
+import HorizontalList from './HorizontalList';
+import HorizontalListItem from './HorizontalListItem';
+import SearchBar from './SearchBar';
+import { searchByNameAndProvince } from '../services/SearchService';
 
 class TicoStopList extends Component {
 
-  viewTicoStop(item) {
-    Actions.ticoStop({ title: item.name, ticoStop: item });
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      searchText: ''
+    };
   }
 
-  renderTicoStops(item) {
+  filter(province) {
+    let results = searchByNameAndProvince(this.props.ticoStopList, this.state.searchText, province.name);
+    return results;
+  }
+
+  renderProvincesWithTicoStops(listIndex, provinceName, ticoStops) {
     return (
-      <TouchableOpacity onPress={()=>this.viewTicoStop(item)}>
-        <Card>
-          <CardItem>
-            <Left>
-              <Thumbnail square source={{uri: item.photo}} />
-              <Text>{item.name}</Text>
-            </Left>
-          </CardItem>
-        </Card>
-      </TouchableOpacity>
+      <ListItem key={listIndex} style={{flex: 1}}>
+        <View style={{flex: 1}}>
+          <Separator bordered style={{flex: 1}}>
+            <Text style={styles.provinceName}>{provinceName}</Text>
+          </Separator>
+
+          <HorizontalList
+            items={ticoStops}
+            onItemPressed={(item) => Actions.ticoStop({ title: item.name, ticoStop: item })}
+            viewMoreParams={(items) => this.getViewMoreParams(items)}
+            renderItem={(item) => this.renderInterest(item)}
+          />
+        </View>
+      </ListItem>
+    );
+  }
+
+  getViewMoreParams(items) {
+    return {
+      title: I18n.t('titles.ticoStops'),
+      items: items,
+      onItemPressed: (_item) => Actions.ticoStop({ title: _item.name, ticoStop: _item }),
+      itemImage: (_item) => _item.photo,
+      itemLegend: (_item) => _item.province.name
+    };
+  }
+
+  renderInterest(interest) {
+    return (
+      <HorizontalListItem
+        item={interest}
+        renderItemImage={(item) => item.photo}
+        renderItemText={(item) => item.name}/>
     );
   }
 
   render() {
     return (
       <Container>
-        <List
-          dataArray={this.props.ticoStopList}
-          renderRow={(item) => this.renderTicoStops(item)}
-        />
+        <Content>
+          {/* Collapsible search panel */}
+          <SearchBar
+            placeholder={I18n.t('touristInterest.searchLegend')}
+            onChangeText={(text) => this.setState({searchText: text})}/>
+
+          {/* List of provinces with ticoStops */}
+          <List>
+            {
+              this.props.provinces.map((prov, indx) => {
+                let ticoStops = this.filter(prov);
+                if (ticoStops.length > 0) {
+                  return this.renderProvincesWithTicoStops(indx, prov.name, ticoStops);
+                }
+              })
+            }
+          </List>
+        </Content>
       </Container>
     );
   }
 
 }
 
+const styles = {
+  provinceName: {
+    position: 'relative',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  }
+};
+
 const mapStateToProps = state => {
   return {
-    ticoStopList: state.db.staticData.ticoStops
+    ticoStopList: state.db.staticData.ticoStops,
+    provinces: state.db.staticData.provinces
   };
 };
 

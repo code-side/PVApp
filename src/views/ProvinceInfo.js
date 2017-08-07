@@ -3,7 +3,6 @@ import { Image, Linking } from 'react-native';
 import { Container, Text, Content, Button, Tabs, Tab, List, ListItem, Thumbnail, Body } from 'native-base';
 import { Row, Grid } from 'react-native-easy-grid';
 import I18n from '../services/languageService';
-import { connect } from 'react-redux';
 
 class ProvinceInfo extends Component {
 
@@ -162,10 +161,4 @@ const styles = {
   }
 };
 
-const mapStateToProps = state => {
-  return {
-    province: state.provinceReducer.selected
-  };
-};
-
-export default connect(mapStateToProps, null)(ProvinceInfo);
+export default ProvinceInfo;

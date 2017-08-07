@@ -42,6 +42,12 @@ export default {
       finish: '¡Filtro listo!'
     }
   },
+  touristInterest: {
+    searchLegend: 'Buscar: Provincias, Lugares...'
+  },
+  ticoStops: {
+    searchLegend: 'Buscar: Provincias, Lugares...'
+  },
   provinceInfo: {
     history: 'Historia:',
     culture: 'Cultura:',

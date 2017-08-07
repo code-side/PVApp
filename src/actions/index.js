@@ -137,8 +137,3 @@ export const invoke = (token, url, method, body) => {
     }).then((response) => response.json());
   }
 };
-
-// Province Actions
-export const selectProvince = data => {
-  return {type: 'SELECT_PROVINCE', payload: data};
-};
