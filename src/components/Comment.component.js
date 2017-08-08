@@ -3,7 +3,7 @@ import {View, Alert, ToastAndroid} from 'react-native';
 import {connect} from 'react-redux';
 import { Text, Content, Item, Input, Button, Right } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { saveTouristicInterest } from '../actions';
+import { saveComments } from '../actions';
 import I18n from '../services/languageService';
 
 class CommentComponent extends Component {
@@ -100,8 +100,8 @@ class CommentComponent extends Component {
   }
 
   saveChange(message){
-    const {token = this.props.token, body = this.props.reviewsObject} = {};
-    this.props.saveTouristicInterest({token, body}).then((response) =>{
+    const {token = this.props.token, body = this.props.reviewsObject, url = this.props.url} = {};
+    this.props.saveComments({token, body, url}).then((response) =>{
       this.setState({validRating: true});
     });
     if (message !== undefined){
@@ -148,4 +148,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, {saveTouristicInterest})(CommentComponent);
+export default connect(mapStateToProps, {saveComments})(CommentComponent);

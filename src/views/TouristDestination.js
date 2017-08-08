@@ -3,9 +3,12 @@ import { Image, Alert} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { Row, Grid } from 'react-native-easy-grid';
 import { connect } from 'react-redux';
-import { saveFavoriteDest } from '../actions';
+import { modifyUser } from '../actions';
 import { Container, Text, Content, Button, Tabs, Tab, List, Left, Body, Card, CardItem, Fab, Icon } from 'native-base';
 import {invoke} from '../actions';
+
+import  CommentComponent  from '../components/Comment.component';
+import  CommentsComponent  from '../components/Comments.component';
 
 
 class TouristDestination extends Component {
@@ -66,7 +69,7 @@ favoriteList = ()=>{
     actionMessage = 'Se agregó el destino turistico a la lista de favoritos.';
   }
   const {token = this.props.token, user = this.props.user} = {};
-  this.props.saveFavoriteDest({token, user}).then(()=>{
+  this.props.modifyUser({token, user}).then(()=>{
     Alert.alert(
     'Lista de favoritos',
     actionMessage,
@@ -155,7 +158,11 @@ removeTouristDestFromList =(i)=>{
             <Tab heading="Fotos">
               <List dataArray={this.props.touristDest.photos} renderRow={(item) => this.renderPhotos(item)}/>
             </Tab>
-            <Tab heading="Comentarios"/>
+            <Tab heading="Comentarios">
+            <CommentComponent reviewsObject={this.props.touristDest} url="tourist-destinations"/>
+            <CommentsComponent />
+            </Tab>
+
           </Tabs>
         </Content>
 
@@ -255,4 +262,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { saveFavoriteDest })(TouristDestination);
+export default connect(mapStateToProps, { modifyUser })(TouristDestination);

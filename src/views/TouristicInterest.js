@@ -61,7 +61,7 @@ export default class TouristicInterest extends Component {
             </Tab>
 
             <Tab heading="Comentarios">
-              <CommentComponent reviewsObject={this.props.touristicInterest} />
+              <CommentComponent reviewsObject={this.props.touristicInterest} url="touristic-interests"/>
               <CommentsComponent />
             </Tab>
           </Tabs>
