@@ -62,6 +62,7 @@
 		5802F7464B53433194BCF90D /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2357CFCF8AD64F1BA171BE8E /* libRNI18n.a */; };
 		CCD68286CEB54CC3BB926C44 /* libimageCropPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02715D562C524478859C98CC /* libimageCropPicker.a */; };
 		757860894BA8491A82722AFD /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CDC87AF16854878BD0E03A7 /* libAirMaps.a */; };
+		C9B1377B3B2140458463FE2B /* libRNJustifiedText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 01D0CBE39B224DDA98E0196C /* libRNJustifiedText.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -313,6 +314,8 @@
 		02715D562C524478859C98CC /* libimageCropPicker.a */ = {isa = PBXFileReference; name = "libimageCropPicker.a"; path = "libimageCropPicker.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		DE1BEBB9734E4AC393D5B0DA /* AirMaps.xcodeproj */ = {isa = PBXFileReference; name = "AirMaps.xcodeproj"; path = "../node_modules/react-native-maps/lib/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		5CDC87AF16854878BD0E03A7 /* libAirMaps.a */ = {isa = PBXFileReference; name = "libAirMaps.a"; path = "libAirMaps.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		07E700A1583D4CFE8A870E9E /* RNJustifiedText.xcodeproj */ = {isa = PBXFileReference; name = "RNJustifiedText.xcodeproj"; path = "../node_modules/react-native-justified-text/ios/RNJustifiedText.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		01D0CBE39B224DDA98E0196C /* libRNJustifiedText.a */ = {isa = PBXFileReference; name = "libRNJustifiedText.a"; path = "libRNJustifiedText.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -344,6 +347,7 @@
 				5802F7464B53433194BCF90D /* libRNI18n.a in Frameworks */,
 				CCD68286CEB54CC3BB926C44 /* libimageCropPicker.a in Frameworks */,
 				757860894BA8491A82722AFD /* libAirMaps.a in Frameworks */,
+				C9B1377B3B2140458463FE2B /* libRNJustifiedText.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -515,6 +519,7 @@
 				DEDE8E01648C4439992BC594 /* RNI18n.xcodeproj */,
 				B24A083B31E6451BAAEC2E8D /* imageCropPicker.xcodeproj */,
 				DE1BEBB9734E4AC393D5B0DA /* AirMaps.xcodeproj */,
+				07E700A1583D4CFE8A870E9E /* RNJustifiedText.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1100,6 +1105,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1108,6 +1114,7 @@
 					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 					"$(SRCROOT)/../node_modules/react-native-image-crop-picker/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-justified-text/ios",
 				);
 			};
 			name = Debug;
@@ -1133,6 +1140,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1141,6 +1149,7 @@
 					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 					"$(SRCROOT)/../node_modules/react-native-image-crop-picker/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-justified-text/ios",
 				);
 			};
 			name = Release;
@@ -1167,6 +1176,7 @@
 					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 					"$(SRCROOT)/../node_modules/react-native-image-crop-picker/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-justified-text/ios",
 				);
 			};
 			name = Debug;
@@ -1192,6 +1202,7 @@
 					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 					"$(SRCROOT)/../node_modules/react-native-image-crop-picker/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-justified-text/ios",
 				);
 			};
 			name = Release;
@@ -1226,6 +1237,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1234,6 +1246,7 @@
 					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 					"$(SRCROOT)/../node_modules/react-native-image-crop-picker/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-justified-text/ios",
 				);
 			};
 			name = Debug;
@@ -1268,6 +1281,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1276,6 +1290,7 @@
 					"$(SRCROOT)/../node_modules/react-native-i18n/ios",
 					"$(SRCROOT)/../node_modules/react-native-image-crop-picker/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-justified-text/ios",
 				);
 			};
 			name = Release;
@@ -1305,6 +1320,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Debug;
@@ -1329,6 +1345,7 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
