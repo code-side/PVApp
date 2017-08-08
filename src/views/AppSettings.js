@@ -13,7 +13,9 @@ class AppSettings extends Component {
       Actions.login();
     });
   }
-
+   goToProfile=()=>{
+     Actions.profile();
+}
   render(){
     return (
       <Container>

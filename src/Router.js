@@ -8,6 +8,8 @@ import Home from './views/Home';
 import Register from './views/Register';
 import AppSettings from './views/AppSettings';
 import Configuration from './views/Configuration';
+import Profile from './views/Profile';
+import EditProfile from './views/EditProfile';
 import Splash from './views/Splash';
 import RegisterProfilePicture from './views/RegisterProfilePicture';
 
@@ -39,7 +41,7 @@ const RouterComponent = () => {
       barButtonIconStyle={styles.barButtonIconStyle}
       sceneStyle={{ paddingTop: 54 }}
     >
-      <Scene key="splash" component={Splash} initial/>
+      <Scene key="splash" component={Splash} hideNavBar={true}  initial/>
       <Scene key="login" component={Login} title=""  type="reset"/>
       <Scene key="register" component={Register} title="Registro"/>
       <Scene key="registerProfilePicture" component ={RegisterProfilePicture} title="Registro"/>
@@ -55,6 +57,8 @@ const RouterComponent = () => {
       <Scene key="showMap" component={Nearby}/>
       <Scene key="appSettings" component={AppSettings} title="Perfil"/>
       <Scene key="config" component={Configuration} title={I18n.t('titles.settings')}/>
+      <Scene key= "profile" component={Profile} title="Perfil"/>
+      <Scene key= "editProfile" component={EditProfile} hideNavBar={true}   sceneStyle={{ paddingTop: 0 }} title="Ver Perfil"/>
     </Router>
   );
 };

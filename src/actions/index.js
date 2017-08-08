@@ -1,5 +1,6 @@
 const SERVER_IP = '192.168.86.23';
 
+
 export const saveLoggedUser = (user) => {
   return {type: 'SAVE_LOGGED_USER', payload: user};
 };
@@ -30,6 +31,25 @@ export const saveTokenToApp = () => {
    dispatch({type: 'SAVE_TOKEN', payload:'Bearer ' + token});
  });
  };
+};
+
+export const modifyUser = ({token, user})=> {
+  return (dispatch)=>{
+    return fetch('http://' + SERVER_IP + ':8080/api/p-v-app-users', {
+      method:'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': token
+      },
+      body: JSON.stringify(user)
+    })
+    .then((response) => response.json())
+    // Save token and load static info
+    .then(async (userResponse) => {
+      dispatch({type: 'SAVE_LOGGED_USER', payload: userResponse});
+   });
+  };
 };
 
 export const login = ({username, password, token}) => {
@@ -106,9 +126,9 @@ export const registerUser = ({token, user}) => {
     };
   };
 
-export const  saveTouristicInterest = ({token, body}) =>{
+export const  saveComments = ({token, body, url}) =>{
     return (dispatch) => {
-    return invoke(token, 'touristic-interests', 'PUT', body)
+    return invoke(token, url, 'PUT', body)
     .then(async(registerResponse) => {
 
       });
