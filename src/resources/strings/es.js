@@ -41,5 +41,9 @@ export default {
       en: 'Inglés',
       es: 'Español'
     }
+  },
+  comment: {
+    myComment: 'Mi comentario',
+    submit: 'Enviar'
   }
 };

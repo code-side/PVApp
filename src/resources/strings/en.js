@@ -41,5 +41,9 @@ export default {
       en: 'English',
       es: 'Spanish'
     }
+  },
+  comment: {
+    myComment: 'My comment',
+    submit: 'Submit'
   }
 };
