@@ -162,10 +162,6 @@ const styles = {
   }
 };
 
-const mapStateToProps = state => {
-  return {
-    province: state.provinceReducer.selected
-  };
-};
 
-export default connect(mapStateToProps, null)(ProvinceInfo);
+
+export default connect(null, null)(ProvinceInfo);

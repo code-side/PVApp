@@ -3,7 +3,7 @@ import { StyleSheet, Dimensions, View, AsyncStorage } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { Container, Content, Text, Button } from 'native-base';
 import { connect } from 'react-redux';
-import { regiseterUser } from '../actions';
+import { registerUser } from '../actions';
 import { Actions } from 'react-native-router-flux';
 
 class RegisterProfilePicture extends Component {
@@ -31,7 +31,7 @@ class RegisterProfilePicture extends Component {
 
   registerUser =() =>{
     const { token = this.props.token, user = this.props.registrationUser} = {};
-    this.props.regiseterUser({token, user}).then(() =>{
+    this.props.registerUser({token, user}).then(() =>{
       if (this.props.user !== undefined){
         AsyncStorage.setItem('@loggedUser:key', JSON.stringify(this.props.user));
         Actions.home();
@@ -99,4 +99,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { regiseterUser })(RegisterProfilePicture);
+export default connect(mapStateToProps, { registerUser })(RegisterProfilePicture);
