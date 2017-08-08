@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { saveFavoriteDest } from '../actions';
 import { Container, Text, Content, Button, Tabs, Tab, List, Left, Body, Card, CardItem, Fab, Icon } from 'native-base';
 import {invoke} from '../actions';
-import {connect} from 'react-redux';
+
 
 class TouristDestination extends Component {
   constructor(props) {

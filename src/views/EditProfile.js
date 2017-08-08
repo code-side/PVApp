@@ -5,13 +5,14 @@ import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
-class Profile extends Component {
+class EditProfile extends Component {
   constructor(props) {
     super(props);
     console.log(this.props.user);
   }
-  editProfile(){
-    Actions.editProfile();
+
+  cancelEdit =()=>{
+    Actions.pop();
   }
 
 render() {
@@ -21,8 +22,11 @@ render() {
         <Form  style={{flex:1}}>
         <Card>
           <CardItem>
+            <Left>
+              <Icon name= 'times' onPress={()=> this.cancelEdit()}/>
+            </Left>
             <Right>
-            <Text onPress={()=> this.editProfile()}> Editar <Icon name= 'pencil'/></Text>
+            <Text>Done</Text>
             </Right>
           </CardItem>
           <CardItem>
@@ -95,4 +99,4 @@ const mapStateToProps = state => {
   return {user: state.db.user};
 };
 
-export default connect(mapStateToProps, null)(Profile);
+export default connect(mapStateToProps, null)(EditProfile);
