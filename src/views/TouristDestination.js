@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import { Image } from 'react-native';
+import React, {Component} from 'react';
+import {Image, Share, WebView, View} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import { Row, Grid } from 'react-native-easy-grid';
-import { Container, Text, Content, Button, Tabs, Tab, List, Left, Body, Card, CardItem, Icon } from 'native-base';
-import { invoke } from '../actions';
-import { connect } from 'react-redux';
-import Menu from '../components/Menu';
-import CustomFab from '../components/CustomFab';
+import {Row, Grid} from 'react-native-easy-grid';
+import {Container,Text,Content,Button,Tabs,Tab,List,Body,Card,CardItem,Icon} from 'native-base';
+import {invoke, getDirections} from '../actions';
+import {connect} from 'react-redux';
+import {CustomFab} from '../components/CustomFab';
+import {Menu} from '../components/Menu';
 
 class TouristDestination extends Component {
   constructor(props) {
@@ -15,6 +15,10 @@ class TouristDestination extends Component {
       isAddToVisit: false,
       active: false
     };
+  }
+
+  componentWillMount() {
+    console.log(getDirections('9.855733,-83.9134888','9.8549748,-83.9124078'));
   }
 
   renderTDestItem(destination) {
@@ -32,34 +36,49 @@ class TouristDestination extends Component {
   }
 
   takePhoto() {
-    ImagePicker.openCamera({width: 300, height: 400, cropping: true, includeBase64: true})
-      .then((image) => {
-        this.props.touristDest.photos.push({
-          reports: [],
-          state: 'inactivo',
-          url: 'data:${image.mime};base64,' + image.data
-        });
-        invoke(this.props.token, 'tourist-destinations', 'PUT', this.props.touristDest);
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+      includeBase64: true
+    }).then((image) => {
+      this.props.touristDest.photos.push({
+        reports: [],
+        state: 'inactivo',
+        url: 'data:${image.mime};base64,' + image.data
       });
+      invoke(this.props.token, 'tourist-destinations', 'PUT', this.props.touristDest);
+    });
+  }
 
+  shareDestination() {
+    Share.share({
+      message: 'BAM: we\'re helping your business with awesome React Native apps',
+      url: 'http://bam.tech',
+      title: 'Wow, did you see that?'
+    }, {dialogTitle: 'Share BAM goodness'});
   }
 
   renderPhotos(item) {
     return (
-      <Card style={{flex: 0}}>
-      <CardItem style={{ flexDirection: 'row'}}>
-        <Image
-          style={{width: 50, height: 50}}
-          source={{uri: item.url}}
+      <Card style={{ flex: 0 }}>
+        <CardItem style={{ flexDirection: 'row' }}>
+          <Image style={{
+            width: 50,
+            height: 50
+          }}
+          source={{ uri: item.url }}
         />
-      </CardItem>
+        </CardItem>
       </Card>
     );
   }
 
   noItems(text) {
     return (
-      <Text style={styles.noItems}>{text}</Text>
+      <Text style={styles.noItems}>
+        {text}
+      </Text>
     );
   }
 
@@ -71,61 +90,58 @@ class TouristDestination extends Component {
             <Row style={ styles.header }>
               <Image
                 style={{ flex: 1 }}
-                source={{ uri: this.props.touristDest.photos[0].url }}
-              />
+                source={{ uri: this.props.touristDest.photos[0].url }}/>
             </Row>
           </Grid>
-          <Tabs initialPage={0} style={{
-            flex: 1
-          }}>
+          <Tabs
+            initialPage={ 0 }
+            style={{ flex: 1 }}>
             <Tab heading="Información">
-
               {/* Info */}
               <Card>
                 <CardItem>
-                  <Left>
-                    <Text style={styles.titles}>Provincia:</Text>
-                    <Text style={styles.textContainer}>{this.props.touristDest.province.name}</Text>
-                  </Left>
-                </CardItem>
-
-                <CardItem>
                   <Body>
-                    <Text style={styles.titles}>Descripción:</Text>
-                    <Text style={styles.textContainer}>{this.props.touristDest.description}</Text>
+                    {/* ./' + this.props.touristDest.description + ' */}
+                    <View style={{flex: 1}}>
+                      <WebView
+                        source={{ html: "<p style='text-align: justify;'>Justified text here</p>" }}
+                      />
+                    </View>
+
                   </Body>
                 </CardItem>
-
                 <CardItem>
                   <Body>
-                    <Text style={styles.titles}>Servicios:</Text>
-                  </Body>
-                </CardItem>
-
-                <CardItem>
-                  <List dataArray={this.props.touristDest.attributes} renderRow={(item) => this.renderTDestItem(item)}/>
-                </CardItem>
-
-                <CardItem>
-                  <Body>
-                    <Text style={styles.titles}>Ubicación:</Text>
-                  </Body>
-
-                </CardItem>
-                <Button transparent>
-                  {this.state.isAddToVisit
-                    ? <Text style={{
-                        color: 'red'
-                      }}>Remover de lista por visitar</Text>
-                    : <Text>Añadir a lista por visitar</Text>}
-                </Button>
-              </Card>
-            </Tab>
-
-            <Tab heading="Fotos">
-              <List dataArray={this.props.touristDest.photos} renderRow={(item) => this.renderPhotos(item)}/>
-            </Tab>
-            <Tab heading="Comentarios"/>
+                    <Text style={styles.titles}>
+                      Servicios:
+                    </Text>
+                    </Body>
+                    </CardItem>
+                    <CardItem>
+                      <List
+                        dataArray={ this.props.touristDest.attributes }
+                        renderRow={ (item) => this.renderTDestItem(item) }
+                      />
+                    </CardItem>
+                    {/* <CardItem>
+                      <Body>
+                        <Text style={ styles.titles }>
+                          Ubicación:
+                        </Text>
+                      </Body>
+                    </CardItem>
+                    <Button transparent>
+                      { this.state.isAddToVisit ? <Text style={{ color: 'red' }}> Remover de lista por visitar </Text> : <Text> Añadir a lista por visitar </Text> }
+                    </Button> */}
+                  </Card>
+                </Tab>
+                <Tab heading="Fotos">
+                  <List
+                    dataArray={this.props.touristDest.photos}
+                    renderRow= {(item) => this.renderPhotos(item)}
+                  />
+                  </Tab>
+                  <Tab heading="Comentarios"/>
           </Tabs>
         </Content>
 
@@ -148,67 +164,66 @@ class TouristDestination extends Component {
     );
   }
 }
-
-const styles = {
-  header: {
-    flex: 1,
-    height: 200
-  },
-  mainTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    paddingTop: 10,
-    paddingBottom: 10,
-    color: 'white',
-    flex: 1
-  },
-  titles: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 10
-  },
-  textContainer: {
-    fontSize: 14,
-    paddingLeft: 10,
-    paddingRight: 10,
-    textAlign: 'justify',
-    flexWrap: 'wrap'
-  },
-  listItem: {
-    padding: 10,
-    marginLeft: 10
-  },
-  noItems: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'red',
-    flex: 1,
-    textAlign: 'center',
-    textAlignVertical: 'center'
-  },
-  buttonMargin: {
-    width: 140,
-    marginLeft: 10,
-    marginRight: 10
-  },
-  buttonText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    flex: 1
-  },
-  listButton: {
-    width: 16,
-    height: 16
-  },
-  icons: {
-    width: 32,
-    height: 32,
-    marginRight: 5
-  }
+  const styles = {
+    header : {
+      flex: 1,
+      height: 200
+    },
+    mainTitle : {
+      fontSize: 20,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      paddingTop: 10,
+      paddingBottom: 10,
+      color: 'white',
+      flex: 1
+    },
+    titles : {
+      fontSize: 16,
+      fontWeight: 'bold',
+      marginTop: 10,
+      marginBottom: 10,
+      marginLeft: 10
+    },
+    textContainer : {
+      fontSize: 14,
+      paddingLeft: 10,
+      paddingRight: 10,
+      textAlign: 'justify',
+      flexWrap: 'wrap'
+    },
+    listItem : {
+      padding: 10,
+      marginLeft: 10
+    },
+    noItems : {
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: 'red',
+      flex: 1,
+      textAlign: 'center',
+      textAlignVertical: 'center'
+    },
+    buttonMargin : {
+      width: 140,
+      marginLeft: 10,
+      marginRight: 10
+    },
+    buttonText : {
+      fontSize: 14,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      flex: 1
+    },
+    listButton : {
+      width: 16,
+      height: 16
+    },
+    icons : {
+      width: 32,
+      height: 32,
+      marginRight: 5
+    }
 };
 
 const mapStateToProps = state => {
@@ -217,4 +232,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(TouristDestination);
+export default connect(mapStateToProps,{getDirections})(TouristDestination);

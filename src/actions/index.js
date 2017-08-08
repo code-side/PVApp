@@ -137,3 +137,15 @@ export const invoke = (token, url, method, body) => {
     }).then((response) => response.json());
   }
 };
+
+export const getDirections = (origin, destination) => {
+  console.log(origin,destination);
+  return fetch('https://maps.googleapis.com/maps/api/directions/json?origin=' + origin + '&destination=' + destination + '&key=AIzaSyAxFpWldamQAaPa6BKi5M4Fo9KB3nHTpf4', {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+  }).then((response) => response.json());
+
+};
