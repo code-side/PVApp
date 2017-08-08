@@ -3,7 +3,7 @@ import {View, AsyncStorage} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import {saveTokenToApp, login, updateConfig, refreshStaticData} from '../actions';
 import {connect} from 'react-redux';
-import I18n from '../services/languageService';
+import I18n from '../services/LanguageService';
 
 class Splash extends Component {
   constructor(props) {
@@ -34,7 +34,6 @@ class Splash extends Component {
   }
 
   loadAppConfig() {
-
     AsyncStorage.getItem('@app_config:key').then((strConfig) =>{
       if (strConfig !== null) {
         let config = JSON.parse(strConfig);
@@ -45,6 +44,7 @@ class Splash extends Component {
           lang: 'en',
           notifications: true
         });
+        I18n.locale = 'en';
       }
     });
   }

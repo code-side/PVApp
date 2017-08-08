@@ -4,8 +4,17 @@ export default {
     provinces: 'Provinces',
     ticoStops: 'Tico Stops',
     touristictInterest: 'Touristict Interest',
+    touristictInterests: 'Touristict Interests',
     touristictDestination: 'Touristict Destination',
-    settings: 'Settings'
+    touristictDestinations: 'Touristict Destinations',
+    settings: 'Settings',
+    survey: 'Survey'
+  },
+  home: {
+    home: 'Home',
+    favorites: 'Favorites',
+    map: 'Map',
+    profile: 'Profile'
   },
   general: {
     tags: 'Tags',
@@ -16,10 +25,28 @@ export default {
     seeMore: 'See more',
     filters: 'Filters',
     apply: 'Apply',
-    cancel: 'Cancel'
+    cancel: 'Cancel',
+    close: 'Close',
+    noOption: 'No',
+    yesOption: 'Yes',
+    clear: 'Clear',
+    viewAll: 'View all',
+    loading: 'loading'
   },
-  touristDestionation: {
-    searchLegend: 'Search: Prinvinces, Places...'
+  touristDestination: {
+    searchLegend: 'Search: Provinces, Places...',
+    fastSearch: 'Fast search',
+    survey: {
+      title: 'Fast search',
+      searchBy: 'Search by',
+      finish: 'Filter ready!'
+    }
+  },
+  touristInterest: {
+    searchLegend: 'Search: Provinces, Places...'
+  },
+  ticoStops: {
+    searchLegend: 'Search: Provinces, Places...'
   },
   provinceInfo: {
     history: 'History:',
