@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import I18n from '../services/languageService';
+import I18n from '../services/LanguageService';
 import { Text, Item, Input, Button } from 'native-base';
 
 class SearchBar extends Component {

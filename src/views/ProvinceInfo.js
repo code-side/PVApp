@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Image, Linking } from 'react-native';
 import { Container, Text, Content, Button, Tabs, Tab, List, ListItem, Thumbnail, Body } from 'native-base';
 import { Row, Grid } from 'react-native-easy-grid';
-import I18n from '../services/languageService';
+import I18n from '../services/LanguageService';
+import Menu from '../components/Menu';
 
 class ProvinceInfo extends Component {
 
@@ -100,6 +101,8 @@ class ProvinceInfo extends Component {
             </Tab>
           </Tabs>
         </Content>
+
+        <Menu/>
       </Container>
     );
   }

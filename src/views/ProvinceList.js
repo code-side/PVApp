@@ -3,6 +3,7 @@ import { Image, TouchableOpacity } from 'react-native';
 import { Container, Text, Content, Card, CardItem, Body } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import Menu from '../components/Menu';
 
 class ProvinceList extends Component {
 
@@ -38,6 +39,8 @@ class ProvinceList extends Component {
         <Content>
           {this.renderProvinces()}
         </Content>
+
+        <Menu/>
       </Container>
     );
   }

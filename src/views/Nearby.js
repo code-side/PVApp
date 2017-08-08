@@ -3,7 +3,6 @@ import { StyleSheet, Dimensions } from 'react-native';
 import MapView from 'react-native-maps';
 import { connect } from 'react-redux';
 import haversine from 'haversine';
-
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;

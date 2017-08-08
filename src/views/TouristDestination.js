@@ -1,10 +1,12 @@
-import React, {Component} from 'react';
-import {Image} from 'react-native';
+import React, { Component } from 'react';
+import { Image } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import {Row, Grid} from 'react-native-easy-grid';
-import { Container, Text, Content, Button, Tabs, Tab, List, Left, Body, Card, CardItem, Fab, Icon } from 'native-base';
-import {invoke} from '../actions';
-import {connect} from 'react-redux';
+import { Row, Grid } from 'react-native-easy-grid';
+import { Container, Text, Content, Button, Tabs, Tab, List, Left, Body, Card, CardItem, Icon } from 'native-base';
+import { invoke } from '../actions';
+import { connect } from 'react-redux';
+import Menu from '../components/Menu';
+import CustomFab from '../components/CustomFab';
 
 class TouristDestination extends Component {
   constructor(props) {
@@ -28,12 +30,6 @@ class TouristDestination extends Component {
       </Card>
     );
   }
-
-  // invokeGeo(type, resource) {
-  //   if (Linking.canOpenURL(type + ':' + resource.location)) {
-  //     Linking.openURL(type + ':' + resource.location);
-  //   }
-  // }
 
   takePhoto() {
     ImagePicker.openCamera({width: 300, height: 400, cropping: true, includeBase64: true})
@@ -133,33 +129,21 @@ class TouristDestination extends Component {
           </Tabs>
         </Content>
 
-        <Fab
-          active={this.state.active}
-          direction="up"
-          containerStyle={{}}
-          style={{ backgroundColor: '#5067FF' }}
-          position="bottomRight"
-          onPress={() => this.setState({ active: !this.state.active })}
-        >
-          <Icon name="md-more"/>
+        <CustomFab>
           <Button
             onPress={() => this.takePhoto()}
-            style={{ backgroundColor: '#34A34F' }}
-          >
+            style={{ backgroundColor: '#34A34F' }}>
             <Icon name="md-camera"/>
           </Button>
-          <Button
-            style={{ backgroundColor: '#3B5998' }}
-          >
+          <Button style={{ backgroundColor: '#3B5998' }}>
             <Icon name="md-flag"/>
           </Button>
-          <Button
-            style={{ backgroundColor: '#DD5144' }}
-          >
+          <Button style={{ backgroundColor: '#DD5144' }}>
             <Icon name="md-heart"/>
           </Button>
-        </Fab>
+        </CustomFab>
 
+        <Menu/>
       </Container>
     );
   }

@@ -3,7 +3,7 @@ import React from 'react';
 import { Router, Scene } from 'react-native-router-flux';
 
 import Login from './views/Login';
-import I18n from './services/languageService';
+import I18n from './services/LanguageService';
 import Home from './views/Home';
 import Register from './views/Register';
 import AppSettings from './views/AppSettings';

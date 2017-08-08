@@ -1,4 +1,4 @@
-import I18n from '../services/languageService';
+import I18n from '../services/LanguageService';
 const SERVER_IP = '10.223.29.134';
 
 export const saveLoggedUser = (user) => {

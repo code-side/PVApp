@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import I18n from '../services/languageService';
+import I18n from '../services/LanguageService';
 import { Row, Text, Card, CardItem, Right, Left } from 'native-base';
 
 class HorizontalList extends Component {

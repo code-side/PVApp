@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Container, Text, Card, CardItem, Right, Body, Left, List, Thumbnail } from 'native-base';
+import Menu from '../components/Menu';
+import { Container, Content, Text, Card, CardItem, Right, Body, Left, List, Thumbnail } from 'native-base';
 
 class ViewMoreList extends Component {
 
@@ -54,10 +55,14 @@ class ViewMoreList extends Component {
   render() {
     return (
       <Container>
-        <List
-          dataArray={this.props.items}
-          renderRow={(item) => this.renderItem(item)}
-        />
+        <Content>
+          <List
+            dataArray={this.props.items}
+            renderRow={(item) => this.renderItem(item)}
+          />
+        </Content>
+
+        <Menu/>
       </Container>
     );
   }

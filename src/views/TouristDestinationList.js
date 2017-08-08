@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { View, ScrollView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import I18n from '../services/languageService';
+import I18n from '../services/LanguageService';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modal';
-import HorizontalList from './HorizontalList';
-import HorizontalListItem from './HorizontalListItem';
-import SearchBar from './SearchBar';
+import HorizontalList from '../components/HorizontalList';
+import HorizontalListItem from '../components/HorizontalListItem';
+import SearchBar from '../components/SearchBar';
+import Menu from '../components/Menu';
 import { sortByRating, searchByNameAndProvince } from '../services/SearchService';
 import TouristDestinationSurvey from './TouristDestinationSurvey';
 import { Container, Text, CheckBox, Separator, Content, Fab, Footer, FooterTab, Header, Title, List, ListItem, Button, Left, Right } from 'native-base';
@@ -238,6 +239,8 @@ class TouristDestinationList extends Component {
           onPress={() => this.surveyModal.showModal()}>
           <AwesomeIcon name="filter"/>
         </Fab>
+
+        <Menu/>
       </Container>
     );
   }

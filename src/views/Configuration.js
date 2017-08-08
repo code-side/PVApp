@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Container, Text, Content, Radio, Right, List, ListItem, CheckBox } from 'native-base';
 import { connect } from 'react-redux';
 import { updateConfig, refreshStaticData } from '../actions';
-import I18n from '../services/languageService';
+import I18n from '../services/LanguageService';
 import { AsyncStorage } from 'react-native';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 
 class Configuration extends Component {
 

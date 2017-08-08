@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 import Modal from 'react-native-modal';
-import I18n from '../services/languageService';
+import I18n from '../services/LanguageService';
 import { Text, Row, Button, Header, Title, Footer, FooterTab } from 'native-base';
 
 class TouristDestinationSurvey extends Component {

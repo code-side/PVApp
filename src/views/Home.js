@@ -1,8 +1,5 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
-  Footer,
-  FooterTab,
-  Button,
   Container,
   Content,
   List,
@@ -10,12 +7,13 @@ import {
   Text,
   Right
 } from 'native-base';
-import I18n from '../services/languageService';
-import {connect} from 'react-redux';
-import {Actions} from 'react-native-router-flux';
+import I18n from '../services/LanguageService';
+import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import HorizontalList from './HorizontalList';
-import HorizontalListItem from './HorizontalListItem';
+import Menu from '../components/Menu';
+import HorizontalList from '../components/HorizontalList';
+import HorizontalListItem from '../components/HorizontalListItem';
 
 class Home extends Component {
 
@@ -118,32 +116,7 @@ class Home extends Component {
           </List>
         </Content>
 
-        <Footer>
-          <FooterTab>
-            <Button full>
-              <Icon name="home" size={25} color="#FFF"/>
-              <Text style={{fontSize:10, fontWeight:'bold'}}>{I18n.t('home.home')}</Text>
-            </Button>
-          </FooterTab>
-          <FooterTab>
-            <Button full>
-              <Icon name="heart-o" size={25} color="#FFF"/>
-              <Text style={{fontSize:10, fontWeight:'bold'}}>{I18n.t('home.favorites')}</Text>
-            </Button>
-          </FooterTab>
-          <FooterTab>
-            <Button full onPress={() => Actions.showMap({title: 'Nearby'})}>
-              <Icon name="map-marker" size={25} color="#FFF"/>
-              <Text style={{fontSize:10, fontWeight:'bold'}}>{I18n.t('home.map')}</Text>
-            </Button>
-          </FooterTab>
-          <FooterTab>
-            <Button full onPress={() => Actions.appSettings()}>
-              <Icon name="user-o" size={25} color="#FFF"/>
-              <Text style={{fontSize:10, fontWeight:'bold'}}>{I18n.t('home.profile')}</Text>
-            </Button>
-          </FooterTab>
-        </Footer>
+        <Menu/>
       </Container>
     );
   }

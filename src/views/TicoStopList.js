@@ -3,10 +3,11 @@ import { View } from 'react-native';
 import { Container, Content, Text, List, ListItem, Separator } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import I18n from '../services/languageService';
-import HorizontalList from './HorizontalList';
-import HorizontalListItem from './HorizontalListItem';
-import SearchBar from './SearchBar';
+import I18n from '../services/LanguageService';
+import HorizontalList from '../components/HorizontalList';
+import HorizontalListItem from '../components/HorizontalListItem';
+import SearchBar from '../components/SearchBar';
+import Menu from '../components/Menu';
 import { searchByNameAndProvince } from '../services/SearchService';
 
 class TicoStopList extends Component {
@@ -83,6 +84,8 @@ class TicoStopList extends Component {
             }
           </List>
         </Content>
+
+        <Menu/>
       </Container>
     );
   }
