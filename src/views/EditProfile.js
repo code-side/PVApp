@@ -3,7 +3,7 @@ import { Thumbnail, Text, Container, Content, Form, Card, CardItem, Left, Right,
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { TouchableOpacity, Picker, View } from 'react-native';
+import { TouchableOpacity, Picker, View, DatePickerAndroid } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { modifyUser } from '../actions';
 
@@ -17,7 +17,8 @@ class EditProfile extends Component {
         {name:'Female',value:'female'},
         {name:'Other',value:'other'},
       ],
-      selectedGender: ''
+      selectedGender: '',
+      birthday: ''
     };
   }
 
@@ -25,6 +26,7 @@ class EditProfile extends Component {
     for (let gender of this.state.genders_en){
       if (gender.value === this.props.user.gender){
         this.setState({selectedGender: gender});
+        console.log(this.props.user.birthday);
       }
     }
   }
@@ -42,6 +44,27 @@ class EditProfile extends Component {
       // console.log(this.props.registrationUser);
       //this.registerUser();
     });
+  }
+  openDatePicker = async () =>{
+    let userBirthDay;
+    if (this.props.user.birthday !== null){
+       userBirthDay = new Date();
+    } else {
+      userBirthDay = new Date();
+    }
+    try {
+      const {action, year, month, day} = await DatePickerAndroid.open({
+          date: userBirthDay,
+          maxDate: new Date()
+      });
+      if (action !== DatePickerAndroid.dismissedAction) {
+        // Selected year, month (0-11), day
+        this.props.user.birthday = new Date(year, month, day);
+        this.setState({birthday: (month + 1) + '/' + day + '/' + year});
+      }
+    } catch ({code, message}) {
+      console.warn('Cannot open date picker', message);
+    }
   }
 
   setGender = (selectedGender) =>{
@@ -107,13 +130,8 @@ render() {
            </View>
 
           <View style={styles.cardItem}>
-            <Text style={styles.titles}>Fecha de nacimiento:</Text>
-            <Text style={styles.text}>{this.props.user.birthday}</Text>
-          </View>
-
-          <View style={styles.cardItem}>
-            <Text style={styles.titles}>Fecha de registro:</Text>
-            <Text style={styles.text}>{this.props.user.registrationDate}</Text>
+            <Text style={styles.titles}  onPress={this.openDatePicker}>Fecha de nacimiento:</Text>
+            <Text style={styles.text}  onPress={this.openDatePicker}>{this.props.user.birthday}</Text>
           </View>
 
         </Card>
@@ -150,7 +168,7 @@ const styles = {
 const mapStateToProps = state => {
   return {
     user: state.db.user,
-    token: state.db.token
+    token: state.db.toke
   };
 };
 
