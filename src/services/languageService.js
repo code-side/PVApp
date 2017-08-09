@@ -11,9 +11,6 @@ I18n.translations = {
 I18n.languages = ['en', 'es'];
 I18n.defaultLocale = 'en';
 I18n.locale = I18n.currentLocale();
-I18n.getLocale = () => {
-  return I18n.locale.substring(0, 2);
-};
 
 export default I18n;
 

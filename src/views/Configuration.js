@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Container, Text, Content, Radio, Right, List, ListItem, CheckBox } from 'native-base';
 import { connect } from 'react-redux';
-import { updateConfig, refreshStaticData } from '../actions';
-import I18n from '../services/LanguageService';
+import { updateConfig } from '../actions';
+import I18n from '../services/languageService';
 import { AsyncStorage } from 'react-native';
-import { Actions } from 'react-native-router-flux';
+import {Actions} from 'react-native-router-flux';
 
 class Configuration extends Component {
 
@@ -18,7 +18,6 @@ class Configuration extends Component {
       return (
         <ListItem key={indx} onPress={() => {
           I18n.locale = lang;
-          this.props.refreshStaticData(this.props.token);
           this.updateConfig({...this.props.config, lang: lang});
           Actions.refresh({title: I18n.t('titles.settings')});
         }}>
@@ -64,9 +63,8 @@ class Configuration extends Component {
 
 const mapStateToProps = state => {
   return {
-    config: state.appConfigReducer.appConfig,
-    token: state.db.token
+    config: state.appConfigReducer.appConfig
   };
 };
 
-export default connect(mapStateToProps, { updateConfig, refreshStaticData })(Configuration);
+export default connect(mapStateToProps, { updateConfig })(Configuration);

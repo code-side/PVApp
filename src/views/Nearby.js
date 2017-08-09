@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import haversine from 'haversine';
 import {getDirections} from '../actions';
 import person from '../resources/images/person.png';
+
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
