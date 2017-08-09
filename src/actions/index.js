@@ -1,5 +1,4 @@
-import I18n from '../services/LanguageService';
-const SERVER_IP = '10.223.29.134';
+const SERVER_IP = '192.168.86.26';
 
 export const saveLoggedUser = (user) => {
   return {type: 'SAVE_LOGGED_USER', payload: user};
@@ -54,12 +53,10 @@ export const login = ({username, password, token}) => {
 }; // end login function
 
 export const refreshStaticData = (token) => {
-  const locale = I18n.getLocale();
-
   return (dispatch) => {
     let staticData = {};
 
-    invoke(token, 'provinces?lang=' + locale, 'GET', {}).then(async(provincesResponse) => {
+    invoke(token, 'provinces', 'GET', {}).then(async(provincesResponse) => {
       staticData.provinces = provincesResponse;
       dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
     });
@@ -79,13 +76,8 @@ export const refreshStaticData = (token) => {
       dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
     });
 
-    invoke(token, 'attributes?lang=' + locale, 'GET', {}).then(async (attributesResponse) => {
+    invoke(token, 'attributes', 'GET', {}).then(async (attributesResponse) => {
       staticData.attributes = attributesResponse;
-      dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
-    });
-
-    invoke(token, 'survey-questions?lang=' + locale, 'GET', {}).then(async (surveyQuestions) => {
-      staticData.surveyQuestions = surveyQuestions;
       dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
     });
   };
@@ -148,4 +140,9 @@ export const getDirections = (origin, destination) => {
     }
   }).then((response) => response.json());
 
+};
+
+// Province Actions
+export const selectProvince = data => {
+  return {type: 'SELECT_PROVINCE', payload: data};
 };

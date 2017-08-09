@@ -2,11 +2,9 @@ import React, {Component} from 'react';
 import {Image, Share, WebView, View} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import {Row, Grid} from 'react-native-easy-grid';
-import {Container,Text,Content,Button,Tabs,Tab,List,Body,Card,CardItem,Icon} from 'native-base';
+import {Container,Text,Content,Button,Tabs,Tab,List,Body,Card,CardItem,Fab,Icon} from 'native-base';
 import {invoke, getDirections} from '../actions';
 import {connect} from 'react-redux';
-import {CustomFab} from '../components/CustomFab';
-import {Menu} from '../components/Menu';
 
 class TouristDestination extends Component {
   constructor(props) {
@@ -34,6 +32,12 @@ class TouristDestination extends Component {
       </Card>
     );
   }
+
+  // invokeGeo(type, resource) {
+  //   if (Linking.canOpenURL(type + ':' + resource.location)) {
+  //     Linking.openURL(type + ':' + resource.location);
+  //   }
+  // }
 
   takePhoto() {
     ImagePicker.openCamera({
@@ -144,23 +148,34 @@ class TouristDestination extends Component {
                   <Tab heading="Comentarios"/>
           </Tabs>
         </Content>
-
-        <CustomFab>
-          <Button
-            onPress={() => this.takePhoto()}
-            style={{ backgroundColor: '#34A34F' }}>
-            <Icon name="md-camera"/>
-          </Button>
-          <Button style={{ backgroundColor: '#3B5998' }}>
-            <Icon name="md-flag"/>
-          </Button>
-          <Button style={{ backgroundColor: '#DD5144' }}>
-            <Icon name="md-heart"/>
-          </Button>
-        </CustomFab>
-
-        <Menu/>
-      </Container>
+      <Fab
+        active={this.state.active}
+        direction="up"
+        containerStyle={{}}
+        style={{ backgroundColor: '#5067FF' }}
+        position="bottomRight"
+        onPress={ () => this.setState({ active: !this.state.active })}
+      >
+      <Icon name="md-more"/>
+      <Button
+        onPress={ () => this.takePhoto() }
+        style={{ backgroundColor: '#34A34F' }}
+      >
+        <Icon name="md-camera"/>
+      </Button>
+      <Button
+        onPress={ () => this.shareDestination() }
+        style={{ backgroundColor: '#3B5998' }}
+      >
+        <Icon name="md-share"/>
+      </Button>
+      <Button
+        style={{ backgroundColor: '#DD5144' }}
+      >
+        <Icon name="md-heart"/>
+      </Button>
+      </Fab>
+    </Container>
     );
   }
 }

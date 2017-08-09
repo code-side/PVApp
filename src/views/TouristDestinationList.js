@@ -1,109 +1,168 @@
 import React, { Component } from 'react';
-import { View, ScrollView } from 'react-native';
+import { TouchableOpacity, View, ScrollView, Image } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import I18n from '../services/LanguageService';
+import I18n from '../services/languageService';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modal';
-import HorizontalList from '../components/HorizontalList';
-import HorizontalListItem from '../components/HorizontalListItem';
-import SearchBar from '../components/SearchBar';
-import Menu from '../components/Menu';
-import { sortByRating, searchByNameAndProvince } from '../services/SearchService';
-import TouristDestinationSurvey from './TouristDestinationSurvey';
-import { Container, Text, CheckBox, Separator, Content, Fab, Footer, FooterTab, Header, Title, List, ListItem, Button, Left, Right } from 'native-base';
+import { Container, Text, CheckBox, Separator, Content, Footer, FooterTab,Header, Title, Input, List, ListItem, Row, Button, Item, Card, CardItem, Left, Right } from 'native-base';
 
 class TouristDestinationList extends Component {
 
   constructor(props) {
     super(props);
 
-    this.hideSurveyModal = this.hideSurveyModal.bind(this);
+    this.mapDestWithProvinces = {};
     this.appliedTags = [];
     this.state = {
+      showAdvancedSearchBar: false,
       showAttributesModalPicker: false,
       searchText: '',
-      exclusiveSearch: true, // <- Applies AND or OR condition to appliedTags
       tempTags: []
     };
   }
 
-  filter(province) {
+  filterDestinations(province) {
     let results = [];
+    let searchText = this.state.searchText.toLowerCase().trim();
 
-    // Filter results by destination name and province name
-    let destinations = searchByNameAndProvince(this.props.touristDestinations, this.state.searchText, province.name);
+    for (let dest of this.props.touristDestinations) {
+      if (dest.province.name === province.name) {
+        // If no search request accept the destionation by default
 
-    if (this.appliedTags.length === 0) {
-      results = destinations;
-    } else {
-      for (let dest of destinations) {
-        let hasAttributes = (dest.attributes.length > 0);
-
-        if (hasAttributes) {
+        if (this.appliedTags.length === 0 && searchText.length === 0) {
+          results.push(dest);
+        } else {
+          // Search by attributes
+          let hasAttributes = (dest.attributes.length > 0);
           let i = 0;
 
-          // Filter exclusively or inclusively by attributes
           while (hasAttributes && i < this.appliedTags.length) {
             let tag = this.appliedTags[i++];
-            let containsAttr = (dest.attributes.find((x) => x.name === tag.name) !== undefined);
-            hasAttributes = (this.state.exclusiveSearch ? (containsAttr && hasAttributes) : (containsAttr || hasAttributes));
+            let hasTag = (dest.attributes.find((x) => x.name === tag.name) !== undefined);
+            hasAttributes = (hasAttributes && hasTag);
           }
-        }
 
-        if (hasAttributes) {
-          results.push(dest);
+          // Search for property text match (if has value)
+          let matchText = false;
+
+          if (searchText.length > 0) {
+            let keys = searchText.split(' ');
+            let hasTextMatch = false;
+            i = 0;
+
+            while (!hasTextMatch && i < keys.length) {
+              let key = keys[i].trim();
+              hasTextMatch = dest.name.toLowerCase().includes(key) ||
+                             dest.province.name.toLowerCase().includes(key);
+              i++;
+            }
+            matchText = hasTextMatch;
+          }
+
+          // If tag or text conditions are true, add the destination to result list
+          if (hasAttributes && ((searchText.length === 0) || (searchText.length > 0 && matchText))) {
+            results.push(dest);
+          }
         }
       }
     }
 
     // Sort results by rating from better to worse
-    results = sortByRating(results);
+    results.sort((arg1, arg2) => {
+      let globalRating1 = 0;
+      let globalRating2 = 0;
+
+      arg1.reviews.forEach((r) => {globalRating1 += r.rating;});
+      arg2.reviews.forEach((r) => {globalRating2 += r.rating;});
+
+      return globalRating1 < globalRating2;
+    });
+
     return results;
   }
 
   renderProvincesWithDestinations(listIndex, provinceName, destinations) {
     return (
-      <ListItem key={listIndex} style={{flex: 1}}>
-        <View style={{flex: 1}}>
+      <ListItem key={listIndex}>
+        <View>
           <Separator bordered style={{flex: 1}}>
             <Text style={styles.provinceName}>{provinceName}</Text>
           </Separator>
 
-          <HorizontalList
-            items={destinations}
-            onItemPressed={(item) => Actions.touristDestination({title: item.name, touristDest: item})}
-            viewMoreParams={(items) => this.getViewMoreParams(items)}
-            renderItem={(item) => this.renderDestination(item)}
-          />
+          <ScrollView horizontal={true}>
+            <Row>
+              {this.renderTouristDestinations(destinations)}
+            </Row>
+          </ScrollView>
         </View>
       </ListItem>
     );
   }
 
-  getViewMoreParams(items) {
-    return {
-      title: I18n.t('titles.touristictDestinations'),
-      items: items,
-      onItemPressed: (_item) => Actions.touristDestination({title: _item.name, touristDest: _item}),
-      itemImage: (_item) => _item.photos[0].url,
-      itemLegend: (_item) => _item.province.name
-    };
+  renderTouristDestinations(destinations) {
+    let i = 0;
+    return destinations.map((touristDest, indx) => {
+      if (i++ < 10) {
+        return (
+          <TouchableOpacity key={indx} style={{ width: 180, height: 240 }} onPress={() => Actions.touristDestionation({title: touristDest.name, touristDest: touristDest})}>
+            <Card>
+              <CardItem cardBody>
+                <Image style={{ flex: 1, height: 150, margin: 5 }} source={{uri: touristDest.photos[0].url}} />
+              </CardItem>
+              <CardItem>
+                <Left>
+                  <Text style={{ flex: 1, textAlign: 'center' }}>{touristDest.name}</Text>
+                </Left>
+              </CardItem>
+            </Card>
+          </TouchableOpacity>
+        );
+      } else if (i === 11) {
+        return (
+          <TouchableOpacity key={indx} style={{ width: 180, height: 240 }} onPress={() => {}}>
+            <Image
+              source={SEE_BACKGROUND_CARD}
+              style={styles.seeMoreBackground}>
+              <Card style={{backgroundColor: 'transparent', width: 180, height: 240}}>
+                <CardItem>
+                  <Left style={{ marginTop: 25 }}>
+                    <Text style={{fontWeight: 'bold', fontSize: 16}}>{I18n.t('general.seeMore')}</Text>
+                  </Left>
+                  <Right style={{ marginTop: 25, marginRight: 10 }}>
+                    <AwesomeIcon name="arrow-right" backgroundColor="#fff" color="#000" size={20} />
+                  </Right>
+                </CardItem>
+              </Card>
+            </Image>
+          </TouchableOpacity>
+        );
+      }
+    });
   }
 
-  renderDestination(destination) {
+  getAdvancedSearchBar() {
     return (
-      <HorizontalListItem
-        item={destination}
-        renderItemImage={(item) => item.photos[0].url}
-        renderItemText={(item) => item.name}/>
+      <View style={{ flex: 1, paddingBottom: 15, backgroundColor: '#3f51b5' }}>
+        <Item rounded style={{marginTop: 15, backgroundColor: '#fff'}}>
+          <Input
+            style={{height: 45}}
+            value={this.state.searchText}
+            onChangeText={(text) => this.setState({searchText: text})}
+            placeholder={I18n.t('touristDestionation.searchLegend')}/>
+
+          <Button rounded light onPress={() => this.openModal()}>
+            <AwesomeIcon name="plus" backgroundColor="#fff" color="#000" size={18} />
+            <Text style={{marginLeft: 10}}>{I18n.t('general.filters')}</Text>
+          </Button>
+        </Item>
+      </View>
     );
   }
 
   renderAttributesModal() {
     const appyTags = () => {
       this.appliedTags = [];
-      this.state.exclusiveSearch = true;
       this.state.tempTags.forEach(x => this.appliedTags.push(x));
       this.closeModal();
     };
@@ -120,14 +179,6 @@ class TouristDestinationList extends Component {
          </Header>
 
          {/* Load attribute list */}
-         <ListItem itemDivider onPress={() => this.setState({tempTags: []})}>
-           <Left>
-             <Text>{I18n.t('general.clear')}</Text>
-           </Left>
-           <Right style={{marginRight: 20}}>
-             <AwesomeIcon name="trash-o"/>
-           </Right>
-         </ListItem>
          <ScrollView style={{flex: 1}}>
            {
              this.props.attributes.map((attr, indx) => {
@@ -136,9 +187,7 @@ class TouristDestinationList extends Component {
                    <Text>{attr.name}</Text>
                  </Left>
                  <Right>
-                   <CheckBox
-                     checked={this.state.tempTags.find((x) => x.name === attr.name) !== undefined}
-                     onPress={() => this.tagToSearch(attr)}/>
+                   <CheckBox checked={this.state.tempTags.indexOf(attr) !== -1} onPress={() => this.tagToSearch(attr)}/>
                  </Right>
                </ListItem>;
              })
@@ -174,7 +223,7 @@ class TouristDestinationList extends Component {
   }
 
   tagToSearch(tag) {
-    let indx = this.state.tempTags.findIndex((x) => x.name === tag.name);
+    let indx = this.state.tempTags.indexOf(tag);
 
     if (indx !== -1) {
       this.state.tempTags.splice(indx, 1);
@@ -185,46 +234,28 @@ class TouristDestinationList extends Component {
     this.setState(this.state);
   }
 
-  hideSurveyModal() {
-    this.appliedTags = [];
-    this.state.tempTags = [];
-    this.state.exclusiveSearch = false;
-
-    this.surveyModal.getTags().forEach(tagName => {
-      let tag = {name: tagName};
-      this.appliedTags.push(tag);
-      this.state.tempTags.push(tag);
-    });
-
-    this.setState({...this.state, searchText: ''});
-  }
-
   render() {
     return (
       <Container>
         {/* Advanced search modal, Attributes */}
         {this.renderAttributesModal()}
 
-        {/* Surveys */}
-        <TouristDestinationSurvey
-          modalRef={(ref) => {this.surveyModal = ref;}}
-          onModalClose={this.hideSurveyModal}/>
-
         {/* View main content */}
         <Content>
+          {/* "Header" search button */}
+          <Button full onPress={() => this.setState({...this.state, showAdvancedSearchBar: !this.state.showAdvancedSearchBar})}>
+            <Text style={{marginRight: 10}}>{I18n.t('general.searcher')}</Text>
+            <AwesomeIcon name={this.state.showAdvancedSearchBar ? 'chevron-up' : 'chevron-down'} backgroundColor="transparent" color="#fff" size={14} />
+          </Button>
+
           {/* Collapsible search panel */}
-          <SearchBar
-            placeholder={I18n.t('touristDestination.searchLegend')}
-            onChangeText={(text) => this.setState({searchText: text})}
-            searchFieldIcon="plus"
-            searchFieldText={I18n.t('general.filters')}
-            searchFieldAction={() => this.openModal()}/>
+          {this.state.showAdvancedSearchBar && this.getAdvancedSearchBar()}
 
           {/* List of provinces with destinations */}
           <List>
             {
               this.props.provinces.map((prov, indx) => {
-                let destinations = this.filter(prov);
+                let destinations = this.filterDestinations(prov);
                 if (destinations.length > 0) {
                   return this.renderProvincesWithDestinations(indx, prov.name, destinations);
                 }
@@ -232,20 +263,12 @@ class TouristDestinationList extends Component {
             }
           </List>
         </Content>
-
-        {/* Survey modal trigger */}
-        <Fab
-          position="bottomRight"
-          onPress={() => this.surveyModal.showModal()}>
-          <AwesomeIcon name="filter"/>
-        </Fab>
-
-        <Menu/>
       </Container>
     );
   }
 }
 
+const SEE_BACKGROUND_CARD = require('../resources/images/seeMoreBackground.jpg');
 const styles = {
   modalHeader: {
     borderTopLeftRadius: 8,
@@ -269,15 +292,19 @@ const styles = {
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center'
+  },
+  seeMoreBackground: {
+    flex: 1,
+    width: undefined,
+    height: undefined,
+    backgroundColor:'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 };
 
 const mapStateToProps = state => {
-  return {
-    touristDestinations: state.db.staticData.touristDestinations,
-    provinces: state.db.staticData.provinces,
-    attributes: state.db.staticData.attributes
-  };
+  return {touristDestinations: state.db.staticData.touristDestinations, provinces: state.db.staticData.provinces, attributes: state.db.staticData.attributes};
 };
 
 export default connect(mapStateToProps, null)(TouristDestinationList);

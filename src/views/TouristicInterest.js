@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Image, Linking } from 'react-native';
 import { Container, Text, Content, Tabs, Tab, Card, List, Thumbnail, CardItem, Body, Left, Right } from 'native-base';
 import { Row, Grid } from 'react-native-easy-grid';
-import Menu from '../components/Menu';
+// import Moment from 'moment';
 
 export default class TouristicInterest extends Component {
 
@@ -104,8 +104,6 @@ export default class TouristicInterest extends Component {
             </Tab>
           </Tabs>
         </Content>
-
-        <Menu/>
       </Container>
     );
   }
