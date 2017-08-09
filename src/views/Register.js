@@ -182,7 +182,7 @@ class Register extends Component {
         </Content>
         <Footer>
           <FooterTab>
-            <Button block info onPress={()=> this.continue()}>
+            <Button block info onPress={()=> this.continue()} active badge vertical>
               <Text>Continuar</Text>
             </Button>
           </FooterTab>

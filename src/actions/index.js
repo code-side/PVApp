@@ -1,4 +1,5 @@
-const SERVER_IP = '192.168.86.26';
+const SERVER_IP = '172.20.10.2';
+
 
 export const saveLoggedUser = (user) => {
   return {type: 'SAVE_LOGGED_USER', payload: user};
@@ -30,6 +31,25 @@ export const saveTokenToApp = () => {
    dispatch({type: 'SAVE_TOKEN', payload:'Bearer ' + token});
  });
  };
+};
+
+export const modifyUser = ({token, user})=> {
+  return (dispatch)=>{
+    return fetch('http://' + SERVER_IP + ':8080/api/p-v-app-users', {
+      method:'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': token
+      },
+      body: JSON.stringify(user)
+    })
+    .then((response) => response.json())
+    // Save token and load static info
+    .then(async (userResponse) => {
+      dispatch({type: 'SAVE_LOGGED_USER', payload: userResponse});
+   });
+  };
 };
 
 export const login = ({username, password, token}) => {
@@ -83,7 +103,7 @@ export const refreshStaticData = (token) => {
   };
 };
 
-export const regiseterUser = ({token, user}) => {
+export const registerUser = ({token, user}) => {
   return (dispatch) => {
     return fetch('http://' + SERVER_IP + ':8080/api/p-v-app-users', {
         method: 'POST',
@@ -105,6 +125,16 @@ export const regiseterUser = ({token, user}) => {
       });
     };
   };
+
+export const  saveComments = ({token, body, url}) =>{
+    return (dispatch) => {
+    return invoke(token, url, 'PUT', body)
+    .then(async(registerResponse) => {
+
+      });
+    };
+};
+
 
 // Generic method to make http request to PVApp API
 export const invoke = (token, url, method, body) => {

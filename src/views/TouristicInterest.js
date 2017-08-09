@@ -4,48 +4,12 @@ import { Container, Text, Content, Tabs, Tab, Card, List, Thumbnail, CardItem, B
 import { Row, Grid } from 'react-native-easy-grid';
 // import Moment from 'moment';
 
+import  CommentComponent  from '../components/Comment.component';
+import  CommentsComponent  from '../components/Comments.component';
+
+
 export default class TouristicInterest extends Component {
 
-  renderReviews(reviews) {
-    return (
-      <Card>
-        <CardItem header>
-          <Left>
-            <Thumbnail source={COMMENT_ICONS.user} />
-            <Body>
-              <Text>{reviews.user.name}</Text>
-              <Text note>{ reviews.published }</Text>
-            </Body>
-          </Left>
-          <Right>
-            <CardItem>
-              <Thumbnail
-                square
-                source={ COMMENT_ICONS.report }
-                style={ styles.listButton }
-              />
-            </CardItem>
-            <CardItem style={{ flexDirection: 'row' }}>
-              <Text>{reviews.rating}</Text>
-              <Thumbnail
-                square
-                source={ COMMENT_ICONS.full }
-                style={ styles.listButton }
-              />
-            </CardItem>
-
-          </Right>
-        </CardItem>
-
-        <CardItem>
-          <Body>
-            <Text>{ reviews.comment }</Text>
-          </Body>
-        </CardItem>
-
-      </Card>
-    );
-  }
   invoke(type, resource) {
     if (Linking.canOpenURL(type + ':' + resource.coordinates)) {
       Linking.openURL(type + ':' + resource.coordinates);
@@ -97,10 +61,8 @@ export default class TouristicInterest extends Component {
             </Tab>
 
             <Tab heading="Comentarios">
-              <List
-                dataArray={this.props.touristicInterest.reviews}
-                renderRow={(item) => this.renderReviews(item)}
-              />
+              <CommentComponent reviewsObject={this.props.touristicInterest} url="touristic-interests"/>
+              <CommentsComponent />
             </Tab>
           </Tabs>
         </Content>
@@ -108,12 +70,6 @@ export default class TouristicInterest extends Component {
     );
   }
 }
-
-export const COMMENT_ICONS = {
-  full: require('../resources/images/full.png'),
-  report: require('../resources/images/flag.png'),
-  user: require('../resources/images/user.jpg')
-};
 
 const styles = {
   header: {
