@@ -33,7 +33,7 @@ export default {
     viewAll: 'View all',
     loading: 'loading'
   },
-  touristDestionation: {
+  touristDestination: {
     searchLegend: 'Search: Prinvinces, Places...',
     fastSearch: 'Fast search',
     survey: {

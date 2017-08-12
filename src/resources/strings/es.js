@@ -33,7 +33,7 @@ export default {
     viewAll: 'Ver todos',
     loading: 'Cargando'
   },
-  touristDestionation: {
+  touristDestination: {
     searchLegend: 'Buscar: Provincias, Lugares...',
     fastSearch: 'Búsqueda rapida',
     survey: {

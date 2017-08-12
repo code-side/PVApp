@@ -20,11 +20,11 @@ class TouristDestinationSurvey extends Component {
   }
 
   componentWillMount() {
-    this.loadNext();
-
     if (this.props.modalRef !== undefined) {
       this.props.modalRef(this);
     }
+
+    this.loadNext();
   }
 
   componentWillUnmount() {
@@ -120,20 +120,29 @@ class TouristDestinationSurvey extends Component {
 
           {/* Modal body */}
           <View style={{flex: 1}}>
-            {/* Question */}
-            <Text style={styles.questions}>{this.currentQuestion.question}</Text>
+            {/* Question */
+              this.currentQuestion ? (
+                <Text style={styles.questions}>{this.currentQuestion.question}</Text>
+              ) : (
+                <Text style={styles.questions}>{'No hay preguntas'}</Text>
+              )
+            }
 
             {/* Options or summary */}
-            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 15}}>
-              <View style={{width: 150, flexDirection: 'row'}}>
-                <Button bordered danger onPress={() => this.loadNext(false)} style={{marginRight: 15, width: 60}}>
-                  <Text style={{flex: 1, textAlign: 'center'}}>{I18n.t('general.noOption')}</Text>
-                </Button>
-                <Button bordered success onPress={() => this.loadNext(true)} style={{marginLeft: 15, width: 60}}>
-                  <Text style={{flex: 1, textAlign: 'center'}}>{I18n.t('general.yesOption')}</Text>
-                </Button>
-              </View>
-            </View>
+            {
+              this.currentQuestion && (
+                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 15}}>
+                  <View style={{width: 150, flexDirection: 'row'}}>
+                    <Button bordered danger onPress={() => this.loadNext(false)} style={{marginRight: 15, width: 60}}>
+                      <Text style={{flex: 1, textAlign: 'center'}}>{I18n.t('general.noOption')}</Text>
+                    </Button>
+                    <Button bordered success onPress={() => this.loadNext(true)} style={{marginLeft: 15, width: 60}}>
+                      <Text style={{flex: 1, textAlign: 'center'}}>{I18n.t('general.yesOption')}</Text>
+                    </Button>
+                  </View>
+                </View>
+              )
+            }
 
             {/* Progress */}
             <Row style={{flex: 1, justifyContent: 'center'}}>
