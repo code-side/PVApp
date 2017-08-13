@@ -1,20 +1,12 @@
 import React, { Component } from 'react';
-import { Image, Linking } from 'react-native';
-import { Container, Text, Content, Tabs, Tab, Card, List, Thumbnail, CardItem, Body, Left, Right } from 'native-base';
+import { Image } from 'react-native';
+import { Container, Text, Content, Tabs, Tab } from 'native-base';
 import { Row, Grid } from 'react-native-easy-grid';
-// import Moment from 'moment';
-
+import Menu from '../components/Menu';
 import  CommentComponent  from '../components/Comment.component';
 import  CommentsComponent  from '../components/Comments.component';
 
-
 export default class TouristicInterest extends Component {
-
-  invoke(type, resource) {
-    if (Linking.canOpenURL(type + ':' + resource.coordinates)) {
-      Linking.openURL(type + ':' + resource.coordinates);
-    }
-  }
 
   render() {
     return (
@@ -66,6 +58,8 @@ export default class TouristicInterest extends Component {
             </Tab>
           </Tabs>
         </Content>
+
+        <Menu/>
       </Container>
     );
   }
