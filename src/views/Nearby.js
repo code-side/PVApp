@@ -112,19 +112,21 @@ class Nearby extends Component {
 
       });
 
-      // this.props.touristicInterestList.map((obj) => {
-      //
-      //   const end = {
-      //     latitude: obj.coordinates.latitude,
-      //     longitude: obj.coordinates.longitude
-      //   };
-      //
-      //   if (haversine(start, end, {unit: 'meter'}) <= 1500) {
-      //     obj.type = 'Service';
-      //     nearby.push(obj);
-      //   }
-      //
-      // });
+      this.props.touristicInterestList.map((obj) => {
+        if (obj.coordinates !== null) {
+          const end = {
+            latitude: obj.coordinates.latitude,
+            longitude: obj.coordinates.longitude
+          };
+
+          if (haversine(start, end, {unit: 'meter'}) <= 2000) {
+            obj.type = 'Service';
+            nearby.push(obj);
+          }
+        }
+
+
+      });
     }
     return nearby;
   }
