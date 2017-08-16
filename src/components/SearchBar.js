@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import I18n from '../services/LanguageService';
 import { Text, Item, Input, Button } from 'native-base';
 
@@ -35,10 +35,10 @@ class SearchBar extends Component {
     this.setState({searchText: text});
   }
 
-  getSearchBar() {
+  render() {
     return (
-      <View style={{ marginLeft: 5, marginBottom: 15, marginRight: 5 }}>
-        <Item rounded style={{marginTop: 15, backgroundColor: '#fff'}}>
+      <View style={{ backgroundColor: '#3f51b5', padding: 5, paddingRight: 8 }}>
+        <Item style={{ backgroundColor: '#fff'}}>
           <Input
             style={{height: 45}}
             value={this.state.searchText}
@@ -47,28 +47,13 @@ class SearchBar extends Component {
 
           {
             this.props.searchFieldAction !== undefined ? (
-              <Button rounded light onPress={() => this.props.searchFieldAction()}>
-                {this.props.searchFieldIcon !== undefined ? (<AwesomeIcon name={this.props.searchFieldIcon} backgroundColor="#fff" color="#000" size={18} />) : (null)}
+              <Button light onPress={() => this.props.searchFieldAction()}>
+                {this.props.searchFieldIcon !== undefined ? (<Icon name={this.props.searchFieldIcon} backgroundColor="#fff" color="#000" size={18} />) : (null)}
                 {this.props.searchFieldText !== undefined ? (<Text style={{marginLeft: 10}}>{this.props.searchFieldText}</Text>) : (null)}
               </Button>
             ) : (null)
           }
         </Item>
-      </View>
-    );
-  }
-
-  render() {
-    return (
-      <View style={{ backgroundColor: '#3f51b5' }}>
-        {/* "Header" search button */}
-        <Button full onPress={() => this.setState({...this.state, visible: !this.state.visible})}>
-          <Text style={{marginRight: 10}}>{I18n.t('general.searcher')}</Text>
-          <AwesomeIcon name={this.state.visible ? 'chevron-up' : 'chevron-down'} backgroundColor="transparent" color="#fff" size={14} />
-        </Button>
-
-        {/* Collapsible search panel */}
-        {this.state.visible && this.getSearchBar()}
       </View>
     );
   }

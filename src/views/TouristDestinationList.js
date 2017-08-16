@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import I18n from '../services/LanguageService';
-import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import Modal from 'react-native-modal';
 import HorizontalList from '../components/HorizontalList';
 import HorizontalListItem from '../components/HorizontalListItem';
 import SearchBar from '../components/SearchBar';
 import Menu from '../components/Menu';
 import { sortByRating, searchByNameAndProvince } from '../services/SearchService';
 import TouristDestinationSurvey from './TouristDestinationSurvey';
-import { Container, Text, CheckBox, Separator, Content, Footer, FooterTab, Header, Title, List, ListItem, Button, Left, Right } from 'native-base';
+import { Container, Text, Separator, Content, List, ListItem } from 'native-base';
 import CustomFab from '../components/CustomFab';
 
 class TouristDestinationList extends Component {
@@ -20,12 +18,12 @@ class TouristDestinationList extends Component {
     super(props);
 
     this.hideSurveyModal = this.hideSurveyModal.bind(this);
+    this.onCloseFiltersModal = this.onCloseFiltersModal.bind(this);
     this.appliedTags = [];
     this.state = {
       showAttributesModalPicker: false,
       searchText: '',
-      exclusiveSearch: true, // <- Applies AND or OR condition to appliedTags
-      tempTags: []
+      exclusiveSearch: true // <- Applies AND or OR condition to appliedTags
     };
   }
 
@@ -101,88 +99,9 @@ class TouristDestinationList extends Component {
     );
   }
 
-  renderAttributesModal() {
-    const appyTags = () => {
-      this.appliedTags = [];
-      this.state.tempTags.forEach(x => this.appliedTags.push(x));
-      this.closeModal();
-    };
-
-    return (
-      <Modal
-        isVisible={this.state.showAttributesModalPicker}
-        onBackButtonPress={() => this.closeModal()}>
-
-       <View style={styles.modalStyle}>
-         {/* Modal title */}
-         <Header style={styles.modalHeader}>
-           <Title style={{marginTop: 12}}>{I18n.t('general.advancedSearch')}</Title>
-         </Header>
-
-         {/* Load attribute list */}
-         <ListItem itemDivider onPress={() => this.setState({tempTags: []})}>
-           <Left>
-             <Text>{I18n.t('general.clear')}</Text>
-           </Left>
-           <Right style={{marginRight: 20}}>
-             <AwesomeIcon name="trash-o"/>
-           </Right>
-         </ListItem>
-         <ScrollView style={{flex: 1}}>
-           {
-             this.props.attributes.map((attr, indx) => {
-               return <ListItem key={indx} style={{marginRight: 20}} onPress={() => this.tagToSearch(attr)}>
-                 <Left>
-                   <Text>{attr.name}</Text>
-                 </Left>
-                 <Right>
-                   <CheckBox
-                     checked={this.state.tempTags.find((x) => x.name === attr.name) !== undefined}
-                     onPress={() => this.tagToSearch(attr)}/>
-                 </Right>
-               </ListItem>;
-             })
-           }
-         </ScrollView>
-
-         {/* Button actions */}
-         <Footer style={styles.modalFooter}>
-           <FooterTab style={{borderBottomLeftRadius: 8}}>
-             <Button full onPress={() => this.closeModal()}>
-               <Text style={{fontSize: 14}}>{I18n.t('general.cancel')}</Text>
-             </Button>
-           </FooterTab>
-           <FooterTab style={{borderBottomRightRadius: 8}}>
-             <Button full onPress={() => appyTags()}>
-               <Text style={{fontSize: 14}}>{I18n.t('general.apply')}</Text>
-             </Button>
-           </FooterTab>
-         </Footer>
-       </View>
-      </Modal>
-    );
-  }
-
-  openModal() {
-    let _tempTags = [];
-    this.appliedTags.forEach(x => _tempTags.push(x));
-    this.setState({...this.state, tempTags: _tempTags, showAttributesModalPicker: true});
-  }
-
-  closeModal() {
-    this.setState({...this.state, tempTags: [], showAttributesModalPicker: false});
-  }
-
-  tagToSearch(tag) {
-    let indx = this.state.tempTags.findIndex((x) => x.name === tag.name);
-
-    if (indx !== -1) {
-      this.state.tempTags.splice(indx, 1);
-    } else {
-      this.state.tempTags.push(tag);
-    }
-
-    this.setState(this.state);
+  onCloseFiltersModal(selectedTags) {
+    this.appliedTags = selectedTags || [];
+    this.setState({exclusiveSearch: true});
   }
 
   hideSurveyModal() {
@@ -191,13 +110,11 @@ class TouristDestinationList extends Component {
     }
 
     this.appliedTags = [];
-    this.state.tempTags = [];
     this.state.exclusiveSearch = false;
 
     this.surveyModal.getTags().forEach(tagName => {
       let tag = {name: tagName};
       this.appliedTags.push(tag);
-      this.state.tempTags.push(tag);
     });
 
     this.setState({...this.state, searchText: ''});
@@ -206,9 +123,6 @@ class TouristDestinationList extends Component {
   render() {
     return (
       <Container>
-        {/* Advanced search modal, Attributes */}
-        {this.renderAttributesModal()}
-
         {/* Surveys */}
         <TouristDestinationSurvey
           modalRef={(ref) => {this.surveyModal = ref;}}
@@ -220,9 +134,8 @@ class TouristDestinationList extends Component {
           <SearchBar
             placeholder={I18n.t('touristDestination.searchLegend')}
             onChangeText={(text) => this.setState({searchText: text})}
-            searchFieldIcon="plus"
-            searchFieldText={I18n.t('general.filters')}
-            searchFieldAction={() => this.openModal()}/>
+            searchFieldIcon="filter"
+            searchFieldAction={() => Actions.touristDestinationFilter({onClose: this.onCloseFiltersModal, selectedTags: this.appliedTags})}/>
 
             {/* List of provinces with destinations */}
             <List>
@@ -239,8 +152,8 @@ class TouristDestinationList extends Component {
 
           {/* Survey modal trigger */}
           <CustomFab
-            mainIcon="filter"
-            useFontAwesome={true}
+            mainIcon="ios-book-outline"
+            useIonic={true}
             onPress={() => this.surveyModal.showModal()}/>
 
           <Menu/>
@@ -276,7 +189,8 @@ const styles = {
 };
 
 const mapStateToProps = state => {
-  return {touristDestinations: state.db.staticData.touristDestinations,
+  return {
+    touristDestinations: state.db.staticData.touristDestinations,
     provinces: state.db.staticData.provinces,
     attributes: state.db.staticData.attributes
   };
