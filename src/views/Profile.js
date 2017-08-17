@@ -8,7 +8,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 class Profile extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.user);
   }
   editProfile(){
     Actions.editProfile();
@@ -22,7 +21,7 @@ render() {
         <Card>
           <CardItem>
             <Right>
-            <Text onPress={()=> this.editProfile()}> Editar <Icon name= 'pencil'/></Text>
+            <Text onPress={()=> this.editProfile()}> Editar <Icon name= "pencil"/></Text>
             </Right>
           </CardItem>
           <CardItem>

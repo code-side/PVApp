@@ -3,6 +3,8 @@ import { StyleSheet, Dimensions } from 'react-native';
 import MapView from 'react-native-maps';
 import { connect } from 'react-redux';
 import haversine from 'haversine';
+import {getDirections} from '../actions';
+import person from '../resources/images/person.png';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -24,7 +26,8 @@ class Nearby extends Component {
       markerPosition: {
         latitude: 0,
         longitude: 0
-      }
+      },
+      markersToRender: []
     };
   }
 
@@ -45,7 +48,7 @@ class Nearby extends Component {
 
       this.setState({initialPosition: initialRegion});
       this.setState({markerPosition: initialRegion});
-
+      this.renderMarkers();
     },
     (error) => console.log(JSON.stringify(error)),
     {enableHighAccuaracy: true, timeout: 20000, maximumAge: 1000});
@@ -63,9 +66,11 @@ class Nearby extends Component {
 
       this.setState({initialPosition: lastRegion});
       this.setState({markerPosition: lastRegion});
+
     });
 
-    this.getNearby();
+
+
   }
 
   getNearby() {
@@ -74,19 +79,20 @@ class Nearby extends Component {
 
     if (this.state.markerPosition.latitude !== 0 || this.state.markerPosition.longitude !== 0 ) {
 
-      this.props.ticoStopList.map((obj) => {
+      const start = {
+        latitude: this.state.markerPosition.latitude,
+        longitude: this.state.markerPosition.longitude
+      };
 
-        const start = {
-          latitude: this.state.markerPosition.latitude,
-          longitude: this.state.markerPosition.longitude
-        };
+      this.props.ticoStopList.map((obj) => {
 
         const end = {
           latitude: obj.coordinates.latitude,
           longitude: obj.coordinates.longitude
         };
 
-        if (haversine(start, end, {unit: 'meter'}) <= 1500) {
+        if (haversine(start, end, {unit: 'meter'}) <= 2000) {
+          obj.type = 'Tico Stop';
           nearby.push(obj);
         }
 
@@ -94,41 +100,33 @@ class Nearby extends Component {
 
       this.props.touristDestionationList.map((obj) => {
 
-        const start = {
-          latitude: this.state.markerPosition.latitude,
-          longitude: this.state.markerPosition.longitude
-        };
-
         const end = {
           latitude: obj.coordinates.latitude,
           longitude: obj.coordinates.longitude
         };
 
-        if (haversine(start, end, {unit: 'meter'}) <= 1.500) {
+        if (haversine(start, end, {unit: 'meter'}) <= 2000) {
+          obj.type = 'Destination';
           nearby.push(obj);
         }
 
       });
 
-      // this.props.touristicInterestList.map((obj) => {
-      //
-      //   const coords = obj.coordinates.split(',');
-      //
-      //   const start = {
-      //     latitude: this.state.markerPosition.latitude,
-      //     longitude: this.state.markerPosition.longitude
-      //   };
-      //
-      //   const end = {
-      //     latitude: coords[0],
-      //     longitude: coords[1]
-      //   };
-      //
-      //   if (haversine(start, end, {unit: 'meter'}) <= 1.500) {
-      //     nearby.push(obj);
-      //   }
-      //
-      // });
+      this.props.touristicInterestList.map((obj) => {
+        if (obj.coordinates !== null) {
+          const end = {
+            latitude: obj.coordinates.latitude,
+            longitude: obj.coordinates.longitude
+          };
+
+          if (haversine(start, end, {unit: 'meter'}) <= 2000) {
+            obj.type = 'Service';
+            nearby.push(obj);
+          }
+        }
+
+
+      });
     }
     return nearby;
   }
@@ -139,34 +137,47 @@ class Nearby extends Component {
   }
 
   renderMarkers() {
-    const tempMarkers = [
-      {
-        coordinate: this.state.markerPosition,
-        title: 'Ubicacion actual',
-        description: 'Aca estas pelotudo'
-      },
-      {
-        coordinate: {latitude: this.state.markerPosition.latitude + 0.00641, longitude: this.state.markerPosition.longitude + 0.00641},
-        title: '+',
-        description: 'Abc'
-      },
-      {
-        coordinate: {latitude: this.state.markerPosition.latitude - 0.00641, longitude: this.state.markerPosition.longitude - 0.00641},
-        title: '-',
-        description: 'Def'
-      }
-    ];
 
-    return tempMarkers.map((marker,index) => {
-      return (
-        <MapView.Marker
-          coordinate={marker.coordinate}
-          title={marker.title}
-          description={marker.description}
-          key={index}
-        />
-      );
-    });
+    if (this.state.markerPosition.latitude !== 0 || this.state.markerPosition.longitude !== 0 ) {
+
+      const nearbyMarkers = this.getNearby();
+      console.log(nearbyMarkers);
+
+      nearbyMarkers.map((marker) => {
+
+        getDirections(this.state.markerPosition.latitude + ',' + this.state.markerPosition.longitude, marker.coordinates.latitude + ',' + marker.coordinates.longitude).then(async(response) => {
+
+          marker.distance = response.routes[0].legs[0].distance.text;
+
+          this.setState({ markersToRender: [...this.state.markersToRender,
+            {
+              coordinate: {
+                latitude: marker.coordinates.latitude,
+                longitude: marker.coordinates.longitude
+              },
+              title: marker.name,
+              description: 'Distancia ' + marker.distance,
+              pinColor: ( marker.type === 'Tico Stop' ? '#9e2424' : marker.type === 'Destination' ? '#1d7d01' : '#2242b3' )
+            },
+          ],
+          });
+        });
+      });
+
+
+
+      // return this.state.markersToRender.map((obj,index) => {
+      //   return (
+      //     <MapView.Marker
+      //       coordinate={obj.coordinate}
+      //       title={obj.title}
+      //       description={obj.description}
+      //       pinColor={obj.pinColor}
+      //       key={index}
+      //     />
+      //   );
+      // });
+    }
   }
 
   render() {
@@ -175,8 +186,21 @@ class Nearby extends Component {
           style={styles.map}
           region={this.state.initialPosition}
         >
-          {this.renderMarkers()}
-
+          <MapView.Marker
+            coordinate={this.state.markerPosition}
+            image={person}
+          />
+          {this.state.markersToRender.map((marker, index) => {
+            return (
+              <MapView.Marker
+                coordinate={marker.coordinate}
+                title={marker.title}
+                description={marker.description}
+                pinColor={marker.pinColor}
+                key={index}
+              />
+            );
+          })}
         </MapView>
     );
   }
@@ -198,4 +222,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Nearby);
+export default connect(mapStateToProps,{getDirections})(Nearby);
