@@ -3,7 +3,7 @@ import {Image, Share, WebView, View, Alert} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import {Row, Grid} from 'react-native-easy-grid';
 import { Container, Text, Content, Button, Tabs, Tab, List, Left, Body, Card, CardItem, Fab, Icon} from 'native-base';
-import {invoke, getDirections,modifyUser} from '../actions';
+import {invoke, getDirections,modifyUser, reportD} from '../actions';
 import {connect} from 'react-redux';
 
 import  CommentComponent  from '../components/Comment.component';
@@ -94,6 +94,14 @@ favoriteList = ()=>{
 }
 removeTouristDestFromList =(i)=>{
   this.props.user.favoriteList.splice(i,1);
+}
+
+reportDestination() {
+  let reportBody = {idUser: this.props.user.id, idDestination: this.props.touristDest.id };
+  const {token = this.props.token, body = reportBody} = {};
+  this.props.reportD({token, body}).then(()=>{
+    this.setState({ active: !this.state.active });
+  });
 }
 
   renderPhotos(item) {
@@ -202,6 +210,12 @@ removeTouristDestFromList =(i)=>{
        <Icon name="md-share"/>
      </Button>
      <Button
+       onPress={ () => this.reportDestination() }
+       style={{ backgroundColor: '#c0392b' }}
+     >
+       <Icon name="md-flag"/>
+     </Button>
+     <Button
        onPress={()=> this.favoriteList()}
        style={{ backgroundColor: '#DD5144' }}
      >
@@ -281,4 +295,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, {getDirections, modifyUser })(TouristDestination);
+export default connect(mapStateToProps, {getDirections, modifyUser, reportD })(TouristDestination);

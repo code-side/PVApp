@@ -1,4 +1,4 @@
-const SERVER_IP = '172.20.10.8';
+const SERVER_IP = '192.168.1.12';
 
 
 export const saveLoggedUser = (user) => {
@@ -134,6 +134,17 @@ export const  saveComments = ({token, body, url}) =>{
       });
     };
 };
+
+export const  reportD = ({token, body}) =>{
+  console.log(token, body);
+    return (dispatch) => {
+    return invoke(token, 'report-destination', 'POST', body)
+    .then(async(reportResponse) => {
+      console.log(reportResponse);
+      });
+    };
+};
+
 
 
 // Generic method to make http request to PVApp API
