@@ -168,7 +168,7 @@ const styles = {
 const mapStateToProps = state => {
   return {
     user: state.db.user,
-    token: state.db.toke
+    token: state.db.token
   };
 };
 
