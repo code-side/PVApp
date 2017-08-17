@@ -57,7 +57,7 @@ class ProvinceInfo extends Component {
 
           {/* Layout */}
           <Tabs initialPage={0} style={{flex:1}}>
-            <Tab heading="Información">
+            <Tab heading="Información" tabStyle={{backgroundColor: '#3498db'}} activeTabStyle={{backgroundColor: '#2980b9'}}>
               <Grid>
                 {/* Info */}
                 <Row>
@@ -87,7 +87,7 @@ class ProvinceInfo extends Component {
             </Tab>
 
             {/* Emergency Contacts */}
-            <Tab heading="Contactos de emergencia">
+            <Tab heading="Contactos de emergencia" tabStyle={{backgroundColor: '#3498db'}} activeTabStyle={{backgroundColor: '#2980b9'}}>
               {
                 this.props.province.emergencyContacts.length > 0 ?
                 (

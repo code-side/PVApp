@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import {  Content } from 'native-base';
-import { Text, View, TextInput, TouchableOpacity, Button, AsyncStorage, ActivityIndicator} from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, Button, AsyncStorage, ActivityIndicator, Image} from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { login } from '../actions';
+
 
 class Login extends Component {
 
@@ -38,6 +39,15 @@ class Login extends Component {
   render() {
     return (
      <Content>
+     <View style={{
+       justifyContent: 'center',
+       alignItems: 'center',
+     }}>
+     <Image
+       style={{width: 200, height: 200}}
+       source={require('../resources/images/pvapp_azul.png')}
+     />
+     </View>
      <View style={styles.loginContainer}>
         <Text style={styles.welcome}>PVApp</Text>
         <View style ={styles.body}>
@@ -79,7 +89,6 @@ class Login extends Component {
 
 const styles = ({
   loginContainer: {
-    marginTop: 150,
     justifyContent: 'center',
     alignItems: 'center'
   },

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, AsyncStorage} from 'react-native';
+import {View, AsyncStorage, Image} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import {saveTokenToApp, login, updateConfig, refreshStaticData} from '../actions';
 import {connect} from 'react-redux';
@@ -50,7 +50,18 @@ class Splash extends Component {
   }
 
   render() {
-    return (<View/>);
+    return (
+      <View style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <Image
+          style={{width: 400, height: 400}}
+          source={require('../resources/images/pvapp_blanco.png')}
+        />
+      </View>
+
+    );
   }
 }
 

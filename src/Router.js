@@ -45,7 +45,7 @@ const RouterComponent = () => {
       sceneStyle={{ paddingTop: 54 }}
     >
       <Scene key="splash" component={Splash} hideNavBar={true}  initial/>
-      <Scene key="login" component={Login} title=""  type="reset"/>
+      <Scene key="login" component={Login} title="" hideNavBar={true} type="reset"/>
       <Scene key="register" component={Register} title="Registro"/>
       <Scene key="registerProfilePicture" component ={RegisterProfilePicture} title="Registro"/>
       <Scene key="home" component={Home} title="PVApp" type="reset"/>
@@ -69,7 +69,7 @@ const RouterComponent = () => {
 
 const styles = {
   navBar: {
-    backgroundColor: '#5069c3'
+    backgroundColor: '#2980b9'
   },
   navBarTitle: {
     color: '#FFFFFF',

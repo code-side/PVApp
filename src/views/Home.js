@@ -19,7 +19,7 @@ class Home extends Component {
 
   renderSectionHeader(sectionName, action) {
     return (
-      <ListItem itemDivider>
+      <ListItem itemDivider style={{backgroundColor:'white'}}>
         <Text style={styles.sectionHeaderText}>{sectionName}</Text>
         <Right>
           <Text style={styles.sectionHeaderViewMore} onPress={() => action()}>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, Share, Alert} from 'react-native';
+import {Image, Share, Alert, WebView} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import {Row, Grid} from 'react-native-easy-grid';
 import {
@@ -136,16 +136,16 @@ class TouristDestination extends Component {
           <Tabs initialPage={0} style={{
             flex: 1
           }}>
-            <Tab heading="Información">
+            <Tab heading="Información" tabStyle={{backgroundColor: '#3498db'}} activeTabStyle={{backgroundColor: '#2980b9'}}>
               {/* Info */}
               <Card>
-                <CardItem>
-                  <Body>
-                    <Text>
-                      {this.props.touristDest.description}
-                    </Text>
-                  </Body>
-                </CardItem>
+                <WebView
+                source={{html:
+                "<p style='text-align: justify; display:block;'>" +
+                this.props.touristDest.description +
+                '</p>' }}
+                style={{marginTop: 20, height:150}}
+                />
                 <CardItem>
                   <Body>
                     <Text style={styles.titles}>
@@ -158,10 +158,10 @@ class TouristDestination extends Component {
                 </CardItem>
               </Card>
             </Tab>
-            <Tab heading="Fotos">
+            <Tab heading="Fotos" tabStyle={{backgroundColor: '#3498db'}} activeTabStyle={{backgroundColor: '#2980b9'}}>
               <List dataArray={this.props.touristDest.photos} renderRow= {(item) => this.renderPhotos(item)}/>
             </Tab>
-            <Tab heading="Comentarios">
+            <Tab heading="Comentarios" tabStyle={{backgroundColor: '#3498db'}} activeTabStyle={{backgroundColor: '#2980b9'}}>
               <CommentComponent reviewsObject={this.props.touristDest} url="tourist-destinations"/>
               <CommentsComponent/>
             </Tab>

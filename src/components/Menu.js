@@ -47,7 +47,7 @@ const styles = {
     fontWeight:'bold'
   },
   menuOption: {
-    backgroundColor: '#f4f4f4'
+    backgroundColor: '#ecf0f1'
   }
 };
 
