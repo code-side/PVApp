@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {View} from 'react-native';
 import {connect} from 'react-redux';
-import { Container, Text, Content, Tabs, Tab, Card, List, Thumbnail, CardItem, Body, Left, Right } from 'native-base';
-import I18n from '../services/languageService';
+import { Text } from 'native-base';
+//import I18n from '../services/LanguageService';
 
 class CommentsComponent extends Component {
   constructor(props) {

@@ -3,7 +3,7 @@ import React from 'react';
 import { Router, Scene } from 'react-native-router-flux';
 
 import Login from './views/Login';
-import I18n from './services/languageService';
+import I18n from './services/LanguageService';
 import Home from './views/Home';
 import Register from './views/Register';
 import AppSettings from './views/AppSettings';
@@ -28,9 +28,13 @@ import ProvinceInfo from './views/ProvinceInfo';
 //touristDestionations
 import TouristDestinationList from './views/TouristDestinationList';
 import TouristDestination from './views/TouristDestination';
+import TouristDestinationFilter from './views/TouristDestinationFilter';
 
 //MapView
 import Nearby from './views/Nearby';
+
+//Generic
+import ViewMoreList from './views/ViewMoreList';
 
 const RouterComponent = () => {
   return (
@@ -48,12 +52,14 @@ const RouterComponent = () => {
       <Scene key="home" component={Home} title="PVApp" type="reset"/>
       <Scene key="provList" component={ProvinceList} title="Provincias"/>
       <Scene key="provInfo" component={ProvinceInfo}/>
-      <Scene key="touristDestionations" component={TouristDestinationList} title="Destinos turísticos"/>
-      <Scene key="touristDestionation" component={TouristDestination}/>
+      <Scene key="touristDestinations" component={TouristDestinationList} title="Destinos turísticos"/>
+      <Scene key="touristDestinationFilter" component={TouristDestinationFilter} title="Filtros"/>
+      <Scene key="touristDestination" component={TouristDestination}/>
       <Scene key="ticoStopList" component={TicoStopList} title="Tico Stops"/>
       <Scene key="ticoStop" component={TicoStop}/>
       <Scene key="touristicInterestList" component={TouristicInterestList} title="Interés turístico"/>
       <Scene key="touristicInterest" component={TouristicInterest}/>
+      <Scene key="viewMore" component={ViewMoreList}/>
       <Scene key="showMap" component={Nearby}/>
       <Scene key="appSettings" component={AppSettings} title="Perfil"/>
       <Scene key="config" component={Configuration} title={I18n.t('titles.settings')}/>

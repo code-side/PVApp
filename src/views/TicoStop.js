@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Image, Linking } from 'react-native';
-import { Container, Text, Content, Fab, Icon, Button } from 'native-base';
+import { Container, Text, Content, Icon, Button } from 'native-base';
 import { Row, Grid } from 'react-native-easy-grid';
+import Menu from '../components/Menu';
+import CustomFab from '../components/CustomFab';
 
 export default class TicoStop extends Component {
   constructor(props) {
@@ -57,27 +59,21 @@ export default class TicoStop extends Component {
             </Row>
           </Grid>
         </Content>
-        <Fab
-            active={this.state.active}
-            direction="up"
-            containerStyle={{ }}
-            style={{ backgroundColor: '#5067FF' }}
-            position="bottomRight"
-            onPress={() => this.setState({ active: !this.state.active })}>
-            <Icon name="md-more" />
-            <Button
-              onPress={() => this.invoke('geo', this.props.ticoStop.coordinates, this.props.ticoStop.name)}
-              style={{ backgroundColor: '#34A34F' }}
-            >
-              <Icon name="ios-pin-outline" />
-            </Button>
-            <Button style={{ backgroundColor: '#3B5998' }}>
-              <Icon name="ios-flag-outline" />
-            </Button>
-            <Button style={{ backgroundColor: '#DD5144' }}>
-              <Icon name="ios-heart-outline" />
-            </Button>
-          </Fab>
+        <CustomFab>
+          <Button
+            onPress={() => this.invoke('geo', this.props.ticoStop.coordinates, this.props.ticoStop.name)}
+            style={{ backgroundColor: '#34A34F' }}>
+            <Icon name="ios-pin-outline" />
+          </Button>
+          <Button style={{ backgroundColor: '#3B5998' }}>
+            <Icon name="ios-flag-outline" />
+          </Button>
+          <Button style={{ backgroundColor: '#DD5144' }}>
+            <Icon name="ios-heart-outline" />
+          </Button>
+        </CustomFab>
+
+        <Menu/>
       </Container>
     );
   }
