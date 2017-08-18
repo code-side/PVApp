@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { Container, Content, Text, List, ListItem, Separator } from 'native-base';
+import { Container, Text, List, ListItem, Separator } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import I18n from '../services/LanguageService';
@@ -9,6 +9,7 @@ import HorizontalListItem from '../components/HorizontalListItem';
 import SearchBar from '../components/SearchBar';
 import Menu from '../components/Menu';
 import { searchByNameAndProvince } from '../services/SearchService';
+import PullDownContainer from '../components/PullDownContainer';
 
 class TicoStopList extends Component {
 
@@ -66,7 +67,7 @@ class TicoStopList extends Component {
   render() {
     return (
       <Container>
-        <Content>
+        <PullDownContainer requestUrl={'tico-stops?lang=' + I18n.getLocale()} propToUpdate="ticoStops">
           {/* Collapsible search panel */}
           <SearchBar
             placeholder={I18n.t('touristInterest.searchLegend')}
@@ -83,7 +84,7 @@ class TicoStopList extends Component {
               })
             }
           </List>
-        </Content>
+        </PullDownContainer>
 
         <Menu/>
       </Container>

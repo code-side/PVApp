@@ -72,41 +72,36 @@ export const login = ({username, password, token}) => {
  }; // end dispatch function
 }; // end login function
 
+// Refresh a module data
+export const refreshData = (token, url, propToUpdate, staticData, dispatch) => {
+  if (dispatch !== undefined) {
+    invoke(token, url, 'GET', {}).then(async(response) => {
+      staticData[propToUpdate] = response;
+      dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
+    });
+  } else {
+    return (newDispatch) => {
+      invoke(token, url, 'GET', {}).then(async(response) => {
+        staticData[propToUpdate] = response;
+        newDispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
+      });
+    };
+  }
+};
+
+// Refresh all application static data
 export const refreshStaticData = (token) => {
   const locale = I18n.getLocale();
 
   return (dispatch) => {
     let staticData = {};
 
-    invoke(token, 'provinces?lang=' + locale, 'GET', {}).then(async(provincesResponse) => {
-      staticData.provinces = provincesResponse;
-      dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
-    });
-
-    invoke(token, 'tico-stops', 'GET', {}).then(async(ticoStopsResponse) => {
-      staticData.ticoStops = ticoStopsResponse;
-      dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
-    });
-
-    invoke(token, 'touristic-interests', 'GET', {}).then(async(touristicInterestsResponse) => {
-      staticData.touristicInterests = touristicInterestsResponse;
-      dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
-    });
-
-    invoke(token, 'tourist-destinations', 'GET', {}).then(async(touristDestinationsResponse) => {
-      staticData.touristDestinations = touristDestinationsResponse;
-      dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
-    });
-
-    invoke(token, 'attributes?lang=' + locale, 'GET', {}).then(async (attributesResponse) => {
-      staticData.attributes = attributesResponse;
-      dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
-    });
-
-    invoke(token, 'survey-questions?lang=' + locale, 'GET', {}).then(async (surveyQuestions) => {
-      staticData.surveyQuestions = surveyQuestions;
-      dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
-    });
+    refreshData(token, 'provinces?lang=' + locale, 'provinces', staticData, dispatch);
+    refreshData(token, 'tico-stops?lang=' + locale, 'ticoStops', staticData, dispatch);
+    refreshData(token, 'touristic-interests?lang=' + locale, 'touristicInterests', staticData, dispatch);
+    refreshData(token, 'tourist-destinations?lang=' + locale, 'touristDestinations', staticData, dispatch);
+    refreshData(token, 'attributes?lang=' + locale, 'attributes', staticData, dispatch);
+    refreshData(token, 'survey-questions?lang=' + locale, 'surveyQuestions', staticData, dispatch);
   };
 };
 

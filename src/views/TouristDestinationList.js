@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import { refreshData } from '../actions';
 import I18n from '../services/LanguageService';
 import HorizontalList from '../components/HorizontalList';
 import HorizontalListItem from '../components/HorizontalListItem';
@@ -9,8 +10,9 @@ import SearchBar from '../components/SearchBar';
 import Menu from '../components/Menu';
 import { sortByRating, searchByNameAndProvince } from '../services/SearchService';
 import TouristDestinationSurvey from './TouristDestinationSurvey';
-import { Container, Text, Separator, Content, List, ListItem } from 'native-base';
+import { Container, Text, Separator, List, ListItem } from 'native-base';
 import CustomFab from '../components/CustomFab';
+import PullDownContainer from '../components/PullDownContainer';
 
 class TouristDestinationList extends Component {
 
@@ -23,6 +25,7 @@ class TouristDestinationList extends Component {
     this.state = {
       showAttributesModalPicker: false,
       searchText: '',
+      isRefreshing: false,
       exclusiveSearch: true // <- Applies AND or OR condition to appliedTags
     };
   }
@@ -129,7 +132,7 @@ class TouristDestinationList extends Component {
           onModalClose={this.hideSurveyModal}/>
 
         {/* View main content */}
-        <Content>
+        <PullDownContainer requestUrl={'tourist-destinations?lang=' + I18n.getLocale()} propToUpdate="touristDestinations">
           {/* Collapsible search panel */}
           <SearchBar
             placeholder={I18n.t('touristDestination.searchLegend')}
@@ -140,7 +143,7 @@ class TouristDestinationList extends Component {
             {/* List of provinces with destinations */}
             <List>
               {
-                this.props.provinces.map((prov, indx) => {
+                (this.props.provinces || []).map((prov, indx) => {
                   let destinations = this.filter(prov);
                   if (destinations.length > 0) {
                     return this.renderProvincesWithDestinations(indx, prov.name, destinations);
@@ -148,7 +151,7 @@ class TouristDestinationList extends Component {
                 })
               }
             </List>
-          </Content>
+          </PullDownContainer>
 
           {/* Survey modal trigger */}
           <CustomFab
@@ -190,10 +193,12 @@ const styles = {
 
 const mapStateToProps = state => {
   return {
+    token: state.db.token,
+    staticData: state.db.staticData,
     touristDestinations: state.db.staticData.touristDestinations,
     provinces: state.db.staticData.provinces,
     attributes: state.db.staticData.attributes
   };
 };
 
-export default connect(mapStateToProps, null)(TouristDestinationList);
+export default connect(mapStateToProps, { refreshData })(TouristDestinationList);
