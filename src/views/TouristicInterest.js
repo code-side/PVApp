@@ -54,7 +54,7 @@ export default class TouristicInterest extends Component {
 
             <Tab heading="Comentarios" tabStyle={{backgroundColor: '#3498db'}} activeTabStyle={{backgroundColor: '#2980b9'}}>
               <CommentComponent reviewsObject={this.props.touristicInterest} url="touristic-interests"/>
-              <CommentsComponent />
+              <CommentsComponent reviews={this.props.touristicInterest.reviews}/>
             </Tab>
           </Tabs>
         </Content>

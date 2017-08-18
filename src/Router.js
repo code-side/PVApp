@@ -28,6 +28,7 @@ import ProvinceInfo from './views/ProvinceInfo';
 //touristDestionations
 import TouristDestinationList from './views/TouristDestinationList';
 import TouristDestination from './views/TouristDestination';
+import FavoriteDestinationList from './views/FavoriteDestinationList'
 
 //MapView
 import Nearby from './views/Nearby';
@@ -53,6 +54,7 @@ const RouterComponent = () => {
       <Scene key="provInfo" component={ProvinceInfo}/>
       <Scene key="touristDestinations" component={TouristDestinationList} title="Destinos turísticos"/>
       <Scene key="touristDestination" component={TouristDestination}/>
+      <Scene key="favoriteList" component={FavoriteDestinationList}/>
       <Scene key="ticoStopList" component={TicoStopList} title="Tico Stops"/>
       <Scene key="ticoStop" component={TicoStop}/>
       <Scene key="touristicInterestList" component={TouristicInterestList} title="Interés turístico"/>

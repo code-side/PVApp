@@ -163,7 +163,7 @@ class TouristDestination extends Component {
             </Tab>
             <Tab heading="Comentarios" tabStyle={{backgroundColor: '#3498db'}} activeTabStyle={{backgroundColor: '#2980b9'}}>
               <CommentComponent reviewsObject={this.props.touristDest} url="tourist-destinations"/>
-              <CommentsComponent/>
+              <CommentsComponent reviews={this.props.touristDest.reviews}/>
             </Tab>
           </Tabs>
         </Content>

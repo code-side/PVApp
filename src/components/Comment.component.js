@@ -57,7 +57,7 @@ class CommentComponent extends Component {
         }
       }
     } else {
-      let review = {...{}, id: this.props.user.id, rating: this.state.rating, comment: this.state.myComment, reports:[]};
+      let review = {...{}, id: this.props.user.id,userName:this.props.user.name, userPhoto: this.props.user.photo.url, rating: this.state.rating, comment: this.state.myComment, reports:[], commentDate: new Date()};
       if (this.props.reviewsObject.reviews === null){
         this.props.reviewsObject.reviews = [];
       }
