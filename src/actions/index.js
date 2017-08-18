@@ -2,8 +2,6 @@ import I18n from '../services/LanguageService';
 
 const SERVER_IP = '192.168.86.20';
 
-
-
 export const saveLoggedUser = (user) => {
   return {type: 'SAVE_LOGGED_USER', payload: user};
 };
@@ -138,6 +136,17 @@ export const  saveComments = ({token, body, url}) =>{
       });
     };
 };
+
+export const  reportD = ({token, body}) =>{
+  console.log(token, body);
+    return (dispatch) => {
+    return invoke(token, 'report-destination', 'POST', body)
+    .then(async(reportResponse) => {
+      console.log(reportResponse);
+      });
+    };
+};
+
 
 
 // Generic method to make http request to PVApp API

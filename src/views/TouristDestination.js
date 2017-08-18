@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {Image, Share, View, Alert, TouchableOpacity, Dimensions, Modal, WebView} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import {Row, Grid} from 'react-native-easy-grid';
-import { Container, Text, Content, Button, Tabs, Tab, List, Body, Card, CardItem, Fab, Icon} from 'native-base';
-import {invoke, getDirections,modifyUser} from '../actions';
+import { Container, Text, Content, Button, Tabs, Tab, List, Left, Body, Card, CardItem, Fab, Icon} from 'native-base';
+import {invoke, getDirections,modifyUser, reportD} from '../actions';
 import {connect} from 'react-redux';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import CustomFab from '../components/CustomFab';
@@ -89,6 +89,7 @@ class TouristDestination extends Component {
     this.props.user.favoriteList.splice(i, 1);
   }
 
+
   renderPhotos() {
 
     return (
@@ -131,6 +132,14 @@ class TouristDestination extends Component {
         {text}
       </Text>
     );
+  }
+
+  reportDestination() {
+    let reportBody = {idUser: this.props.user.id, idDestination: this.props.touristDest.id };
+    const {token = this.props.token, body = reportBody} = {};
+    this.props.reportD({token, body}).then(()=>{
+      this.setState({ active: !this.state.active });
+    });
   }
 
   render() {
@@ -199,6 +208,12 @@ class TouristDestination extends Component {
           }}>
             <Icon name="md-share"/>
           </Button>
+          <Button
+             onPress={ () => this.reportDestination() }
+             style={{ backgroundColor: '#c0392b' }}
+           >
+             <Icon name="md-flag"/>
+           </Button>
           <Button onPress={() => this.favoriteList()} style={{
             backgroundColor: '#DD5144'
           }}>
@@ -207,7 +222,7 @@ class TouristDestination extends Component {
         </CustomFab>
 
         <Menu/>
-      </Container>
+        </Container>
     );
   }
 }
@@ -277,4 +292,4 @@ const mapStateToProps = state => {
   return {token: state.db.token, user: state.db.user};
 };
 
-export default connect(mapStateToProps, {getDirections, modifyUser})(TouristDestination);
+export default connect(mapStateToProps, {getDirections, modifyUser, reportD})(TouristDestination);

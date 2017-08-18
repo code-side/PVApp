@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import { Container, Content, Text, List, ListItem, Body, Left, Right, Thumbnail } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import moment from 'moment'
+import moment from 'moment';
 //import I18n from '../services/LanguageService';
 
 class CommentsComponent extends Component {
