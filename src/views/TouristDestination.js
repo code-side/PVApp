@@ -1,33 +1,26 @@
 import React, {Component} from 'react';
-import {Image, Share, Alert, WebView} from 'react-native';
+import {Image, Share, View, Alert, TouchableOpacity, Dimensions, Modal, WebView} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import {Row, Grid} from 'react-native-easy-grid';
-import {
-  Container,
-  Text,
-  Content,
-  Button,
-  Tabs,
-  Tab,
-  List,
-  Body,
-  Card,
-  CardItem,
-  Icon
-} from 'native-base';
-import {invoke, getDirections, modifyUser} from '../actions';
+import { Container, Text, Content, Button, Tabs, Tab, List, Body, Card, CardItem, Fab, Icon} from 'native-base';
+import {invoke, getDirections,modifyUser} from '../actions';
 import {connect} from 'react-redux';
+import ImageViewer from 'react-native-image-zoom-viewer';
 import CustomFab from '../components/CustomFab';
 import Menu from '../components/Menu';
-import CommentComponent from '../components/Comment.component';
-import CommentsComponent from '../components/Comments.component';
+import  CommentComponent  from '../components/Comment.component';
+import  CommentsComponent  from '../components/Comments.component';
+
+const WIDTH = Dimensions.get('window').width;
 
 class TouristDestination extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isAddToVisit: false,
-      active: false
+      active: false,
+      visible: false,
+      index: 0,
+      isAddToVisit: false
     };
   }
 
@@ -52,7 +45,10 @@ class TouristDestination extends Component {
         state: 'inactivo',
         url: 'data:${image.mime};base64,' + image.data
       });
-      invoke(this.props.token, 'tourist-destinations', 'PUT', this.props.touristDest);
+      invoke(this.props.token, 'tourist-destinations', 'PUT', this.props.touristDest)
+        .then(async(response) => {
+          this.props.touristDest.photos = response.photos;
+        });
     });
   }
 
@@ -93,23 +89,40 @@ class TouristDestination extends Component {
     this.props.user.favoriteList.splice(i, 1);
   }
 
-  renderPhotos(item) {
+  renderPhotos() {
+
     return (
-      <Card style={{
-        flex: 0
-      }}>
-        <CardItem style={{
-          flexDirection: 'row'
-        }}>
-          <Image style={{
-            width: 50,
-            height: 50
-          }} source={{
-            uri: item.url
-          }}/>
-        </CardItem>
-      </Card>
-    );
+      this.props.touristDest.photos.map((image, idx) => {
+        return (
+
+          <TouchableOpacity
+            style={{
+              marginTop: 10,
+              height: 150,
+              width: WIDTH / 3,
+            }}
+            key={idx}
+            onPress={ () => this.setState({ visible: true, index: idx }) }
+          >
+            <Card
+              style={{
+                padding: 5
+              }}
+            >
+              <CardItem cardBody>
+                <Image
+                  style={{
+                    flex: 1,
+                    height: 128,
+                    width: null,
+                  }}
+                  source={{ uri: image.url }}
+                />
+              </CardItem>
+            </Card>
+          </TouchableOpacity>
+      );
+    }));
   }
 
   noItems(text) {
@@ -125,42 +138,49 @@ class TouristDestination extends Component {
       <Container>
         <Content>
           <Grid>
-            <Row style={styles.header}>
-              <Image style={{
-                flex: 1
-              }} source={{
-                uri: this.props.touristDest.photos[0].url
-              }}/>
+            <Row style={ styles.header } onPress={ () => this.setState({ visible: true, index: 0 }) }>
+              <Image
+                style={{ flex: 1 }}
+                source={{ uri: this.props.touristDest.photos[0].url }}
+              />
             </Row>
           </Grid>
           <Tabs initialPage={0} style={{
             flex: 1
           }}>
             <Tab heading="Información" tabStyle={{backgroundColor: '#3498db'}} activeTabStyle={{backgroundColor: '#2980b9'}}>
-              {/* Info */}
-              <Card>
-                <WebView
-                source={{html:
-                "<p style='text-align: justify; display:block;'>" +
-                this.props.touristDest.description +
-                '</p>' }}
-                style={{marginTop: 20, height:150}}
-                />
-                <CardItem>
-                  <Body>
-                    <Text style={styles.titles}>
-                      Servicios:
-                    </Text>
-                  </Body>
-                </CardItem>
-                <CardItem>
-                  <List dataArray={this.props.touristDest.attributes} renderRow={(item) => this.renderTDestItem(item)}/>
-                </CardItem>
-              </Card>
-            </Tab>
-            <Tab heading="Fotos" tabStyle={{backgroundColor: '#3498db'}} activeTabStyle={{backgroundColor: '#2980b9'}}>
-              <List dataArray={this.props.touristDest.photos} renderRow= {(item) => this.renderPhotos(item)}/>
-            </Tab>
+             {/* Info */}
+             <Card>
+               <CardItem>
+                 <Body>
+                   <Text>
+                     {this.props.touristDest.description}
+                   </Text>
+                 </Body>
+               </CardItem>
+               <CardItem>
+                 <Body>
+                   <Text style={styles.titles}>
+                     Servicios:
+                   </Text>
+                 </Body>
+               </CardItem>
+               <CardItem>
+                 <List dataArray={this.props.touristDest.attributes} renderRow={(item) => this.renderTDestItem(item)}/>
+               </CardItem>
+             </Card>
+           </Tab>
+           <Tab heading="Fotos" tabStyle={{backgroundColor: '#3498db'}} activeTabStyle={{backgroundColor: '#2980b9'}}>
+             <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}
+            >
+              {this.renderPhotos()}
+            </View>
+
+             </Tab>
             <Tab heading="Comentarios" tabStyle={{backgroundColor: '#3498db'}} activeTabStyle={{backgroundColor: '#2980b9'}}>
               <CommentComponent reviewsObject={this.props.touristDest} url="tourist-destinations"/>
               <CommentsComponent reviews={this.props.touristDest.reviews}/>
