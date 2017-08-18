@@ -16,7 +16,7 @@ class Menu extends Component {
           </Button>
         </FooterTab>
         <FooterTab style={styles.menuOption}>
-          <Button full>
+          <Button full onPress={() => Actions.favoriteList()}>
             <Icon name="heart-o" size={ICON_SIZE} color={ICON_COLOR}/>
             <Text style={styles.menuTextOption}>{I18n.t('home.favorites')}</Text>
           </Button>
@@ -47,7 +47,7 @@ const styles = {
     fontWeight:'bold'
   },
   menuOption: {
-    backgroundColor: '#f4f4f4'
+    backgroundColor: '#ecf0f1'
   }
 };
 

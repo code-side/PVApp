@@ -23,7 +23,7 @@ export default class TouristicInterest extends Component {
 
           {/* Layout */}
           <Tabs initialPage={0} style={{flex:1}}>
-            <Tab heading="Información">
+            <Tab heading="Información" tabStyle={{backgroundColor: '#3498db'}} activeTabStyle={{backgroundColor: '#2980b9'}}>
               <Grid>
             {/* Info */}
                 <Row>
@@ -52,9 +52,9 @@ export default class TouristicInterest extends Component {
               </Grid>
             </Tab>
 
-            <Tab heading="Comentarios">
+            <Tab heading="Comentarios" tabStyle={{backgroundColor: '#3498db'}} activeTabStyle={{backgroundColor: '#2980b9'}}>
               <CommentComponent reviewsObject={this.props.touristicInterest} url="touristic-interests"/>
-              <CommentsComponent />
+              <CommentsComponent reviews={this.props.touristicInterest.reviews}/>
             </Tab>
           </Tabs>
         </Content>

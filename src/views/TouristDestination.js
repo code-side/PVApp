@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {Image, Share, View, Alert, TouchableOpacity, Dimensions, Modal} from 'react-native';
+import {Image, Share, View, Alert, TouchableOpacity, Dimensions, Modal, WebView} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import {Row, Grid} from 'react-native-easy-grid';
-import { Container, Text, Content, Button, Tabs, Tab, List, Body, Card, CardItem, Fab, Icon} from 'native-base';
-import {invoke, getDirections,modifyUser} from '../actions';
+import { Container, Text, Content, Button, Tabs, Tab, List, Body, Card, CardItem, Icon} from 'native-base';
+import {invoke, getDirections,modifyUser, reportD} from '../actions';
 import {connect} from 'react-redux';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import CustomFab from '../components/CustomFab';
@@ -89,6 +89,7 @@ class TouristDestination extends Component {
     this.props.user.favoriteList.splice(i, 1);
   }
 
+
   renderPhotos() {
 
     return (
@@ -133,6 +134,27 @@ class TouristDestination extends Component {
     );
   }
 
+  reportDestination() {
+    let reportBody = {idUser: this.props.user.id, idDestination: this.props.touristDest.id };
+    const {token = this.props.token, body = reportBody} = {};
+    this.props.reportD({token, body}).then(()=>{
+    });
+    this.setState({ active: false});
+  }
+
+  openReportConfirmation(){
+    Alert.alert(
+      'Reportar destino turistico',
+      'El reporte del destino turistico será revisado por nuestros administradores, ' +
+      'por favor tomar la seriedad del caso ya que si el reporte es falto puede traer consecuencias a su cuenta.',
+      [
+        {text: 'Cancelar', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: 'Reportar', onPress: () => this.reportDestination()},
+      ],
+      { cancelable: true }
+    );
+  }
+
   render() {
     return (
       <Container>
@@ -148,42 +170,42 @@ class TouristDestination extends Component {
           <Tabs initialPage={0} style={{
             flex: 1
           }}>
-            <Tab heading="Información">
-              {/* Info */}
-              <Card>
-                <CardItem>
-                  <Body>
-                    <Text>
-                      {this.props.touristDest.description}
-                    </Text>
-                  </Body>
-                </CardItem>
-                <CardItem>
-                  <Body>
-                    <Text style={styles.titles}>
-                      Servicios:
-                    </Text>
-                  </Body>
-                </CardItem>
-                <CardItem>
-                  <List dataArray={this.props.touristDest.attributes} renderRow={(item) => this.renderTDestItem(item)}/>
-                </CardItem>
-              </Card>
-            </Tab>
-            <Tab heading="Fotos">
-              <View
-               style={{
-                 flexDirection: 'row',
-                 flexWrap: 'wrap',
-               }}
-             >
-               {this.renderPhotos()}
-             </View>
+            <Tab heading="Información" tabStyle={{backgroundColor: '#3498db'}} activeTabStyle={{backgroundColor: '#2980b9'}}>
+             {/* Info */}
+             <Card>
+               <WebView
+                source={{html:
+                "<p style='text-align: justify; display:block;'>" +
+                this.props.touristDest.description +
+                '</p>' }}
+                style={{marginTop: 20, height:150}}
+                />
+               <CardItem>
+                 <Body>
+                   <Text style={styles.titles}>
+                     Servicios:
+                   </Text>
+                 </Body>
+               </CardItem>
+               <CardItem>
+                 <List dataArray={this.props.touristDest.attributes} renderRow={(item) => this.renderTDestItem(item)}/>
+               </CardItem>
+             </Card>
+           </Tab>
+           <Tab heading="Fotos" tabStyle={{backgroundColor: '#3498db'}} activeTabStyle={{backgroundColor: '#2980b9'}}>
+             <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}
+            >
+              {this.renderPhotos()}
+            </View>
 
-              </Tab>
-            <Tab heading="Comentarios">
+             </Tab>
+            <Tab heading="Comentarios" tabStyle={{backgroundColor: '#3498db'}} activeTabStyle={{backgroundColor: '#2980b9'}}>
               <CommentComponent reviewsObject={this.props.touristDest} url="tourist-destinations"/>
-              <CommentsComponent/>
+              <CommentsComponent reviews={this.props.touristDest.reviews}/>
             </Tab>
           </Tabs>
         </Content>
@@ -211,6 +233,12 @@ class TouristDestination extends Component {
           }}>
             <Icon name="md-share"/>
           </Button>
+          <Button
+             onPress={ () => this.openReportConfirmation() }
+             style={{ backgroundColor: '#c0392b' }}
+           >
+             <Icon name="md-flag"/>
+           </Button>
           <Button onPress={() => this.favoriteList()} style={{
             backgroundColor: '#DD5144'
           }}>
@@ -219,7 +247,7 @@ class TouristDestination extends Component {
         </CustomFab>
 
         <Menu/>
-      </Container>
+        </Container>
     );
   }
 }
@@ -289,4 +317,4 @@ const mapStateToProps = state => {
   return {token: state.db.token, user: state.db.user};
 };
 
-export default connect(mapStateToProps, {getDirections, modifyUser})(TouristDestination);
+export default connect(mapStateToProps, {getDirections, modifyUser, reportD})(TouristDestination);

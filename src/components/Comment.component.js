@@ -26,7 +26,7 @@ class CommentComponent extends Component {
   }
 
   checkReview(){
-    if (this.props.reviewsObject !== undefined && this.props.reviewsObject.reviews !== undefined) {
+    if (this.props.reviewsObject !== undefined && this.props.reviewsObject.reviews !== null) {
       for (let review of this.props.reviewsObject.reviews) {
         if (review.id === this.props.user.id) {
           this.renderRatings(review.rating);
@@ -40,7 +40,7 @@ class CommentComponent extends Component {
   this.state.stars = [];
   rating = (rating === undefined) ? this.state.rating : rating;
     for (let i = 1; i <= 5; i++) {
-      let star = (i <= rating) ? <Icon key={i} style={{paddingRight:5}} name="star" size={25} onPress={()=> this.selectRating(i)} color="#F2FA1B"/>
+      let star = (i <= rating) ? <Icon key={i} style={{paddingRight:5}} name="star" size={25} onPress={()=> this.selectRating(i)} color="#f1c40f"/>
       :   <Icon key={i} style={{paddingRight:5}} name="star-o" size={25} onPress={()=> this.selectRating(i)}/>;
       this.state.stars.push(star);
     }
@@ -57,7 +57,7 @@ class CommentComponent extends Component {
         }
       }
     } else {
-      let review = {...{}, id: this.props.user.id, rating: this.state.rating, comment: this.state.myComment, reports:[]};
+      let review = {...{}, id: this.props.user.id,userName:this.props.user.name, userPhoto: this.props.user.photo.url, rating: this.state.rating, comment: this.state.myComment, reports:[], commentDate: new Date()};
       if (this.props.reviewsObject.reviews === null){
         this.props.reviewsObject.reviews = [];
       }
@@ -119,7 +119,7 @@ class CommentComponent extends Component {
         <View style={{flexDirection: 'row'}}>
         {this.state.stars}
         <Right style={{paddingRight:20}}>
-          {this.state.hasReview ? <Icon name="trash-o" onPress={()=>this.confirmDelete()} size={25} color="red" /> : null}
+          {this.state.hasReview ? <Icon name="trash-o" onPress={()=>this.confirmDelete()} size={25} color="#c0392b" /> : null}
         </Right>
         </View>
         <Content style={{paddingTop:10, paddingBottom:10}}>
