@@ -188,6 +188,18 @@ class TouristDestination extends Component {
           </Tabs>
         </Content>
 
+        <Modal
+          visible={this.state.visible}
+          transparent={true}
+          onRequestClose={() => this.setState({visible: false})}
+        >
+          <ImageViewer
+            imageUrls={this.props.touristDest.photos}
+            index={this.state.index}
+            saveToLocalByLongPress={false}
+          />
+        </Modal>
+
         <CustomFab>
           <Button onPress={() => this.takePhoto()} style={{
             backgroundColor: '#34A34F'
