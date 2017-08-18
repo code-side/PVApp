@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
   Container,
-  Content,
   List,
   ListItem,
   Text,
@@ -14,6 +13,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Menu from '../components/Menu';
 import HorizontalList from '../components/HorizontalList';
 import HorizontalListItem from '../components/HorizontalListItem';
+import PullDownContainer from '../components/PullDownContainer';
+import { refreshStaticData } from '../actions';
 
 class Home extends Component {
 
@@ -36,7 +37,7 @@ class Home extends Component {
       return <HorizontalListItem
         item={item}
         renderItemText={(_item) => _item.name}
-        renderItemNote={(_item) => (addCardNote ? _item.province.name : '')}
+        renderItemNote={(_item) => (addCardNote ? (_item.province || {name: ''}).name : '')}
         renderItemImage={(_item) => {
           if (_item.photos !== undefined && _item.photos.length > 0) {
             return _item.photos[0].url;
@@ -52,7 +53,7 @@ class Home extends Component {
   render() {
     return (
       <Container>
-        <Content>
+        <PullDownContainer onRefresh={() => this.props.refreshStaticData(this.props.token)}>
           <List>
             {/* Destinations header */}
             {this.renderSectionHeader(I18n.t('titles.touristictDestinations'), Actions.touristDestinations)}
@@ -114,7 +115,7 @@ class Home extends Component {
               }}
             />
           </List>
-        </Content>
+        </PullDownContainer>
 
         <Menu/>
       </Container>
@@ -137,6 +138,7 @@ const styles = {
 
 const mapStateToProps = state => {
   return {
+    token: state.db.token,
     touristDestinations: state.db.staticData.touristDestinations,
     turisticInterestList: state.db.staticData.touristicInterests,
     ticoStopList: state.db.staticData.ticoStops,
@@ -144,4 +146,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, null)(Home);
+export default connect(mapStateToProps, { refreshStaticData })(Home);

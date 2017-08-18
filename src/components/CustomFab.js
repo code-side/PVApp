@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import IonicIcon from 'react-native-vector-icons/Ionicons';
 import { Icon, Fab } from 'native-base';
 
 class CustomFab extends Component {
@@ -11,6 +12,7 @@ class CustomFab extends Component {
 
     OPTIONAL
     useFontAwesome: default false
+    useIonic: default false
     mainIcon: default 'md-more'
     onPress: () => {}
   */
@@ -42,7 +44,9 @@ class CustomFab extends Component {
         onPress={() => this.onPress()}>
 
         {
-          (this.props.useFontAwesome === true) ? (
+          (this.props.useIonic === true) ? (
+            <IonicIcon name={this.props.mainIcon} />
+          ) : (this.props.useFontAwesome === true) ? (
             <AwesomeIcon name={this.props.mainIcon} />
           ) : (
             <Icon name={this.props.mainIcon || 'md-more'} />

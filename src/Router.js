@@ -29,6 +29,8 @@ import ProvinceInfo from './views/ProvinceInfo';
 import TouristDestinationList from './views/TouristDestinationList';
 import TouristDestination from './views/TouristDestination';
 import FavoriteDestinationList from './views/FavoriteDestinationList'
+import TouristDestinationFilter from './views/TouristDestinationFilter';
+
 
 //MapView
 import Nearby from './views/Nearby';
@@ -53,6 +55,7 @@ const RouterComponent = () => {
       <Scene key="provList" component={ProvinceList} title="Provincias"/>
       <Scene key="provInfo" component={ProvinceInfo}/>
       <Scene key="touristDestinations" component={TouristDestinationList} title="Destinos turísticos"/>
+      <Scene key="touristDestinationFilter" component={TouristDestinationFilter} title="Filtros"/>
       <Scene key="touristDestination" component={TouristDestination}/>
       <Scene key="favoriteList" component={FavoriteDestinationList}/>
       <Scene key="ticoStopList" component={TicoStopList} title="Tico Stops"/>

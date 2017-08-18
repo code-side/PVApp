@@ -34,7 +34,7 @@ export default {
     loading: 'loading'
   },
   touristDestination: {
-    searchLegend: 'Search: Prinvinces, Places...',
+    searchLegend: 'Search',
     fastSearch: 'Fast search',
     survey: {
       title: 'Fast search',
@@ -43,10 +43,10 @@ export default {
     }
   },
   touristInterest: {
-    searchLegend: 'Search: Provinces, Places...'
+    searchLegend: 'Search'
   },
   ticoStops: {
-    searchLegend: 'Search: Provinces, Places...'
+    searchLegend: 'Search'
   },
   provinceInfo: {
     history: 'History:',
