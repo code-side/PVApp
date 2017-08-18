@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Image, Share, View, Alert, TouchableOpacity, Dimensions, Modal, WebView} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import {Row, Grid} from 'react-native-easy-grid';
-import { Container, Text, Content, Button, Tabs, Tab, List, Left, Body, Card, CardItem, Fab, Icon} from 'native-base';
+import { Container, Text, Content, Button, Tabs, Tab, List, Body, Card, CardItem, Icon} from 'native-base';
 import {invoke, getDirections,modifyUser, reportD} from '../actions';
 import {connect} from 'react-redux';
 import ImageViewer from 'react-native-image-zoom-viewer';
@@ -135,12 +135,11 @@ class TouristDestination extends Component {
   }
 
   reportDestination() {
-    console.log('reported');
     let reportBody = {idUser: this.props.user.id, idDestination: this.props.touristDest.id };
     const {token = this.props.token, body = reportBody} = {};
     this.props.reportD({token, body}).then(()=>{
-      this.setState({ active: !this.state.active });
     });
+    this.setState({ active: false});
   }
 
   openReportConfirmation(){
@@ -174,13 +173,13 @@ class TouristDestination extends Component {
             <Tab heading="Información" tabStyle={{backgroundColor: '#3498db'}} activeTabStyle={{backgroundColor: '#2980b9'}}>
              {/* Info */}
              <Card>
-               <CardItem>
-                 <Body>
-                   <Text>
-                     {this.props.touristDest.description}
-                   </Text>
-                 </Body>
-               </CardItem>
+               <WebView
+                source={{html:
+                "<p style='text-align: justify; display:block;'>" +
+                this.props.touristDest.description +
+                '</p>' }}
+                style={{marginTop: 20, height:150}}
+                />
                <CardItem>
                  <Body>
                    <Text style={styles.titles}>

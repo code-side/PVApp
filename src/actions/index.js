@@ -147,7 +147,14 @@ export const  reportD = ({token, body}) =>{
     };
 };
 
-
+export const getTouristDestination = ({token, id})=>{
+  return (dispatch) => {
+  return invoke(token, 'tourist-destinations/' + id, 'GET',{})
+  .then(async(response) => {
+    return response;
+    });
+  };
+};
 
 // Generic method to make http request to PVApp API
 export const invoke = (token, url, method, body) => {
