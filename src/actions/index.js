@@ -1,4 +1,4 @@
-const SERVER_IP = '172.20.10.8';
+const SERVER_IP = '192.168.86.23';
 
 
 export const saveLoggedUser = (user) => {
@@ -161,7 +161,7 @@ export const invoke = (token, url, method, body) => {
 };
 
 export const getDirections = (origin, destination) => {
-  console.log(origin,destination);
+
   return fetch('https://maps.googleapis.com/maps/api/directions/json?origin=' + origin + '&destination=' + destination + '&key=AIzaSyAxFpWldamQAaPa6BKi5M4Fo9KB3nHTpf4', {
     method: 'GET',
     headers: {

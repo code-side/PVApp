@@ -1,24 +1,25 @@
 import React, {Component} from 'react';
-import {Image, Share, WebView, View, Alert} from 'react-native';
+import {Image, Share, View, Alert, TouchableOpacity, Dimensions, Modal} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import {Row, Grid} from 'react-native-easy-grid';
-import { Container, Text, Content, Button, Tabs, Tab, List, Left, Body, Card, CardItem, Fab, Icon} from 'native-base';
+import { Container, Text, Content, Button, Tabs, Tab, List, Body, Card, CardItem, Fab, Icon} from 'native-base';
 import {invoke, getDirections,modifyUser} from '../actions';
 import {connect} from 'react-redux';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 import  CommentComponent  from '../components/Comment.component';
 import  CommentsComponent  from '../components/Comments.component';
+
+const WIDTH = Dimensions.get('window').width;
 
 class TouristDestination extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      active: false
+      active: false,
+      visible: false,
+      index: 0
     };
-  }
-
-  componentWillMount() {
-    console.log(getDirections('9.855733,-83.9134888','9.8549748,-83.9124078'));
   }
 
   renderTDestItem(destination) {
@@ -53,7 +54,10 @@ class TouristDestination extends Component {
         state: 'inactivo',
         url: 'data:${image.mime};base64,' + image.data
       });
-      invoke(this.props.token, 'tourist-destinations', 'PUT', this.props.touristDest);
+      invoke(this.props.token, 'tourist-destinations', 'PUT', this.props.touristDest)
+        .then(async(response) => {
+          this.props.touristDest.photos = response.photos;
+        });
     });
   }
 
@@ -64,51 +68,74 @@ class TouristDestination extends Component {
       title: 'Wow, did you see that?'
     }, {dialogTitle: 'Share BAM goodness'});
   }
-favoriteList = ()=>{
-  let isAlreadySaved = false;
-  let actionMessage = '';
-  for (var i = 0; i < this.props.user.favoriteList.length; i++){
-    console.log(this.props.user.favoriteList[i]);
-    if (this.props.touristDest.id === this.props.user.favoriteList[i].id){
-      isAlreadySaved = true;
-      this.removeTouristDestFromList(i);
-      actionMessage = 'Se removió el destino turistico de la lista de favoritos.';
-      break;
-    }
-  }
-  if (!isAlreadySaved){
-    this.props.user.favoriteList.push({id: this.props.touristDest.id, name: this.props.touristDest.name,
-    description: this.props.touristDest.description, photos: this.props.touristDest.photos });
-    actionMessage = 'Se agregó el destino turistico a la lista de favoritos.';
-  }
-  const {token = this.props.token, user = this.props.user} = {};
-  this.props.modifyUser({token, user}).then(()=>{
-    Alert.alert(
-    'Lista de favoritos',
-    actionMessage,
-    [],
-    { cancelable: true }
-    );
-    this.setState({active:false});
-  });
-}
-removeTouristDestFromList =(i)=>{
-  this.props.user.favoriteList.splice(i,1);
-}
 
-  renderPhotos(item) {
+  favoriteList = ()=>{
+    let isAlreadySaved = false;
+    let actionMessage = '';
+    for (var i = 0; i < this.props.user.favoriteList.length; i++){
+      console.log(this.props.user.favoriteList[i]);
+      if (this.props.touristDest.id === this.props.user.favoriteList[i].id){
+        isAlreadySaved = true;
+        this.removeTouristDestFromList(i);
+        actionMessage = 'Se removió el destino turistico de la lista de favoritos.';
+        break;
+      }
+    }
+    if (!isAlreadySaved){
+      this.props.user.favoriteList.push({id: this.props.touristDest.id, name: this.props.touristDest.name,
+      description: this.props.touristDest.description, photos: this.props.touristDest.photos });
+      actionMessage = 'Se agregó el destino turistico a la lista de favoritos.';
+    }
+    const {token = this.props.token, user = this.props.user} = {};
+    this.props.modifyUser({token, user}).then(()=>{
+      Alert.alert(
+      'Lista de favoritos',
+      actionMessage,
+      [],
+      { cancelable: true }
+      );
+      this.setState({active:false});
+    });
+  }
+
+  removeTouristDestFromList =(i)=>{
+    this.props.user.favoriteList.splice(i,1);
+  }
+
+  renderPhotos() {
+
     return (
-      <Card style={{ flex: 0 }}>
-        <CardItem style={{ flexDirection: 'row' }}>
-          <Image style={{
-            width: 50,
-            height: 50
-          }}
-          source={{ uri: item.url }}
-        />
-        </CardItem>
-      </Card>
-    );
+      this.props.touristDest.photos.map((image, idx) => {
+        return (
+
+          <TouchableOpacity
+            style={{
+              marginTop: 10,
+              height: 150,
+              width: WIDTH / 3,
+            }}
+            key={idx}
+            onPress={ () => this.setState({ visible: true, index: idx }) }
+          >
+            <Card
+              style={{
+                padding: 5
+              }}
+            >
+              <CardItem cardBody>
+                <Image
+                  style={{
+                    flex: 1,
+                    height: 128,
+                    width: null,
+                  }}
+                  source={{ uri: image.url }}
+                />
+              </CardItem>
+            </Card>
+          </TouchableOpacity>
+      );
+    }));
   }
 
   noItems(text) {
@@ -124,10 +151,11 @@ removeTouristDestFromList =(i)=>{
       <Container>
        <Content>
          <Grid>
-           <Row style={ styles.header }>
+           <Row style={ styles.header } onPress={ () => this.setState({ visible: true, index: 0 }) }>
              <Image
                style={{ flex: 1 }}
-               source={{ uri: this.props.touristDest.photos[0].url }}/>
+               source={{ uri: this.props.touristDest.photos[0].url }}
+             />
            </Row>
          </Grid>
          <Tabs
@@ -169,10 +197,17 @@ removeTouristDestFromList =(i)=>{
                  </Card>
                </Tab>
                <Tab heading="Fotos">
-                 <List
-                   dataArray={this.props.touristDest.photos}
-                   renderRow= {(item) => this.renderPhotos(item)}
-                 />
+                 <View
+                  style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                  }}
+                >
+
+                  {this.renderPhotos()}
+
+                </View>
+
                  </Tab>
                  <Tab heading="Comentarios">
                   <CommentComponent reviewsObject={this.props.touristDest} url="tourist-destinations"/>
@@ -180,34 +215,45 @@ removeTouristDestFromList =(i)=>{
                  </Tab>
          </Tabs>
        </Content>
-     <Fab
-       active={this.state.active}
-       direction="up"
-       containerStyle={{}}
-       style={{ backgroundColor: '#5067FF' }}
-       position="bottomRight"
-       onPress={ () => this.setState({ active: !this.state.active })}
-     >
-     <Icon name="md-more"/>
-     <Button
-       onPress={ () => this.takePhoto() }
-       style={{ backgroundColor: '#34A34F' }}
-     >
-       <Icon name="md-camera"/>
-     </Button>
-     <Button
-       onPress={ () => this.shareDestination() }
-       style={{ backgroundColor: '#3B5998' }}
-     >
-       <Icon name="md-share"/>
-     </Button>
-     <Button
-       onPress={()=> this.favoriteList()}
-       style={{ backgroundColor: '#DD5144' }}
-     >
-       <Icon name="md-heart"/>
-     </Button>
-     </Fab>
+       <Modal
+         visible={this.state.visible}
+         transparent={true}
+         onRequestClose={() => this.setState({visible: false})}
+        >
+           <ImageViewer
+             imageUrls={this.props.touristDest.photos}
+             index={this.state.index}
+             saveToLocalByLongPress={false}
+           />
+       </Modal>
+       <Fab
+         active={this.state.active}
+         direction="up"
+         containerStyle={{}}
+         style={{ backgroundColor: '#5067FF' }}
+         position="bottomRight"
+         onPress={ () => this.setState({ active: !this.state.active })}
+       >
+       <Icon name="md-more"/>
+       <Button
+         onPress={ () => this.takePhoto() }
+         style={{ backgroundColor: '#34A34F' }}
+       >
+         <Icon name="md-camera"/>
+       </Button>
+       <Button
+         onPress={ () => this.shareDestination() }
+         style={{ backgroundColor: '#3B5998' }}
+       >
+         <Icon name="md-share"/>
+       </Button>
+       <Button
+         onPress={()=> this.favoriteList()}
+         style={{ backgroundColor: '#DD5144' }}
+       >
+         <Icon name="md-heart"/>
+       </Button>
+       </Fab>
     </Container>
     );
   }
