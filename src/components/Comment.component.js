@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import { Text, Content, Item, Input, Button, Right } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { saveComments } from '../actions';
-import I18n from '../services/languageService';
+import I18n from '../services/LanguageService';
 
 class CommentComponent extends Component {
   constructor(props) {
@@ -26,16 +26,14 @@ class CommentComponent extends Component {
   }
 
   checkReview(){
-    if (this.props.reviewsObject.reviews !== null){
-      for (var review of this.props.reviewsObject.reviews){
-        if (review.id === this.props.user.id){
+    if (this.props.reviewsObject !== undefined && this.props.reviewsObject.reviews !== undefined) {
+      for (let review of this.props.reviewsObject.reviews) {
+        if (review.id === this.props.user.id) {
           this.renderRatings(review.rating);
           this.setState({hasReview: true, myComment: review.comment, rating: review.rating, review: review});
         }
       }
-      return false;
     }
-    return false;
   }
 
   renderRatings =(rating) => {

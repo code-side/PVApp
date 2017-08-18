@@ -3,17 +3,15 @@ import { Image, TouchableOpacity } from 'react-native';
 import { Container, Text, Content, Card, CardItem, Body } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { selectProvince } from '../actions';
+import Menu from '../components/Menu';
 
 class ProvinceList extends Component {
 
   openProvince(province) {
-    this.props.selectProvince(province);
-    Actions.provInfo({title: province.name});
+    Actions.provInfo({title: province.name, province: province});
   }
 
   renderProvinces() {
-    console.log(this.props);
     if (this.props.provinces !== undefined) {
       let cards = this.props.provinces.map((prov, indx) => {
         return (
@@ -41,6 +39,8 @@ class ProvinceList extends Component {
         <Content>
           {this.renderProvinces()}
         </Content>
+
+        <Menu/>
       </Container>
     );
   }
@@ -52,4 +52,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { selectProvince })(ProvinceList);
+export default connect(mapStateToProps, null)(ProvinceList);

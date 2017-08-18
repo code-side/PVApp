@@ -1,5 +1,5 @@
-const SERVER_IP = '172.20.10.8';
-
+import I18n from '../services/LanguageService';
+const SERVER_IP = '10.223.29.134';
 
 export const saveLoggedUser = (user) => {
   return {type: 'SAVE_LOGGED_USER', payload: user};
@@ -72,34 +72,36 @@ export const login = ({username, password, token}) => {
  }; // end dispatch function
 }; // end login function
 
+// Refresh a module data
+export const refreshData = (token, url, propToUpdate, staticData, dispatch) => {
+  if (dispatch !== undefined) {
+    invoke(token, url, 'GET', {}).then(async(response) => {
+      staticData[propToUpdate] = response;
+      dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
+    });
+  } else {
+    return (newDispatch) => {
+      invoke(token, url, 'GET', {}).then(async(response) => {
+        staticData[propToUpdate] = response;
+        newDispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
+      });
+    };
+  }
+};
+
+// Refresh all application static data
 export const refreshStaticData = (token) => {
+  const locale = I18n.getLocale();
+
   return (dispatch) => {
     let staticData = {};
 
-    invoke(token, 'provinces', 'GET', {}).then(async(provincesResponse) => {
-      staticData.provinces = provincesResponse;
-      dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
-    });
-
-    invoke(token, 'tico-stops', 'GET', {}).then(async(ticoStopsResponse) => {
-      staticData.ticoStops = ticoStopsResponse;
-      dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
-    });
-
-    invoke(token, 'touristic-interests', 'GET', {}).then(async(touristicInterestsResponse) => {
-      staticData.touristicInterests = touristicInterestsResponse;
-      dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
-    });
-
-    invoke(token, 'tourist-destinations', 'GET', {}).then(async(touristDestinationsResponse) => {
-      staticData.touristDestinations = touristDestinationsResponse;
-      dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
-    });
-
-    invoke(token, 'attributes', 'GET', {}).then(async (attributesResponse) => {
-      staticData.attributes = attributesResponse;
-      dispatch({type: 'LOAD_STATIC_DATA', payload: staticData});
-    });
+    refreshData(token, 'provinces?lang=' + locale, 'provinces', staticData, dispatch);
+    refreshData(token, 'tico-stops?lang=' + locale, 'ticoStops', staticData, dispatch);
+    refreshData(token, 'touristic-interests?lang=' + locale, 'touristicInterests', staticData, dispatch);
+    refreshData(token, 'tourist-destinations?lang=' + locale, 'touristDestinations', staticData, dispatch);
+    refreshData(token, 'attributes?lang=' + locale, 'attributes', staticData, dispatch);
+    refreshData(token, 'survey-questions?lang=' + locale, 'surveyQuestions', staticData, dispatch);
   };
 };
 
@@ -117,7 +119,6 @@ export const registerUser = ({token, user}) => {
       .then((response) => response.json())
 
       .then(async(registerResponse) => {
-        console.log(registerResponse);
         dispatch({
           type: 'SAVE_LOGGED_USER',
           payload: registerResponse
@@ -129,8 +130,8 @@ export const registerUser = ({token, user}) => {
 export const  saveComments = ({token, body, url}) =>{
     return (dispatch) => {
     return invoke(token, url, 'PUT', body)
-    .then(async(registerResponse) => {
-
+      .then(async(registerResponse) => {
+        // do nothing...
       });
     };
 };
@@ -169,10 +170,4 @@ export const getDirections = (origin, destination) => {
       'Content-Type': 'application/json',
     }
   }).then((response) => response.json());
-
-};
-
-// Province Actions
-export const selectProvince = data => {
-  return {type: 'SELECT_PROVINCE', payload: data};
 };

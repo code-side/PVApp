@@ -3,7 +3,6 @@ import { DatePickerAndroid, TouchableOpacity, Picker, View} from 'react-native';
 import { Container, Content, Form, Item, Input, Label, Text, Button, Footer, FooterTab } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
-
 class Register extends Component {
 
   constructor(props){
