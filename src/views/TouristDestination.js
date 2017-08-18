@@ -135,11 +135,25 @@ class TouristDestination extends Component {
   }
 
   reportDestination() {
+    console.log('reported');
     let reportBody = {idUser: this.props.user.id, idDestination: this.props.touristDest.id };
     const {token = this.props.token, body = reportBody} = {};
     this.props.reportD({token, body}).then(()=>{
       this.setState({ active: !this.state.active });
     });
+  }
+
+  openReportConfirmation(){
+    Alert.alert(
+      'Reportar destino turistico',
+      'El reporte del destino turistico será revisado por nuestros administradores, ' +
+      'por favor tomar la seriedad del caso ya que si el reporte es falto puede traer consecuencias a su cuenta.',
+      [
+        {text: 'Cancelar', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: 'Reportar', onPress: () => this.reportDestination()},
+      ],
+      { cancelable: true }
+    );
   }
 
   render() {
@@ -221,7 +235,7 @@ class TouristDestination extends Component {
             <Icon name="md-share"/>
           </Button>
           <Button
-             onPress={ () => this.reportDestination() }
+             onPress={ () => this.openReportConfirmation() }
              style={{ backgroundColor: '#c0392b' }}
            >
              <Icon name="md-flag"/>

@@ -13,7 +13,7 @@ class CommentsComponent extends Component {
     this.deleteUserLoggedComment();
   }
   renderReviews() {
-    console.log(this.props);
+    if (this.props.reviews !== null){
     return this.props.reviews.map((item, indx) => {
       return (
         <ListItem avatar key={indx}>
@@ -32,6 +32,9 @@ class CommentsComponent extends Component {
 
          );
        });
+     } else {
+       return (<Text style={{textAlign:'center', paddingTop:10}}> No comments yet </Text>);
+     }
   }
   deleteUserLoggedComment(){
   var indexToDelete = -1000;
