@@ -1,6 +1,6 @@
 import I18n from '../services/LanguageService';
 
-const SERVER_IP = '192.168.86.20';
+const SERVER_IP = '192.168.86.49';
 
 export const saveLoggedUser = (user) => {
   return {type: 'SAVE_LOGGED_USER', payload: user};
