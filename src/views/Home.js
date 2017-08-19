@@ -18,6 +18,11 @@ import { refreshStaticData } from '../actions';
 
 class Home extends Component {
 
+  constructor(props) {
+    super(props);
+    this.renderItem = this.renderItem.bind(this);
+  }
+
   renderSectionHeader(sectionName, action) {
     return (
       <ListItem itemDivider style={{backgroundColor:'white'}}>
@@ -104,7 +109,7 @@ class Home extends Component {
             {this.renderSectionHeader(I18n.t('titles.provinces'), Actions.provList)}
 
             {/* Provinces list */}
-            <HorizontalList
+              <HorizontalList
               items={this.props.provinces ? this.props.provinces : [{}]}
               renderItem={(item) => this.renderItem(item)}
               noLimitRestriction={true}

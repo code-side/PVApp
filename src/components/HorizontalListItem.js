@@ -13,10 +13,10 @@ class HorizontalListItem extends Component {
     renderItemNote: (item) => {} expected return 'string'
   */
 
-  renderItemImage(item) {
-    if (this.props.renderItemImage !== undefined) {
-      const uri = this.props.renderItemImage(item);
+   renderItemImage (item) {
 
+    if (this.props.renderItemImage !== undefined) {
+      const uri =  this.props.renderItemImage(item);
       if (uri) {
         return {uri: uri};
       }
@@ -42,7 +42,7 @@ class HorizontalListItem extends Component {
     return (
       <Card>
         <CardItem cardBody>
-          <Image style={{ flex: 1, height: 150, margin: 5 }} source={this.renderItemImage(this.props.item)} />
+          <Image style={{flex:1,height: 100, width: 100,margin: 5 }} source={this.renderItemImage(this.props.item)} />
         </CardItem>
         <CardItem>
           <Left>

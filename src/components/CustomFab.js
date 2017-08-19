@@ -38,7 +38,7 @@ class CustomFab extends Component {
       <Fab
         direction="up"
         position="bottomRight"
-        style={{ backgroundColor: '#5067FF' }}
+        style={{ backgroundColor: '#2980b9' }}
         containerStyle={{ marginBottom: 50 }}
         active={this.state.active}
         onPress={() => this.onPress()}>

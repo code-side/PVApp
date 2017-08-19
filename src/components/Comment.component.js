@@ -47,11 +47,13 @@ class CommentComponent extends Component {
   }
 
   saveRating(){
+    console.log(this.props.reviewsObject);
     if (this.state.rating > 0){
     if ( this.state.review !== undefined){
       this.state.review = {...this.state.review, rating: this.state.rating, comment: this.state.myComment };
       for (var reviewIndex in this.props.reviewsObject.reviews){
         if (this.props.reviewsObject.reviews[reviewIndex].id === this.props.user.id){
+          console.log('Modified', {...this.props.reviewsObject.reviews[reviewIndex], rating: this.state.review.rating, comment: this.state.review.comment});
           this.props.reviewsObject.reviews[reviewIndex] = {...this.props.reviewsObject.reviews[reviewIndex], rating: this.state.review.rating, comment: this.state.review.comment};
           break;
         }
@@ -98,6 +100,7 @@ class CommentComponent extends Component {
   }
 
   saveChange(message){
+    console.log(this.props.reviewsObject);
     const {token = this.props.token, body = this.props.reviewsObject, url = this.props.url} = {};
     this.props.saveComments({token, body, url}).then((response) =>{
       this.setState({validRating: true});
@@ -142,7 +145,9 @@ class CommentComponent extends Component {
 const mapStateToProps = state => {
   return {
     user: state.db.user,
-    token: state.db.token
+    token: state.db.token,
+    touristDestinations: state.db.staticData.touristDestinations,
+    turisticInterestList: state.db.staticData.touristicInterests
   };
 };
 

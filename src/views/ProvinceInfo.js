@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Linking } from 'react-native';
+import { Image, Linking, WebView } from 'react-native';
 import { Container, Text, Content, Button, Tabs, Tab, List, ListItem, Thumbnail, Body } from 'native-base';
 import { Row, Grid } from 'react-native-easy-grid';
 import I18n from '../services/LanguageService';
@@ -64,14 +64,26 @@ class ProvinceInfo extends Component {
                   <Text style={styles.titles}>Historia</Text>
                 </Row>
                 <Row>
-                  <Text style={styles.textContainer}>{this.props.province.history}</Text>
+                <WebView
+                 source={{html:
+                 "<p style='text-align: justify; display:block;'>" +
+                 this.props.province.history +
+                 '</p>' }}
+                 style={{marginTop: 20, height:370}}
+                 />
                 </Row>
 
                 <Row>
                   <Text style={styles.titles}>Cultura</Text>
                 </Row>
                 <Row>
-                  <Text style={styles.textContainer}>{this.props.province.culture}</Text>
+                <WebView
+                 source={{html:
+                 "<p style='text-align: justify; display:block;'>" +
+                 this.props.province.culture +
+                 '</p>' }}
+                 style={{marginTop: 20, height:500}}
+                 />
                 </Row>
 
                 {/* Cantones */}

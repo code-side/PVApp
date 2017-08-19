@@ -208,7 +208,7 @@ render() {
           </Content>
           <Footer>
              <FooterTab>
-              <Button block info onPress={()=> this.setModalVisible()} active badge vertical>
+              <Button block info onPress={()=> this.setModalVisible(false)} active badge vertical>
                 <Text>Cancelar</Text>
               </Button>
               </FooterTab>

@@ -37,7 +37,6 @@ class HorizontalList extends Component {
   renderItems() {
     let i = 0;
     let showMore = false;
-
     return this.props.items.map((item, indx) => {
       if ((i++ < (this.props.maxItems || MAX_ITEMS)) || (this.props.noLimitRestriction || false)) {
         return (

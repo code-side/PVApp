@@ -8,8 +8,8 @@ import {connect} from 'react-redux';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import CustomFab from '../components/CustomFab';
 import Menu from '../components/Menu';
-import  CommentComponent  from '../components/Comment.component';
-import  CommentsComponent  from '../components/Comments.component';
+import CommentComponent  from '../components/Comment.component';
+import CommentsComponent  from '../components/Comments.component';
 
 const WIDTH = Dimensions.get('window').width;
 
@@ -50,6 +50,7 @@ class TouristDestination extends Component {
           this.props.touristDest.photos = response.photos;
         });
     });
+    this.setState({active: false});
   }
 
   shareDestination() {
