@@ -78,7 +78,8 @@ const styles = {
   },
   navBarTitle: {
     color: '#FFFFFF',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontSize: 10
   },
   barButtonTextStyle: {
     color: '#FFFFFF'

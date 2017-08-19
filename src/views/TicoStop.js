@@ -1,25 +1,40 @@
 import React, { Component } from 'react';
-import { Image, Linking } from 'react-native';
+import { Image, Modal, Dimensions, StyleSheet } from 'react-native';
 import { Container, Text, Content, Icon, Button } from 'native-base';
 import { Row, Grid } from 'react-native-easy-grid';
 import Menu from '../components/Menu';
 import CustomFab from '../components/CustomFab';
+import MapView from 'react-native-maps';
+
+const { width, height } = Dimensions.get('window');
+const ASPECT_RATIO = width / height;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export default class TicoStop extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      active: false
+      active: false,
+      visible: false,
+      initialPosition: {
+        latitude: this.props.ticoStop.coordinates.latitude,
+        longitude: this.props.ticoStop.coordinates.longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA
+      },
     };
   }
 
-  invoke(type, resource, name) {
-    const uriString = 'http://maps.google.com/maps?q=' + resource + '(' + name + ')&z=20';
-    if (Linking.canOpenURL(type + ':' + uriString)) {
-      Linking.openURL(type + ':' + uriString);
-    }
-  }
+  // invoke(type, resource, name) {
+  //   const uriString = 'http://maps.google.com/maps?q=' + resource + '(' + name + ')&z=20';
+  //   if (Linking.canOpenURL(type + ':' + uriString)) {
+  //     Linking.openURL(type + ':' + uriString);
+  //   }
+  // }
+
+
 
   render() {
     return (
@@ -59,17 +74,25 @@ export default class TicoStop extends Component {
             </Row>
           </Grid>
         </Content>
+        <Modal
+          visible={this.state.visible}
+          transparent={true}
+          onRequestClose={() => this.setState({visible: false})}
+        >
+          <MapView
+            style={styles.map}
+            region={this.state.initialPosition}
+          >
+            <MapView.Marker
+              coordinate={this.state.initialPosition}
+            />
+          </MapView>
+        </Modal>
         <CustomFab>
           <Button
-            onPress={() => this.invoke('geo', this.props.ticoStop.coordinates, this.props.ticoStop.name)}
+            onPress={ () => this.setState({ visible: true }) }
             style={{ backgroundColor: '#34A34F' }}>
-            <Icon name="ios-pin-outline" />
-          </Button>
-          <Button style={{ backgroundColor: '#3B5998' }}>
-            <Icon name="ios-flag-outline" />
-          </Button>
-          <Button style={{ backgroundColor: '#DD5144' }}>
-            <Icon name="ios-heart-outline" />
+            <Icon name="ios-pin" />
           </Button>
         </CustomFab>
 
@@ -80,6 +103,10 @@ export default class TicoStop extends Component {
 }
 
 const styles = {
+  map: {
+    flex: 1,
+    ...StyleSheet.absoluteFillObject,
+  },
   header: {
     flex: 1,
     height: 200
